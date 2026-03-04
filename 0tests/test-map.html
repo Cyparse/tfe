@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <meta charset="utf-8" />
+      <title>My Leaflet Map</title>
+
+      <!-- Leaflet CSS -->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+      <style>
+         #map {
+            height: 400px;
+            width: 400px;
+         }
+      </style>
+   </head>
+
+   <body>
+
+      <div id="map"></div>
+
+      <!-- Leaflet JS -->
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+      <script>
+
+         // 1. Create the map
+         var map = L.map('map').setView([48.8566, 2.3522], 13); // Paris
+
+         // 2. Add the map tiles
+         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+         }).addTo(map);
+
+         // 3. Add a marker
+         L.marker([48.8566, 2.3522])
+            .addTo(map)
+            .bindPopup('Hello Paris!')
+            .openPopup();
+      </script>
+
+      <script>
+         var places = [
+            [48.8566, 2.3522, "Center"],
+            [48.8606, 2.3376, "Louvre"],
+            [48.8529, 2.3499, "Latin Quarter"]
+         ];
+
+         places.forEach(function (place) {
+            L.marker([place[0], place[1]])
+               .addTo(map)
+               .bindPopup(place[2]);
+         });
+
+      </script>
+
+   </body>
+
+</html>

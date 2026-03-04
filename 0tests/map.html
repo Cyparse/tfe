@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="UTF-8" />
+      <title>Neighbourhood Map</title>
+
+      <!-- Leaflet -->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+      <style>
+         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+         }
+
+         .map-wrapper {
+            position: relative;
+         }
+
+         #map {
+            height: 70vh;
+            width: 100%;
+         }
+
+         /* Filter buttons */
+         .map-filters {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            z-index: 1000;
+         }
+
+         .map-filters button {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+         }
+
+         .map-filters button.active {
+            background: #111;
+            color: white;
+         }
+
+         .map-filters button:not(:last-child) {
+            border-bottom: 1px solid #eee;
+         }
+      </style>
+   </head>
+
+   <body>
+
+      <div class="map-wrapper">
+         <div class="map-filters">
+            <button data-category="cafes" class="active">☕ Cafes</button>
+            <button data-category="transport" class="active">🚉 Transport</button>
+            <button data-category="parks" class="active">🌳 Parks</button>
+         </div>
+
+         <div id="map"></div>
+      </div>
+
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+      <script>
+         // 1. Create map
+         const map = L.map('map', {
+            scrollWheelZoom: false
+         }).setView([48.8566, 2.3522], 14);
+
+         // 2. Tiles (clean, neutral)
+         L.tileLayer(
+            'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+         ).addTo(map);
+
+         // 3. Icons
+         const icons = {
+            cafes: L.icon({
+               iconUrl: 'icons/cafe.svg',
+               iconSize: [28, 28]
+            }),
+            transport: L.icon({
+               iconUrl: 'icons/transport.svg',
+               iconSize: [28, 28]
+            }),
+            parks: L.icon({
+               iconUrl: 'icons/park.svg',
+               iconSize: [28, 28]
+            })
+         };
+
+         // 4. Data (this is what you customize)
+         const places = [
+            { category: 'cafes', name: 'Coffee Club', lat: 48.8572, lng: 2.3510 },
+            { category: 'cafes', name: 'Morning Brew', lat: 48.8555, lng: 2.3490 },
+
+            { category: 'transport', name: 'Metro Station', lat: 48.8588, lng: 2.3545 },
+            { category: 'transport', name: 'Bus Stop', lat: 48.8549, lng: 2.3502 },
+
+            { category: 'parks', name: 'City Park', lat: 48.8595, lng: 2.3478 }
+         ];
+
+         // 5. Layer groups per category
+         const layers = {
+            cafes: L.layerGroup(),
+            transport: L.layerGroup(),
+            parks: L.layerGroup()
+         };
+
+         // 6. Create markers
+         places.forEach(place => {
+            const marker = L.marker([place.lat, place.lng], {
+               icon: icons[place.category]
+            }).bindPopup(place.name);
+
+            layers[place.category].addLayer(marker);
+         });
+
+         // 7. Add all layers initially
+         Object.values(layers).forEach(layer => layer.addTo(map));
+
+         // 8. Filter buttons logic
+         document.querySelectorAll('.map-filters button').forEach(button => {
+            button.addEventListener('click', () => {
+               const category = button.dataset.category;
+
+               if (map.hasLayer(layers[category])) {
+                  map.removeLayer(layers[category]);
+                  button.classList.remove('active');
+               } else {
+                  map.addLayer(layers[category]);
+                  button.classList.add('active');
+               }
+            });
+         });
+      </script>
+
+   </body>
+
+</html>
