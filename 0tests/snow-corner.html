@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Snow on Windowsill Effect</title>
+      <style>
+         body {
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+         }
+
+         .snow-container {
+            position: relative;
+            max-width: 600px;
+            background: #15395e;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+         }
+
+         /* Bottom-right L-shape snow */
+         .snow-container.bottom-right::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: -4px;
+            width: 30%;
+            height: 35px;
+            background: white;
+            rotate: 180deg;
+            border-radius: 20% 20% 70% 70% / 98% 85% 70% 68%;
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.9) inset, 0 -4px 8px rgba(0, 0, 0, 0.1);
+            clip-path: polygon(
+               0% 88%, 
+               10% 74%, 
+               20% 68%, 
+               30% 65%, 
+               40% 70%, 
+               50% 60%, 
+               60% 68%, 
+               70% 75%, 
+               80% 70%, 
+               90% 78%, 
+               100% 77%, 
+               100% 0%, 
+               0% 0%);
+         }
+
+         /* Vertical snow on the right side */
+         .snow-container.bottom-right::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 80%;
+            width: 35px;
+            height: 20%;
+            background: white;
+            border-radius: 70% 65% 50% 70% / 50% 50% 40% 70%;
+            clip-path: polygon(
+                  16% -2%,
+                  18% -139%,
+                  28% 21%,
+                  35% 31%,
+                  30% 43%,
+                  38% 56%,
+                  46% 60%,
+                  38% 70%,
+                  32% 80%,
+                  26% 90%,
+                  12% 100%,
+                  100% 100%,
+                  100% 0%);
+         }
+
+
+         /* Bubble effects */
+         .snow-container.bottom-right .bubble-effect {
+            content: '';
+            position: relative;
+            bottom: -50px;
+            left: 73%;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            box-shadow:
+               -20px 2px 0 -3px white,
+               -40px -1px 0 -2px white,
+               -60px 1px 0 -3px white;
+         }
+
+         .upright {
+            content: '';
+            position: relative;
+            top: -105px;
+            left: 104%;
+            width: 15px;
+            height: 15px;
+            rotate: 90deg;
+            border-radius: 50%;
+            box-shadow:
+               15px -2px 0 -4px white,
+               35px 0px 0 -3px white,
+               55px 1px 0 -2px white;
+         }
+
+
+         h1 {
+            margin-top: 0;
+            color: #f8f9fa;
+            font-size: 2em;
+         }
+
+         p {
+            line-height: 1.6;
+            color: #e9ecef;
+            margin-bottom: 1em;
+         }
+      </style>
+   </head>
+
+   <body>
+
+      <div class="snow-container bottom-right">
+         <h1>Snowy Corner</h1>
+         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+            laborum.</p>
+         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+            aperiam.</p>
+         <div class="bubble-effect"></div>
+         <div class="upright"></div>
+
+      </div>
+   </body>
+
+</html>
+
+<!-- /*polygon(23% 0%,
+               16% 4%,
+               18% 6%,
+               16% 8%,
+               16% 10%,
+               20% 12%,
+               27% 14%,
+               32% 16%,
+               30% 18%,
+               32% 20%,
+               34% 22%,
+               27% 24%,
+               28% 26%,
+               35% 28%,
+               43% 30%,
+               45% 32%,
+               43% 34%,
+               40% 36%,
+               30% 38%,
+               20% 40%,
+               17% 42%,
+               20% 44%,
+               28% 46%,
+               35% 48%,
+               35% 50%,
+               39% 52%,
+               46% 54%,
+               50% 56%,
+               54% 58%,
+               52% 60%,
+               49% 62%,
+               44% 64%,
+               37% 66%,
+               32% 68%,
+               30% 70%,
+               32% 72%,
+               39% 74%,
+               38% 76%,
+               27% 78%,
+               21% 80%,
+               18% 82%,
+               20% 84%,
+               24% 86%,
+               31% 88%,
+               37% 90%,
+               38% 92%,
+               33% 94%,
+               27% 96%,
+               26% 98%,
+               20% 92%,
+               100% 94%,
+               160% 0%)
+                
+   autre test 45% 55% 0% 100% / 45% 100% 0% 55% 
+               -->
