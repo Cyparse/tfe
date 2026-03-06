@@ -51,9 +51,7 @@ export default function ContentSection() {
                         </div>
                     </div>
                 </div>
-                <div className="absolute -bottom-10 -right-10 opacity-5">
-                    <span className="material-symbols-outlined text-[250px]">ac_unit</span>
-                </div>
+               
             </div>
         </section>
     );

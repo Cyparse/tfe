@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function MapSection() {
     const mapRef = useRef(null);
     const leafletMapRef = useRef(null);
+    const [showInfo, setShowInfo] = useState(true);
 
     useEffect(() => {
         // Initialize Leaflet map
@@ -12,10 +13,14 @@ export default function MapSection() {
             const foodVillageLocation = [50.602511757616966, 3.388043095146282];
             const amateurLocation = [50.599967067972884, 3.3919939590763226];
 
+            // Set zoom level based on screen width
+            const isMobile = screen.width < 768;
+            const zoomLevel = isMobile ? 15 : 16;
+
             // Create map centered between all locations
             leafletMapRef.current = window.L.map(mapRef.current, {
                 scrollWheelZoom: false
-            }).setView([50.6032, 3.3875], 16);
+            }).setView([50.6022, 3.3870], zoomLevel);
 
             // Add tile layer with clean CartoDB style
             window.L.tileLayer(
@@ -125,9 +130,20 @@ export default function MapSection() {
                     />
                     
                     {/* Map Overlay Info */}
-                    <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-[1000]">
+                    <div className={`absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-[1000] transition-transform duration-300 ${showInfo ? 'translate-y-0' : 'translate-y-[calc(100%+24px)]'}`}>
                         <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl max-w-md">
-                            <h3 className="text-2xl font-bold text-deep-navy mb-3">Getting Here</h3>
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-2xl font-bold text-deep-navy">Getting Here</h3>
+                                <button 
+                                    onClick={() => setShowInfo(!showInfo)}
+                                    className="md:hidden text-deep-navy hover:text-festival-yellow transition-colors"
+                                    aria-label="Toggle info"
+                                >
+                                    <span className="material-symbols-outlined">
+                                        {showInfo ? 'expand_more' : 'expand_less'}
+                                    </span>
+                                </button>
+                            </div>
                             <div className="space-y-2 text-deep-navy/80">
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_subway</span>
@@ -136,6 +152,17 @@ export default function MapSection() {
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_bus</span>
                                     <p className="text-sm">Bus: Routes 12, 45, 78</p>
+
+                    {/* Mobile Toggle Button (when collapsed) */}
+                    {!showInfo && (
+                        <button
+                            onClick={() => setShowInfo(true)}
+                            className="md:hidden absolute bottom-6 left-6 z-[1000] bg-white/95 backdrop-blur-xl rounded-full p-4 shadow-xl"
+                            aria-label="Show info"
+                        >
+                            <span className="material-symbols-outlined text-deep-navy">info</span>
+                        </button>
+                    )}
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">local_parking</span>

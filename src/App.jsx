@@ -6,6 +6,8 @@ import ContentSection from './components/ContentSection';
 import MarketSection from './components/MarketSection';
 import MapSection from './components/MapSection';
 import Footer from './components/Footer';
+import Registration from './components/Registration';
+import Tickets from './components/Tickets';
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -18,6 +20,8 @@ function App() {
             <main className="relative z-10 pt-20">
                 <Hero />
                 <ContentSection />
+                <Registration />
+                <Tickets />                               
                 <MarketSection />
                 <MapSection />
             </main>
