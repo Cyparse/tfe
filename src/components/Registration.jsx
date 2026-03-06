@@ -1,0 +1,365 @@
+import React, { useState, useEffect } from 'react';
+
+export default function Registration() {
+    const [formData, setFormData] = useState({
+        type: 'amateur', // 'amateur' or 'pro'
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        organization: '', // For pro registrations
+        experience: '', // For pro registrations
+        terms: false
+    });
+    const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+
+    useEffect(() => {
+        // Check if user already registered
+        if (formData.email) {
+            const registrations = JSON.parse(localStorage.getItem('festivalRegistrations') || '[]');
+            const exists = registrations.some(reg => reg.email.toLowerCase() === formData.email.toLowerCase());
+            setAlreadyRegistered(exists);
+        }
+    }, [formData.email]);
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.firstName.trim()) {
+            newErrors.firstName = 'First name is required';
+        }
+
+        if (!formData.lastName.trim()) {
+            newErrors.lastName = 'Last name is required';
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!emailRegex.test(formData.email)) {
+            newErrors.email = 'Invalid email format';
+        }
+
+        const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+        if (!formData.phone.trim()) {
+            newErrors.phone = 'Phone number is required';
+        } else if (!phoneRegex.test(formData.phone)) {
+            newErrors.phone = 'Invalid phone number';
+        }
+
+        if (formData.type === 'pro') {
+            if (!formData.organization.trim()) {
+                newErrors.organization = 'Organization is required for professionals';
+            }
+            if (!formData.experience.trim()) {
+                newErrors.experience = 'Experience details are required';
+            }
+        }
+
+        if (!formData.terms) {
+            newErrors.terms = 'You must accept the terms and conditions';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        // Check for double registration
+        const registrations = JSON.parse(localStorage.getItem('festivalRegistrations') || '[]');
+        const emailExists = registrations.some(reg => reg.email.toLowerCase() === formData.email.toLowerCase());
+        
+        if (emailExists) {
+            setErrors({ submit: 'This email is already registered. No double registration allowed.' });
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        // Simulate API call
+        setTimeout(() => {
+            // Save registration to localStorage (prevent double registration)
+            const registration = {
+                ...formData,
+                id: Date.now(),
+                registrationDate: new Date().toISOString()
+            };
+            registrations.push(registration);
+            localStorage.setItem('festivalRegistrations', JSON.stringify(registrations));
+
+            setIsSubmitting(false);
+            setSubmitSuccess(true);
+
+            // Reset form after success message
+            setTimeout(() => {
+                setSubmitSuccess(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 3000);
+        }, 1000);
+    };
+
+    const handleReset = () => {
+        setFormData({
+            type: 'amateur',
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            organization: '',
+            experience: '',
+            terms: false
+        });
+        setErrors({});
+        setAlreadyRegistered(false);
+    };
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+        // Clear error for this field
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    return (
+        <section id="registration" className="max-w-7xl mx-auto px-6 relative z-20 pb-20">
+            {/* Wave Top */}
+            {/* <div className="relative w-full overflow-hidden leading-none -mb-px">
+                <svg preserveAspectRatio="none" viewBox="0 0 1200 120" className="w-full h-16 fill-white">
+                    <path d="M0,0 C150,90 400,10 600,60 C800,110 1050,10 1200,80 L1200,120 L0,120 Z"></path>
+                </svg>
+                {/* Wave decorations */}
+                {/* <div className="absolute top-0 left-14 w-2 h-2 bg-white rounded-full opacity-60"></div>
+                <div className="absolute top-2.5 left-24 w-1.5 h-1.5 bg-white rounded-full opacity-40"></div>
+                <div className="absolute top-5 right-16 w-3 h-3 bg-white rounded-full opacity-50"></div>
+            </div> */}
+            
+            {/* Content Card */}
+            <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl relative border-l border-r border-b border-white/10">
+                <div className="mb-10">
+                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Artist Registration</h2>
+                    <p className="text-ice-blue/80 text-lg">Join our festival as an amateur or professional artist</p>
+                </div>
+
+                <div className="max-w-4xl mx-auto">
+                    {submitSuccess ? (
+                        <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
+                            <div className="text-6xl mb-4">✓</div>
+                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Registration Successful!</h3>
+                            <p className="text-ice-blue/80">You will receive a confirmation email shortly.</p>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Registration Type */}
+                            <div>
+                                <label className="block text-sm font-semibold text-ice-blue mb-3">Registration Type</label>
+                                <div className="flex gap-4">
+                                    <label className="flex-1 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="type"
+                                            value="amateur"
+                                            checked={formData.type === 'amateur'}
+                                            onChange={handleChange}
+                                            className="sr-only"
+                                        />
+                                        <div className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                            formData.type === 'amateur' 
+                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow' 
+                                                : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
+                                        }`}>
+                                            Amateur
+                                        </div>
+                                    </label>
+                                    <label className="flex-1 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="type"
+                                            value="pro"
+                                            checked={formData.type === 'pro'}
+                                            onChange={handleChange}
+                                            className="sr-only"
+                                        />
+                                        <div className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                            formData.type === 'pro' 
+                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow' 
+                                                : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
+                                        }`}>
+                                            Professional
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Personal Information */}
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="firstName" className="block text-sm font-semibold text-ice-blue mb-2">
+                                        First Name *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="firstName"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                        className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                            errors.firstName ? 'border-red-500' : 'border-ice-blue/30'
+                                        }`}
+                                    />
+                                    {errors.firstName && <p className="mt-1 text-sm text-red-400">{errors.firstName}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="lastName" className="block text-sm font-semibold text-ice-blue mb-2">
+                                        Last Name *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="lastName"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                        className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                            errors.lastName ? 'border-red-500' : 'border-ice-blue/30'
+                                        }`}
+                                    />
+                                    {errors.lastName && <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-semibold text-ice-blue mb-2">
+                                    Email *
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                        errors.email || alreadyRegistered ? 'border-red-500' : 'border-ice-blue/30'
+                                    }`}
+                                />
+                                {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
+                                {alreadyRegistered && !errors.email && (
+                                    <p className="mt-1 text-sm text-red-400">This email is already registered</p>
+                                )}
+                            </div>
+
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-semibold text-ice-blue mb-2">
+                                    Phone Number *
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                        errors.phone ? 'border-red-500' : 'border-ice-blue/30'
+                                    }`}
+                                />
+                                {errors.phone && <p className="mt-1 text-sm text-red-400">{errors.phone}</p>}
+                            </div>
+
+                            {/* Professional Fields */}
+                            {formData.type === 'pro' && (
+                                <>
+                                    <div>
+                                        <label htmlFor="organization" className="block text-sm font-semibold text-ice-blue mb-2">
+                                            Organization / Company *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="organization"
+                                            name="organization"
+                                            value={formData.organization}
+                                            onChange={handleChange}
+                                            className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                                errors.organization ? 'border-red-500' : 'border-ice-blue/30'
+                                            }`}
+                                        />
+                                        {errors.organization && <p className="mt-1 text-sm text-red-400">{errors.organization}</p>}
+                                    </div>
+                                    <div>
+                                        <label htmlFor="experience" className="block text-sm font-semibold text-ice-blue mb-2">
+                                            Experience & Qualifications *
+                                        </label>
+                                        <textarea
+                                            id="experience"
+                                            name="experience"
+                                            value={formData.experience}
+                                            onChange={handleChange}
+                                            rows="4"
+                                            className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
+                                                errors.experience ? 'border-red-500' : 'border-ice-blue/30'
+                                            }`}
+                                            placeholder="Please describe your experience in ice/snow sculpting..."
+                                        />
+                                        {errors.experience && <p className="mt-1 text-sm text-red-400">{errors.experience}</p>}
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Terms */}
+                            <div>
+                                <label className="flex items-start gap-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="terms"
+                                        checked={formData.terms}
+                                        onChange={handleChange}
+                                        className="mt-1 w-5 h-5 accent-festival-yellow"
+                                    />
+                                    <span className="text-sm text-ice-blue/80">
+                                        I accept the terms and conditions and confirm that all information provided is accurate *
+                                    </span>
+                                </label>
+                                {errors.terms && <p className="mt-1 text-sm text-red-400">{errors.terms}</p>}
+                            </div>
+
+                            {errors.submit && (
+                                <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-300">
+                                    {errors.submit}
+                                </div>
+                            )}
+
+                            {/* Submit Button */}
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={handleReset}
+                                    className="flex-1 px-6 py-3 border-2 border-ice-blue/30 rounded-lg font-semibold text-ice-blue hover:bg-white/10 transition-colors"
+                                >
+                                    Reset Form
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting || alreadyRegistered}
+                                    className="flex-1 px-6 py-3 bg-festival-yellow text-deep-navy rounded-lg font-bold hover:bg-amber-400 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isSubmitting ? 'Submitting...' : 'Register Now'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+}

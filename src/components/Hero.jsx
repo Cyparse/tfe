@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section
       id="festival"
-      className="relative min-h-[600px] h-[85vh] flex items-center justify-center overflow-hidden"
+      className="relative min-h-[600px] h-[65vh] flex items-center justify-center overflow-hidden"
     >
       {/* Twinkle overlays with pulse animation */}
       <img 

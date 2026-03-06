@@ -1,5 +1,5 @@
 import React from 'react';
-import { snowflake } from "../assets/images";
+import { snowflake, FooterImage } from "../assets/images";
 
 export default function Footer() {
     const socialIcons = [
@@ -75,8 +75,8 @@ export default function Footer() {
             </div>
             
             {/* Footer Trees Background */}
-            <div className="absolute bottom-0 left-0 w-full h-[350px] bg-cover bg-bottom bg-no-repeat pointer-events-none z-0" 
-                 style={{backgroundImage: 'url(/assets/images/pexels-gabin-cobret-430175667-33359035_1.png)'}}></div>
+            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-[350px] bg-cover bg-bottom bg-no-repeat pointer-events-none z-0" 
+                 style={{backgroundImage: `url(${FooterImage})`}}></div>
         </footer>
     );
 }
