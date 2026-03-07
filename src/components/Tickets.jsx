@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../supabaseClient';
 
 export default function Tickets() {
     const [formData, setFormData] = useState({
@@ -83,22 +84,48 @@ export default function Tickets() {
 
         setIsSubmitting(true);
 
-        // Simulate API call with security measures
-        setTimeout(() => {
-            // Save ticket request securely
-            const ticketRequest = {
-                ...formData,
-                id: Date.now(),
-                requestDate: new Date().toISOString(),
-                status: 'pending',
-                // Security: Hash email for reference without exposing full data
-                referenceId: btoa(formData.email + Date.now()).substring(0, 16)
-            };
+        try {
+            // Insert ticket order into Supabase (tickets are free)
+            const { data, error } = await supabase
+                .from('ticket_orders')
+                .insert([
+                    {
+                        first_name: formData.firstName,
+                        last_name: formData.lastName,
+                        email: formData.email,
+                        phone: formData.phone,
+                        address: formData.address,
+                        city: formData.city,
+                        postal_code: formData.postalCode,
+                        country: formData.country,
+                        ticket_count: formData.ticketCount,
+                        special_requests: formData.specialRequests || null,
+                        newsletter_opt_in: formData.newsletter,
+                        terms_accepted: formData.terms
+                    }
+                ])
+                .select();
 
-            // Store in localStorage (in production, this would be sent to a secure backend)
-            const tickets = JSON.parse(localStorage.getItem('festivalTickets') || '[]');
-            tickets.push(ticketRequest);
-            localStorage.setItem('festivalTickets', JSON.stringify(tickets));
+            if (error) throw error;
+
+            // If newsletter is opted in, add to newsletter subscribers
+            if (formData.newsletter) {
+                // Use upsert to handle duplicate emails gracefully
+                await supabase
+                    .from('newsletter_subscribers')
+                    .upsert([
+                        {
+                            email: formData.email,
+                            first_name: formData.firstName,
+                            last_name: formData.lastName
+                        }
+                    ], {
+                        onConflict: 'email',
+                        ignoreDuplicates: false
+                    })
+                    .select();
+                // Ignore errors for newsletter (it's optional and might already exist)
+            }
 
             setIsSubmitting(false);
             setSubmitSuccess(true);
@@ -106,9 +133,15 @@ export default function Tickets() {
             // Reset form after success
             setTimeout(() => {
                 setSubmitSuccess(false);
+                handleReset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 4000);
-        }, 1000);
+
+        } catch (error) {
+            console.error('Ticket order error:', error);
+            setErrors({ submit: `Order failed: ${error.message}. Please try again.` });
+            setIsSubmitting(false);
+        }
     };
 
     const handleReset = () => {
@@ -173,15 +206,15 @@ export default function Tickets() {
             <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl relative border-l border-r border-b border-white/10">
                 <div className="mb-10">
                     <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Get Your Tickets</h2>
-                    <p className="text-ice-blue/80 text-lg">Limited to {MAX_TICKETS} tickets per person</p>
+                    <p className="text-ice-blue/80 text-lg">Free entry! Limited to {MAX_TICKETS} tickets per person</p>
                 </div>
 
                 <div className="max-w-4xl mx-auto">
                     {submitSuccess ? (
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">🎫</div>
-                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Request Submitted!</h3>
-                            <p className="text-ice-blue/80 mb-2">Your ticket request for {formData.ticketCount} ticket(s) has been received.</p>
+                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Tickets Confirmed!</h3>
+                            <p className="text-ice-blue/80 mb-2">Your {formData.ticketCount} free ticket(s) have been confirmed.</p>
                             <p className="text-sm text-ice-blue/60">Confirmation email sent to {formData.email}</p>
                         </div>                    ) : (                        <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Ticket Count */}
@@ -438,7 +471,7 @@ export default function Tickets() {
                                     disabled={isSubmitting}
                                     className="flex-1 px-6 py-3 bg-festival-yellow text-deep-navy rounded-lg font-bold hover:bg-amber-400 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {isSubmitting ? 'Processing...' : `Request ${formData.ticketCount} Ticket${formData.ticketCount > 1 ? 's' : ''}`}
+                                    {isSubmitting ? 'Processing...' : `Get ${formData.ticketCount} Free Ticket${formData.ticketCount > 1 ? 's' : ''}`}
                                 </button>
                             </div>
                         </form>

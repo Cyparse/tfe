@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 export default function Registration() {
     const [formData, setFormData] = useState({
@@ -18,11 +19,24 @@ export default function Registration() {
 
     useEffect(() => {
         // Check if user already registered
-        if (formData.email) {
-            const registrations = JSON.parse(localStorage.getItem('festivalRegistrations') || '[]');
-            const exists = registrations.some(reg => reg.email.toLowerCase() === formData.email.toLowerCase());
-            setAlreadyRegistered(exists);
-        }
+        const checkRegistration = async () => {
+            if (formData.email && formData.email.includes('@')) {
+                const { data, error } = await supabase
+                    .from('registrations')
+                    .select('email')
+                    .ilike('email', formData.email)
+                    .limit(1);
+                
+                if (!error && data && data.length > 0) {
+                    setAlreadyRegistered(true);
+                } else {
+                    setAlreadyRegistered(false);
+                }
+            }
+        };
+        
+        const timeoutId = setTimeout(checkRegistration, 500);
+        return () => clearTimeout(timeoutId);
     }, [formData.email]);
 
     const validateForm = () => {
@@ -74,27 +88,42 @@ export default function Registration() {
             return;
         }
 
-        // Check for double registration
-        const registrations = JSON.parse(localStorage.getItem('festivalRegistrations') || '[]');
-        const emailExists = registrations.some(reg => reg.email.toLowerCase() === formData.email.toLowerCase());
-        
-        if (emailExists) {
-            setErrors({ submit: 'This email is already registered. No double registration allowed.' });
-            return;
-        }
-
         setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            // Save registration to localStorage (prevent double registration)
-            const registration = {
-                ...formData,
-                id: Date.now(),
-                registrationDate: new Date().toISOString()
-            };
-            registrations.push(registration);
-            localStorage.setItem('festivalRegistrations', JSON.stringify(registrations));
+        try {
+            // Check for double registration
+            const { data: existingRegistrations, error: checkError } = await supabase
+                .from('registrations')
+                .select('email')
+                .ilike('email', formData.email)
+                .limit(1);
+            
+            if (checkError) throw checkError;
+            
+            if (existingRegistrations && existingRegistrations.length > 0) {
+                setErrors({ submit: 'This email is already registered. No double registration allowed.' });
+                setIsSubmitting(false);
+                return;
+            }
+
+            // Insert registration into Supabase
+            const { data, error } = await supabase
+                .from('registrations')
+                .insert([
+                    {
+                        type: formData.type,
+                        first_name: formData.firstName,
+                        last_name: formData.lastName,
+                        email: formData.email,
+                        phone: formData.phone,
+                        organization: formData.organization || null,
+                        experience: formData.experience || null,
+                        terms_accepted: formData.terms
+                    }
+                ])
+                .select();
+
+            if (error) throw error;
 
             setIsSubmitting(false);
             setSubmitSuccess(true);
@@ -102,9 +131,15 @@ export default function Registration() {
             // Reset form after success message
             setTimeout(() => {
                 setSubmitSuccess(false);
+                handleReset();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 3000);
-        }, 1000);
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            setErrors({ submit: `Registration failed: ${error.message}. Please try again.` });
+            setIsSubmitting(false);
+        }
     };
 
     const handleReset = () => {
