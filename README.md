@@ -1,6 +1,6 @@
 # Snow Wonder Festival
 
-A modern, responsive website for the Snow Wonder Festival built with React, Vite, Tailwind CSS, and integrated Leaflet maps.
+A modern, responsive website for the Snow Wonder Festival built with React, Vite, Tailwind CSS, integrated Leaflet maps, and Supabase backend.
 
 ## 🚀 Tech Stack
 
@@ -9,6 +9,7 @@ A modern, responsive website for the Snow Wonder Festival built with React, Vite
 - **Tailwind CSS 4** - Utility-first CSS framework
 - **PostCSS & Autoprefixer** - CSS processing
 - **Leaflet** - Interactive maps
+- **Supabase** - Database and backend services
 - **TypeScript** - Type declarations for assets
 
 ## 📁 Project Structure
@@ -23,6 +24,8 @@ tfe/
 │   │   ├── ContentSection.jsx
 │   │   ├── MarketSection.jsx # Market section with map modal
 │   │   ├── MapSection.jsx   # Interactive Leaflet map
+│   │   ├── Registration.jsx # Participant registration (amateur/pro)
+│   │   ├── Tickets.jsx      # Ticket purchase form
 │   │   └── Footer.jsx
 │   ├── assets/
 │   │   └── images/          # Image assets and TypeScript index
@@ -35,6 +38,7 @@ tfe/
 │   ├── main.jsx             # App entry point
 │   └── vite-env.d.ts        # TypeScript declarations for assets
 ├── public/                   # Static assets
+├── .env                      # Environment variables (Supabase keys)
 ├── index.html               # HTML template with Leaflet CDN
 ├── tsconfig.json            # TypeScript configuration
 ├── tsconfig.node.json       # Node TypeScript configuration
@@ -51,6 +55,32 @@ Make sure you have Node.js and npm installed, then run:
 ```bash
 npm install
 ```
+
+## ⚙️ Configuration
+
+Create a `.env` file in the root directory with your Supabase credentials:
+
+```env
+VITE_SUPABASE_URL=your-project-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+To get your Supabase credentials:
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project
+3. Navigate to **Settings** → **API**
+4. Copy the **Project URL** and **anon public** key
+
+## 💾 Database Setup
+
+The project uses Supabase (PostgreSQL) with the following tables:
+- **registrations** - Participant registrations (amateur/pro)
+- **ticket_orders** - Ticket purchases with customer details
+- **events** - Festival events and scheduling
+- **market_locations** - Map markers for market locations
+- **newsletter_subscribers** - Newsletter subscriptions
+
+Run the SQL schema in your Supabase SQL Editor (see database setup guide in project docs).
 
 ## 💻 Development
 
@@ -88,6 +118,9 @@ npm run preview
 - ✅ Scroll-to-top button
 - ✅ Interactive Leaflet maps with custom markers
 - ✅ Modal overlays with maps
+- ✅ Participant registration (amateur/professional)
+- ✅ Ticket purchase system with validation
+- ✅ Form validation and error handling
 - ✅ Twinkle/sparkle animations
 - ✅ Custom SVG icons (food & drink)
 - ✅ Fast development with HMR
@@ -96,6 +129,7 @@ npm run preview
 - ✅ Modern React with hooks
 - ✅ Component-based architecture
 - ✅ TypeScript asset declarations
+- ✅ Supabase backend integration
 
 ## 🗺️ Map Integration
 
@@ -136,3 +170,62 @@ import { snowflake, Logo, HeroImage, FooterImage } from '../assets/images';
 - Mobile: Hamburger menu with snowflake logo
 - Optimized layouts for all screen sizes
 - Touch-friendly interface
+
+## 🗄️ Database Schema
+
+### Tables
+
+**registrations**
+- Participant registrations (amateur/professional)
+- Fields: type, first_name, last_name, email, phone, organization, experience
+- Email uniqueness constraint
+- Timestamps for tracking
+
+**ticket_orders**
+- Ticket purchases with customer details
+- Fields: customer info, address, ticket_count (1-10), special_requests
+- Order status tracking (pending, confirmed, cancelled)
+- Payment status (unpaid, paid, refunded)
+
+**events**
+- Festival events and scheduling
+- Fields: title, description, event_type, start_time, end_time, location
+- Capacity management
+
+**market_locations**
+- Map markers for interactive map
+- Fields: name, type, description, latitude, longitude, icon
+- Used for Leaflet map integration
+
+**newsletter_subscribers**
+- Newsletter subscription management
+- Email uniqueness constraint
+
+### Security
+
+- Row Level Security (RLS) enabled on all tables
+- Public read access for events and locations
+- Public insert for registrations, orders, and subscriptions
+- User-specific access policies (ready for authentication)
+
+## 🔧 Environment Variables
+
+```env
+VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+⚠️ Never commit the `.env` file to version control!
+
+## 📦 Dependencies
+
+Key packages:
+- `react` & `react-dom` - UI framework
+- `@supabase/supabase-js` - Backend client
+- `leaflet` - Map integration
+- `tailwindcss` - Styling framework
+- `vite` - Build tool
+
+---
+
+Built with ❄️ for Snow Wonder Festival 2026
