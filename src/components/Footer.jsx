@@ -75,7 +75,7 @@ export default function Footer() {
             </div>
             
             {/* Footer Trees Background */}
-            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-[350px] bg-cover bg-bottom bg-no-repeat pointer-events-none z-0" 
+            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-[440px] bg-cover bg-bottom bg-no-repeat pointer-events-none z-0" 
                  style={{backgroundImage: `url(${FooterImage})`}}></div>
         </footer>
     );
