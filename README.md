@@ -182,10 +182,9 @@ import { snowflake, Logo, HeroImage, FooterImage } from '../assets/images';
 - Timestamps for tracking
 
 **ticket_orders**
-- Ticket purchases with customer details
-- Fields: customer info, address, ticket_count (1-10), special_requests
-- Order status tracking (pending, confirmed, cancelled)
-- Payment status (unpaid, paid, refunded)
+- Free ticket reservations with customer details
+- Fields: customer info, address, ticket_count (1-10), special_requests, newsletter_opt_in
+- No payment required - tickets are free
 
 **events**
 - Festival events and scheduling
