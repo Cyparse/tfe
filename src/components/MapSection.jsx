@@ -12,6 +12,7 @@ export default function MapSection() {
             const mainFestivalLocation = [50.602860262325706, 3.3809785070446057];
             const foodVillageLocation = [50.602511757616966, 3.388043095146282];
             const amateurLocation = [50.599967067972884, 3.3919939590763226];
+            const gazeboLocation = [50.60274997307288, 3.387951859916449];
 
             // Set zoom level based on screen width
             const isMobile = screen.width < 768;
@@ -55,6 +56,14 @@ export default function MapSection() {
                 iconAnchor: [15, 30]
             });
 
+            // Custom marker icon for gazebo (with image inside)
+            const gazeboIcon = window.L.divIcon({
+                html: '<div style="background-color: white; width: 35px; height: 35px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid #8b4789; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="/gazebo.png" style="width: 20px; height: 20px; object-fit: contain; transform: rotate(45deg);" /></div>',
+                className: 'custom-marker',
+                iconSize: [35, 35],
+                iconAnchor: [17.5, 35]
+            });
+
             // Add main festival marker
             const mainMarker = window.L.marker(mainFestivalLocation, {
                 icon: mainIcon
@@ -91,6 +100,19 @@ export default function MapSection() {
                     <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Amateur Location</h3>
                     <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Community Performances</p>
                     <a href="https://www.google.com/maps/dir/?api=1&destination=50.601703501440326,3.4015264883903047" target="_blank" style="display: inline-block; background-color: #4ecdc4; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
+                </div>
+            `);
+
+            // Add gazebo marker
+            const gazeboMarker = window.L.marker(gazeboLocation, {
+                icon: gazeboIcon
+            }).addTo(leafletMapRef.current);
+
+            gazeboMarker.bindPopup(`
+                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
+                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Gazebo Area</h3>
+                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Outdoor Pavilion</p>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.60274997307288,3.387951859916449" target="_blank" style="display: inline-block; background-color: #8b4789; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
                 </div>
             `);
         }

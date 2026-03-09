@@ -1,0 +1,123 @@
+{
+  "version": 8,
+  "name": "winter-event-minimal",
+
+  "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+
+  "sources": {
+    "mapbox": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v8"
+    }
+  },
+
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f1f7fe"
+      }
+    },
+
+    {
+  "id": "green-areas",
+  "type": "fill",
+  "source": "mapbox",
+  "source-layer": "landuse",
+  "filter": ["in", "class", "park", "grass", "pitch"],
+  "paint": {
+    "fill-color": "#ceeafd"
+  }
+},
+
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "mapbox",
+      "source-layer": "water",
+      "paint": {
+        "fill-color": "#92b8d3"
+      }
+    },
+
+    {
+      "id": "road-outline",
+      "type": "line",
+      "source": "mapbox",
+      "source-layer": "road",
+      "paint": {
+        "line-color": "#aecfea",
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10, 1,
+          16, 4
+        ]
+      }
+    },
+
+    {
+      "id": "road",
+      "type": "line",
+      "source": "mapbox",
+      "source-layer": "road",
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10, 0.5,
+          16, 2
+        ]
+      }
+    },
+    {
+  "id": "place-label",
+  "type": "symbol",
+  "source": "mapbox",
+  "source-layer": "place_label",
+  "layout": {
+    "text-field": ["get", "name"],
+    "text-font": ["Open Sans Bold"],
+    "text-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      8, 12,
+      14, 18
+    ]
+  },
+  "paint": {
+    "text-color": "#002442",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 2
+  }
+},
+{
+  "id": "road-label",
+  "type": "symbol",
+  "source": "mapbox",
+  "source-layer": "road",
+  "layout": {
+    "symbol-placement": "line",
+    "text-field": ["get", "name"],
+    "text-font": ["Open Sans Regular"],
+    "text-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      12, 10,
+      16, 14
+    ]
+  },
+  "paint": {
+    "text-color": "#002442",
+    "text-halo-color": "#ffffff",
+    "text-halo-width": 1.5
+  }
+}
+  ]
+}
