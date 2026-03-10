@@ -64,6 +64,12 @@ export default function Footer() {
                                     <a href="#" className="hover:text-white transition-colors">{link}</a>
                                 </li>
                             ))}
+                            <li>
+                                <a href="#admin" className="hover:text-white transition-colors flex items-center gap-2">
+                                    <span>🔐</span>
+                                    <span>Admin Access</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

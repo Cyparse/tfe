@@ -28,6 +28,15 @@ export default function AdminLogin({ onLoginSuccess }) {
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
             <div className="max-w-md w-full">
                 <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
+                    <div className="flex items-center justify-between mb-6">
+                        <a 
+                            href="#"
+                            className="text-blue-200 hover:text-white text-sm flex items-center transition-colors"
+                        >
+                            ← Back to Home
+                        </a>
+                    </div>
+
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
                         <p className="text-blue-200">Sign in to access the dashboard</p>

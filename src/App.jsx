@@ -14,15 +14,32 @@ import { getCurrentUser } from './services/authService';
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [currentView, setCurrentView] = useState('home');
     const [isAdmin, setIsAdmin] = useState(false);
     const [adminUser, setAdminUser] = useState(null);
     const [checkingAuth, setCheckingAuth] = useState(true);
 
-    // Check if accessing admin route
-    const isAdminRoute = window.location.pathname === '/admin' || window.location.hash === '#admin';
-
+    // Check auth on mount
     useEffect(() => {
         checkAuth();
+    }, []);
+
+    // Listen for hash changes (SPA routing)
+    useEffect(() => {
+        const handleHashChange = () => {
+            if (window.location.hash === '#admin') {
+                setCurrentView('admin');
+            } else {
+                setCurrentView('home');
+            }
+        };
+
+        // Check initial hash
+        handleHashChange();
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
     }, []);
 
     const checkAuth = async () => {
@@ -47,11 +64,11 @@ function App() {
     const handleLogout = () => {
         setAdminUser(null);
         setIsAdmin(false);
-        window.location.href = '/';
+        window.location.hash = '';
     };
 
-    // Admin route handling
-    if (isAdminRoute) {
+    // Admin view
+    if (currentView === 'admin') {
         if (checkingAuth) {
             return (
                 <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -66,6 +83,15 @@ function App() {
 
         return <AdminPanel user={adminUser} onLogout={handleLogout} />;
     }
+
+            {/* Admin Access Link */}
+            <a 
+                href="#admin"
+                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
+                title="Admin Panel"
+            >
+                🔐 Admin
+            </a>
 
     // Main public website
     return (

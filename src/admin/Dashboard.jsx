@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getRegistrationStats, getTicketStats } from '../services/registrationService';
+import { getRegistrationStats } from '../services/registrationService';
+import { getTicketStats } from '../services/ticketService';
 
 export default function Dashboard() {
     const [stats, setStats] = useState({
