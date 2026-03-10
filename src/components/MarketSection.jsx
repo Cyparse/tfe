@@ -18,7 +18,7 @@ export default function MarketSection() {
       const SausageLocation = [50.602741, 3.388638];
       const WafflesLocation = [50.602676, 3.388451];
       const CandyLocation = [50.602568, 3.38824];
-      const GazeboLocation = [50.602558, 3.387799];
+      const GazeboLocation = [50.602631, 3.387923];
 
       // Create map
       leafletMapRef.current = window.L.map(mapRef.current, {
@@ -40,67 +40,67 @@ export default function MarketSection() {
       // Custom icons
 
       const friesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🍟</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/fries.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const pretzelIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🥨</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/pretzel.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const racletteIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🧀</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/cheese.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const clothesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #3a7ca5; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🧣</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #3a7ca5; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/gloves.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const hotDrinksIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">☕</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/coffee.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const sausageIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🌭</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/sausage.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const wafflesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🧇</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/waffle.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       // Custom marker icons
       const candyIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); font-size: 24px;">🍬</div>',
+        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/candy.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
       });
 
       const gazeboIcon = window.L.divIcon({
-        html: '<div style="background-color: #3a7ca5; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #FFFFFF; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/gazebo.png" style="width: 32px; height: 32px; object-fit: contain;" /></div>',
+        html: '<div style="background-color: #3a7ca5; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #FFFFFF; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/gazebo.png" style="width: 32px; height: 32px; object-fit: contain;" /></div>',
         className: "custom-marker",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
+        iconSize: [60, 60],
+        iconAnchor: [30, 30],
       });
 
       // Add craft vendor marker
