@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Navigation from './components/Navigation';
 import SideMenu from './components/SideMenu';
 import Hero from './components/Hero';
@@ -71,27 +72,31 @@ function App() {
     if (currentView === 'admin') {
         if (checkingAuth) {
             return (
-                <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                    <div className="text-gray-600">Loading...</div>
-                </div>
+                <>
+                    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+                        <div className="text-gray-600">Loading...</div>
+                    </div>
+                    <Analytics />
+                </>
             );
         }
 
         if (!isAdmin) {
-            return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+            return (
+                <>
+                    <AdminLogin onLoginSuccess={handleLoginSuccess} />
+                    <Analytics />
+                </>
+            );
         }
 
-        return <AdminPanel user={adminUser} onLogout={handleLogout} />;
+        return (
+            <>
+                <AdminPanel user={adminUser} onLogout={handleLogout} />
+                <Analytics />
+            </>
+        );
     }
-
-            {/* Admin Access Link */}
-            <a 
-                href="#admin"
-                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
-                title="Admin Panel"
-            >
-                🔐 Admin
-            </a>
 
     // Main public website
     return (
@@ -109,6 +114,17 @@ function App() {
             </main>
             
             <Footer />
+            
+            {/* Admin Access Link */}
+            <a 
+                href="#admin"
+                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
+                title="Admin Panel"
+            >
+                🔐 Admin
+            </a>
+            
+            <Analytics />
         </div>
     );
 }
