@@ -10,7 +10,24 @@ import Registration from './components/Registration';
 import Tickets from './components/Tickets';
 import AdminLogin from './admin/AdminLogin';
 import AdminPanel from './admin/AdminPanel';
-import { getCurrentUser } from './services/authService';
+import UpdatePassword from './admin/UpdatePassword';
+import { getCurrentUser, isAdmin as checkAdminAccess } from './services/authService';
+import { Analytics } from "@vercel/analytics/react";
+
+
+const getViewFromLocation = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.get('mode') === 'update-password') {
+        return 'update-password';
+    }
+
+    if (window.location.hash === '#admin') {
+        return 'admin';
+    }
+
+    return 'home';
+};
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -26,28 +43,33 @@ function App() {
 
     // Listen for hash changes (SPA routing)
     useEffect(() => {
-        const handleHashChange = () => {
-            if (window.location.hash === '#admin') {
-                setCurrentView('admin');
-            } else {
-                setCurrentView('home');
-            }
+        const handleLocationChange = () => {
+            setCurrentView(getViewFromLocation());
         };
 
-        // Check initial hash
-        handleHashChange();
+        // Check initial location
+        handleLocationChange();
 
-        // Listen for hash changes
-        window.addEventListener('hashchange', handleHashChange);
-        return () => window.removeEventListener('hashchange', handleHashChange);
+        // Listen for location changes
+        window.addEventListener('hashchange', handleLocationChange);
+        window.addEventListener('popstate', handleLocationChange);
+
+        return () => {
+            window.removeEventListener('hashchange', handleLocationChange);
+            window.removeEventListener('popstate', handleLocationChange);
+        };
     }, []);
 
     const checkAuth = async () => {
         try {
             const user = await getCurrentUser();
-            if (user) {
+
+            if (user && await checkAdminAccess()) {
                 setAdminUser(user);
                 setIsAdmin(true);
+            } else {
+                setAdminUser(null);
+                setIsAdmin(false);
             }
         } catch (error) {
             console.error('Auth check error:', error);
@@ -67,6 +89,16 @@ function App() {
         window.location.hash = '';
     };
 
+    const handleReturnToAdmin = () => {
+        window.history.replaceState({}, document.title, `${window.location.pathname}#admin`);
+        setCurrentView('admin');
+        checkAuth();
+    };
+
+    if (currentView === 'update-password') {
+        return <UpdatePassword onReturnToAdmin={handleReturnToAdmin} />;
+    }
+
     // Admin view
     if (currentView === 'admin') {
         if (checkingAuth) {
@@ -84,15 +116,6 @@ function App() {
         return <AdminPanel user={adminUser} onLogout={handleLogout} />;
     }
 
-            {/* Admin Access Link */}
-            <a 
-                href="#admin"
-                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
-                title="Admin Panel"
-            >
-                🔐 Admin
-            </a>
-
     // Main public website
     return (
         <div className="bg-gradient-to-b from-ice-blue via-midblue to-deep-navy min-h-screen relative overflow-x-hidden">
@@ -109,6 +132,15 @@ function App() {
             </main>
             
             <Footer />
+
+            <a
+                href="#admin"
+                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
+                title="Admin Panel"
+            >
+                🔐 Admin
+            </a>
+            <Analytics />
         </div>
     );
 }

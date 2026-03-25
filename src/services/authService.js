@@ -44,6 +44,39 @@ export const signOut = async () => {
     }
 };
 
+// Send password reset email
+export const requestPasswordReset = async (email, redirectTo) => {
+    try {
+        const fallbackRedirect = `${window.location.origin}${window.location.pathname}?mode=update-password`;
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: redirectTo || fallbackRedirect
+        });
+
+        if (error) throw error;
+
+        return data;
+    } catch (error) {
+        console.error('Password reset error:', error);
+        throw error;
+    }
+};
+
+// Update current user's password
+export const updatePassword = async (password) => {
+    try {
+        const { data, error } = await supabase.auth.updateUser({
+            password
+        });
+
+        if (error) throw error;
+
+        return data;
+    } catch (error) {
+        console.error('Update password error:', error);
+        throw error;
+    }
+};
+
 // Get current session
 export const getCurrentSession = async () => {
     try {

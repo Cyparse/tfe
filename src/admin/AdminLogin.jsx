@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ForgotPassword from './ForgotPassword';
 import { signInAdmin } from '../services/authService';
 
 export default function AdminLogin({ onLoginSuccess }) {
@@ -8,6 +9,16 @@ export default function AdminLogin({ onLoginSuccess }) {
     });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+    if (showForgotPassword) {
+        return (
+            <ForgotPassword
+                initialEmail={credentials.email}
+                onBack={() => setShowForgotPassword(false)}
+            />
+        );
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,6 +88,17 @@ export default function AdminLogin({ onLoginSuccess }) {
                                 placeholder="••••••••"
                                 disabled={isLoading}
                             />
+
+                            <div className="mt-3 text-right">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowForgotPassword(true)}
+                                    disabled={isLoading}
+                                    className="text-sm text-blue-200 hover:text-white transition-colors disabled:opacity-50"
+                                >
+                                    Forgot password?
+                                </button>
+                            </div>
                         </div>
 
                         <button
