@@ -108,21 +108,21 @@ export default function MarketSection() {
           <div className="flex flex-col gap-8 order-1 md:order-2">
             <div className="flex items-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs">
               <span className="h-0.5 w-16 bg-festival-yellow"></span>
-              Seasonal Magic
+              Magie de saison
             </div>
             <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md">
-              Cozy Nights at the Winter Market
+              Soirées douillettes au marché d'hiver
             </h2>
             <p className="text-xl text-ice-blue font-medium">
-              Warm your hands with artisan hot cocoa and find one-of-a-kind
-              treasures. Our market features over 50 local vendors, glowing
-              lanterns, and live music.
+              Réchauffez-vous avec un chocolat chaud artisanal et découvrez
+              des trésors uniques. Notre marché réunit plus de 50 exposants
+              locaux, des lampions lumineux et de la musique live.
             </p>
             <ul className="flex flex-col gap-5 text-white/90">
               {[
-                "Artisanal Handcrafted Gifts",
-                "Traditional Seasonal Delicacies",
-                "Ice Skating Rink & Live Entertainment",
+                "Cadeaux artisanaux uniques",
+                "Spécialités et délices de saison",
+                "Patinoire & animations live",
               ].map((feature) => (
                 <li key={feature} className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-festival-yellow bg-white/10 p-1 rounded-full text-xl">
@@ -136,7 +136,7 @@ export default function MarketSection() {
               onClick={() => setIsModalOpen(true)}
               className="bg-festival-yellow text-white py-5 px-12 rounded-2xl font-bold shadow-2xl hover:bg-festival-yellow/90 transition-all flex items-center justify-center gap-3 w-full md:w-auto uppercase tracking-[0.2em] text-sm"
             >
-              Browse the Market
+              Explorer le marché
               <span className="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>

@@ -33,53 +33,53 @@ export default function Tickets() {
         const newErrors = {};
 
         if (!formData.firstName.trim()) {
-            newErrors.firstName = 'First name is required';
+            newErrors.firstName = 'Le prénom est requis';
         }
 
         if (!formData.lastName.trim()) {
-            newErrors.lastName = 'Last name is required';
+            newErrors.lastName = 'Le nom est requis';
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = "L'e-mail est requis";
         } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = 'Invalid email format';
+            newErrors.email = "Format d'e-mail invalide";
         }
 
         const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
         if (!formData.phone.trim()) {
-            newErrors.phone = 'Phone number is required';
+            newErrors.phone = 'Le numéro de téléphone est requis';
         } else if (!phoneRegex.test(formData.phone)) {
-            newErrors.phone = 'Invalid phone number';
+            newErrors.phone = 'Numéro de téléphone invalide';
         }
 
         if (!formData.address.trim()) {
-            newErrors.address = 'Address is required';
+            newErrors.address = "L'adresse est requise";
         }
 
         if (!formData.city.trim()) {
-            newErrors.city = 'City is required';
+            newErrors.city = 'La ville est requise';
         }
 
         if (!formData.postalCode.trim()) {
-            newErrors.postalCode = 'Postal code is required';
+            newErrors.postalCode = 'Le code postal est requis';
         }
 
         if (!formData.country.trim()) {
-            newErrors.country = 'Country is required';
+            newErrors.country = 'Le pays est requis';
         }
 
         if (formData.ticketCount < 1 || formData.ticketCount > MAX_TICKETS) {
-            newErrors.ticketCount = `Ticket count must be between 1 and ${MAX_TICKETS}`;
+            newErrors.ticketCount = `Le nombre de billets doit être entre 1 et ${MAX_TICKETS}`;
         }
 
         if (!formData.edition) {
-            newErrors.edition = 'Please select a festival edition';
+            newErrors.edition = 'Veuillez sélectionner une édition du festival';
         }
 
         if (!formData.terms) {
-            newErrors.terms = 'You must accept the terms and conditions';
+            newErrors.terms = 'Vous devez accepter les conditions générales';
         }
 
         setErrors(newErrors);
@@ -151,7 +151,7 @@ export default function Tickets() {
 
         } catch (error) {
             console.error('Ticket order error:', error);
-            setErrors({ submit: `Order failed: ${error.message}. Please try again.` });
+            setErrors({ submit: `La commande a échoué : ${error.message}. Veuillez réessayer.` });
             setIsSubmitting(false);
         }
     };
@@ -218,21 +218,21 @@ export default function Tickets() {
             {/* Content Card */}
             <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl relative border-l border-r border-b border-white/10">
                 <div className="mb-10">
-                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Get Your Tickets</h2>
-                    <p className="text-ice-blue/80 text-lg">Free entry! Limited to {MAX_TICKETS} tickets per person</p>
+                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Vos Billets</h2>
+                    <p className="text-ice-blue/80 text-lg">Entrée gratuite ! Limité à {MAX_TICKETS} billets par personne</p>
                 </div>
 
                 <div className="max-w-4xl mx-auto">
                     {submitSuccess ? (
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">🎫</div>
-                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Tickets Confirmed!</h3>
-                            <p className="text-ice-blue/80 mb-2">Your {formData.ticketCount} free ticket(s) have been confirmed.</p>
-                            <p className="text-sm text-ice-blue/60">Confirmation email sent to {formData.email}</p>
+                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Billets confirmés !</h3>
+                            <p className="text-ice-blue/80 mb-2">Vos {formData.ticketCount} billet{formData.ticketCount > 1 ? 's' : ''} gratuit{formData.ticketCount > 1 ? 's' : ''} ont été confirmés.</p>
+                            <p className="text-sm text-ice-blue/60">E-mail de confirmation envoyé à {formData.email}</p>
                         </div>                    ) : (                        <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Festival Edition */}
                             <div>
-                                <label className="block text-sm font-semibold text-ice-blue mb-3">Festival Edition *</label>
+                                <label className="block text-sm font-semibold text-ice-blue mb-3">Édition du festival *</label>
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     {EDITIONS.map((ed) => (
                                         <label key={ed.value} className="flex-1 cursor-pointer">
@@ -261,7 +261,7 @@ export default function Tickets() {
                             {/* Ticket Count */}
                             <div className="bg-festival-yellow/20 p-6 rounded-xl border-2 border-festival-yellow/50">
                                 <label htmlFor="ticketCount" className="block text-lg font-bold text-festival-yellow mb-3">
-                                    Number of Tickets *
+                                    Nombre de billets *
                                 </label>
                                 <div className="flex items-center gap-4">
                                     <input
@@ -298,7 +298,7 @@ export default function Tickets() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="firstName" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        First Name *
+                                        Prénom *
                                     </label>
                                     <input
                                         type="text"
@@ -315,7 +315,7 @@ export default function Tickets() {
                                 </div>
                                 <div>
                                     <label htmlFor="lastName" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Last Name *
+                                        Nom *
                                     </label>
                                     <input
                                         type="text"
@@ -335,7 +335,7 @@ export default function Tickets() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Email *
+                                        E-mail *
                                     </label>
                                     <input
                                         type="email"
@@ -352,7 +352,7 @@ export default function Tickets() {
                                 </div>
                                 <div>
                                     <label htmlFor="phone" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Phone Number *
+                                        Numéro de téléphone *
                                     </label>
                                     <input
                                         type="tel"
@@ -372,7 +372,7 @@ export default function Tickets() {
                             {/* Address Information */}
                             <div>
                                 <label htmlFor="address" className="block text-sm font-semibold text-ice-blue mb-2">
-                                    Street Address *
+                                    Adresse *
                                 </label>
                                 <input
                                     type="text"
@@ -391,7 +391,7 @@ export default function Tickets() {
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        City *
+                                        Ville *
                                     </label>
                                     <input
                                         type="text"
@@ -408,7 +408,7 @@ export default function Tickets() {
                                 </div>
                                 <div>
                                     <label htmlFor="postalCode" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Postal Code *
+                                        Code postal *
                                     </label>
                                     <input
                                         type="text"
@@ -425,7 +425,7 @@ export default function Tickets() {
                                 </div>
                                 <div>
                                     <label htmlFor="country" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Country *
+                                        Pays *
                                     </label>
                                     <input
                                         type="text"
@@ -445,7 +445,7 @@ export default function Tickets() {
                             {/* Special Requests */}
                             <div>
                                 <label htmlFor="specialRequests" className="block text-sm font-semibold text-ice-blue mb-2">
-                                    Special Requests (Optional)
+                                    Demandes particulières (Optionnel)
                                 </label>
                                 <textarea
                                     id="specialRequests"
@@ -454,7 +454,7 @@ export default function Tickets() {
                                     onChange={handleChange}
                                     rows="3"
                                     className="w-full px-4 py-2 bg-white/10 border border-ice-blue/30 text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent"
-                                    placeholder="Accessibility needs, group seating, etc."
+                                    placeholder="Besoins d'accessibilité, groupes, etc."
                                 />
                             </div>
 
@@ -469,7 +469,7 @@ export default function Tickets() {
                                         className="w-5 h-5 accent-festival-yellow"
                                     />
                                     <span className="text-sm text-ice-blue/80">
-                                        Subscribe to festival newsletter for updates and special offers
+                                        S'abonner à la newsletter pour recevoir les actualités et offres spéciales
                                     </span>
                                 </label>
                             </div>
@@ -485,7 +485,7 @@ export default function Tickets() {
                                         className="mt-1 w-5 h-5 accent-festival-yellow"
                                     />
                                     <span className="text-sm text-ice-blue/80">
-                                        I agree to the terms and conditions and privacy policy. I understand that ticket availability is subject to confirmation. *
+                                        J'accepte les conditions générales et la politique de confidentialité. Je comprends que la disponibilité des billets est soumise à confirmation. *
                                     </span>
                                 </label>
                                 {errors.terms && <p className="mt-1 text-sm text-red-400">{errors.terms}</p>}
@@ -494,7 +494,7 @@ export default function Tickets() {
                             {/* Security Note */}
                             <div className="bg-emerald-900/20 border border-emerald-900 rounded-lg p-4 flex items-start gap-3">
                                 <div className="text-sm text-emerald-500">
-                                    <strong>Secure Form:</strong> Your personal information is encrypted and protected. We will never share your data with third parties.
+                                    <strong>Formulaire sécurisé :</strong> Vos données personnelles sont chiffrées et protégées. Nous ne partagerons jamais vos données avec des tiers.
                                 </div>
                             </div>
 
@@ -505,14 +505,14 @@ export default function Tickets() {
                                     onClick={handleReset}
                                     className="flex-1 px-6 py-3 border-2 border-ice-blue/30 rounded-lg font-semibold text-ice-blue hover:bg-white/10 transition-colors"
                                 >
-                                    Reset Form
+                                    Réinitialiser
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
                                     className="flex-1 px-6 py-3 bg-festival-yellow text-deep-navy rounded-lg font-bold hover:bg-amber-400 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {isSubmitting ? 'Processing...' : `Get ${formData.ticketCount} Free Ticket${formData.ticketCount > 1 ? 's' : ''}`}
+                                    {isSubmitting ? 'Traitement en cours...' : `Obtenir ${formData.ticketCount} billet${formData.ticketCount > 1 ? 's' : ''} gratuit${formData.ticketCount > 1 ? 's' : ''}`}
                                 </button>
                             </div>
                         </form>

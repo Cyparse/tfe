@@ -50,42 +50,42 @@ const EDITIONS = [
         const newErrors = {};
 
         if (!formData.firstName.trim()) {
-            newErrors.firstName = 'First name is required';
+            newErrors.firstName = 'Le prénom est requis';
         }
 
         if (!formData.lastName.trim()) {
-            newErrors.lastName = 'Last name is required';
+            newErrors.lastName = 'Le nom est requis';
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = "L'e-mail est requis";
         } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = 'Invalid email format';
+            newErrors.email = "Format d'e-mail invalide";
         }
 
         const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
         if (!formData.phone.trim()) {
-            newErrors.phone = 'Phone number is required';
+            newErrors.phone = 'Le numéro de téléphone est requis';
         } else if (!phoneRegex.test(formData.phone)) {
-            newErrors.phone = 'Invalid phone number';
+            newErrors.phone = 'Numéro de téléphone invalide';
         }
 
         if (formData.type === 'pro') {
             if (!formData.organization.trim()) {
-                newErrors.organization = 'Organization is required for professionals';
+                newErrors.organization = "L'organisation est requise pour les professionnels";
             }
             if (!formData.experience.trim()) {
-                newErrors.experience = 'Experience details are required';
+                newErrors.experience = "Les détails d'expérience sont requis";
             }
         }
 
         if (!formData.edition) {
-            newErrors.edition = 'Please select a festival edition';
+            newErrors.edition = 'Veuillez sélectionner une édition du festival';
         }
 
         if (!formData.terms) {
-            newErrors.terms = 'You must accept the terms and conditions';
+            newErrors.terms = 'Vous devez accepter les conditions générales';
         }
 
         setErrors(newErrors);
@@ -112,7 +112,7 @@ const EDITIONS = [
             if (checkError) throw checkError;
             
             if (existingRegistrations && existingRegistrations.length > 0) {
-                setErrors({ submit: 'This email is already registered. No double registration allowed.' });
+                setErrors({ submit: 'Cet e-mail est déjà enregistré. Les inscriptions en double ne sont pas autorisées.' });
                 setIsSubmitting(false);
                 return;
             }
@@ -149,7 +149,7 @@ const EDITIONS = [
 
         } catch (error) {
             console.error('Registration error:', error);
-            setErrors({ submit: `Registration failed: ${error.message}. Please try again.` });
+            setErrors({ submit: `L'inscription a échoué : ${error.message}. Veuillez réessayer.` });
             setIsSubmitting(false);
         }
     };
@@ -332,7 +332,7 @@ const EDITIONS = [
                                 />
                                 {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
                                 {alreadyRegistered && !errors.email && (
-                                    <p className="mt-1 text-sm text-red-400">This email is already registered</p>
+                                    <p className="mt-1 text-sm text-red-400">Cet e-mail est déjà enregistré</p>
                                 )}
                             </div>
 
@@ -374,7 +374,7 @@ const EDITIONS = [
                                     </div>
                                     <div>
                                         <label htmlFor="experience" className="block text-sm font-semibold text-ice-blue mb-2">
-                                            Experience & Qualifications *
+                                            Expérience & Qualifications *
                                         </label>
                                         <textarea
                                             id="experience"
@@ -385,7 +385,7 @@ const EDITIONS = [
                                             className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
                                                 errors.experience ? 'border-red-500' : 'border-ice-blue/30'
                                             }`}
-                                            placeholder="Please describe your experience in ice/snow sculpting..."
+                                            placeholder="Décrivez votre expérience en sculpture sur glace/neige..."
                                         />
                                         {errors.experience && <p className="mt-1 text-sm text-red-400">{errors.experience}</p>}
                                     </div>
@@ -403,7 +403,7 @@ const EDITIONS = [
                                         className="mt-1 w-5 h-5 accent-festival-yellow"
                                     />
                                     <span className="text-sm text-ice-blue/80">
-                                        I accept the terms and conditions and confirm that all information provided is accurate *
+                                        J'accepte les conditions générales et confirme que toutes les informations fournies sont exactes *
                                     </span>
                                 </label>
                                 {errors.terms && <p className="mt-1 text-sm text-red-400">{errors.terms}</p>}
@@ -422,14 +422,14 @@ const EDITIONS = [
                                     onClick={handleReset}
                                     className="flex-1 px-6 py-3 border-2 border-ice-blue/30 rounded-lg font-semibold text-ice-blue hover:bg-white/10 transition-colors"
                                 >
-                                    Reset Form
+                                    Réinitialiser
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting || alreadyRegistered}
                                     className="flex-1 px-6 py-3 bg-festival-yellow text-deep-navy rounded-lg font-bold hover:bg-amber-400 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {isSubmitting ? 'Submitting...' : 'Register Now'}
+                                    {isSubmitting ? 'Envoi en cours...' : "S'inscrire"}
                                 </button>
                             </div>
                         </form>

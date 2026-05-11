@@ -135,14 +135,14 @@ export default function MapSection() {
                 <div className="text-center mb-12">
                     <div className="flex items-center justify-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs mb-6">
                         <span className="h-0.5 w-16 bg-festival-yellow"></span>
-                        Visit Us
+                        Nous Trouver
                         <span className="h-0.5 w-16 bg-festival-yellow"></span>
                     </div>
                     <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md mb-4">
-                        Find the Festival
+                        Trouver le Festival
                     </h2>
                     <p className="text-xl text-ice-blue font-medium max-w-2xl mx-auto">
-                        Located in the heart of the winter wonderland, easily accessible by public transport
+                        Au cœur de l'hiver, facilement accessible en voiture ou à pied depuis la gare
                     </p>
                 </div>
 
@@ -157,7 +157,7 @@ export default function MapSection() {
                     <div className={`absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-1000 transition-transform duration-300 ${showInfo ? 'translate-y-0' : 'translate-y-[calc(100%+24px)]'}`}>
                         <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl max-w-md">
                             <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-2xl font-bold text-deep-navy">Getting Here</h3>
+                                <h3 className="text-2xl font-bold text-deep-navy">Comment venir</h3>
                                 <button 
                                     onClick={() => setShowInfo(!showInfo)}
                                     className="md:hidden text-deep-navy hover:text-festival-yellow transition-colors"
@@ -171,11 +171,11 @@ export default function MapSection() {
                             <div className="space-y-2 text-deep-navy/80">
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_car</span>
-                                    <p className="text-sm">By car: follow signs for the city centre, free parking available nearby</p>
+                                    <p className="text-sm">En voiture : suivre les panneaux vers le centre-ville, stationnement gratuit à proximité</p>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
-                                    <p className="text-sm">10-minute walk from the main train station</p>
+                                    <p className="text-sm">10 minutes à pied depuis la gare principale</p>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <span className="material-symbols-outlined text-festival-yellow mt-0.5">pin_drop</span>
@@ -188,7 +188,7 @@ export default function MapSection() {
                                 rel="noopener noreferrer"
                                 className="mt-4 block w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider text-center"
                             >
-                                Get Directions
+                                Itinéraire
                             </a>
                         </div>
                     </div>

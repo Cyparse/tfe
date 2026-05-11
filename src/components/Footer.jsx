@@ -19,8 +19,7 @@ export default function Footer() {
                             <span className="font-display text-4xl">Snow Wonder</span>
                         </div>
                         <p className="text-ice-blue/60 max-w-sm mb-8 leading-relaxed">
-                            Join us in celebrating the beauty and creativity of winter. A worldwide tradition bringing light
-                            to the coldest nights since 1994.
+                            Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1994.
                         </p>
                         <div className="flex gap-4">
                             {socialIcons.map((icon) => (
@@ -42,7 +41,7 @@ export default function Footer() {
                     {/* Quick Links */}
                     <div>
                         <h4 className="font-bold uppercase tracking-[0.2em] text-xs mb-8 text-festival-yellow">
-                            Quick Links
+                            Liens rapides
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
                             {[
@@ -63,14 +62,14 @@ export default function Footer() {
                     {/* Support */}
                     <div>
                         <h4 className="font-bold uppercase tracking-[0.2em] text-xs mb-8 text-festival-yellow">
-                            Support
+                            Assistance
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
                             <li>
-                                <a href="#contact" className="hover:text-white transition-colors">Contact Us</a>
+                                <a href="#contact" className="hover:text-white transition-colors">Nous contacter</a>
                             </li>
                             <li>
-                                <a href="#admin" className="hover:text-white transition-colors">Admin Access</a>
+                                <a href="#admin" className="hover:text-white transition-colors">Accès administrateur</a>
                             </li>
                         </ul>
                     </div>
@@ -78,7 +77,7 @@ export default function Footer() {
                 
                 {/* Footer Bottom */}
                 <div className="pt-16 mt-16 border-t border-white/10 text-center text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
-                    © 2026 Snow Wonder Festival. All rights reserved. Crafted for the Cold Season.
+                    © 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.
                 </div>
             </div>
             
