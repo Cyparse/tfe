@@ -2,11 +2,13 @@ import React from 'react';
 
 export default function SideMenu({ isOpen, onClose }) {
     const menuItems = [
-        { label: 'Festival Info', href: '#festival' },
-        { label: 'Snow Sculptures', href: '#sculptures' },
-        { label: 'Winter Market', href: '#market' },
-        { label: 'Visit Us', href: '#map' },
-        { label: 'Contact', href: '#contact' }
+        { label: 'Le Festival', href: '#festival' },
+        { label: 'Programme', href: '#schedule' },
+        { label: 'Inscription', href: '#registration' },
+        { label: 'Billets', href: '#tickets' },
+        { label: 'Marché', href: '#market' },
+        { label: 'Nous Trouver', href: '#map' },
+        { label: 'Contact', href: '#contact' },
     ];
 
     const handleClick = (e, href) => {
@@ -21,13 +23,13 @@ export default function SideMenu({ isOpen, onClose }) {
     return (
         <>
             {/* Overlay */}
-            <div 
-                className={`fixed inset-0 bg-black/50 transition-all duration-300 z-[1040] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+            <div
+                className={`fixed inset-0 bg-black/50 transition-all duration-300 z-1040 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 onClick={onClose}
             />
-            
+
             {/* Side Menu */}
-            <aside className={`fixed top-0 right-0 w-[400px] max-w-[85vw] h-screen bg-white/95 backdrop-blur-xl shadow-2xl transition-transform duration-400 z-[1050] p-8 overflow-y-auto ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <aside className={`fixed top-0 right-0 w-100 max-w-[85vw] h-screen bg-white/95 backdrop-blur-xl shadow-2xl transition-transform duration-400 z-1050 p-8 overflow-y-auto ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-ice-blue">
                     <h2 className="text-2xl font-bold text-deep-navy">Menu</h2>
                     <button 

@@ -5,11 +5,12 @@ export default function Navigation({ onMenuClick }) {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const menuItems = [
-        { label: 'Festival Info', href: '#festival' },
-        { label: 'Snow Sculptures', href: '#sculptures' },
-        { label: 'Winter Market', href: '#market' },
-        { label: 'Visit Us', href: '#map' },
-        { label: 'Contact', href: '#contact' }
+        { label: 'Le Festival', href: '#festival' },
+        { label: 'Programme', href: '#schedule' },
+        { label: 'Inscription', href: '#registration' },
+        { label: 'Billets', href: '#tickets' },
+        { label: 'Marché', href: '#market' },
+        { label: 'Nous Trouver', href: '#map' },
     ];
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export default function Navigation({ onMenuClick }) {
             <div className="max-w-7xl mx-auto w-full">
                 
                 {/* Desktop Navigation */}
-                <ul className="hidden md:flex items-center gap-8 justify-evenly w-[800px] mx-auto">
+                <ul className="hidden md:flex items-center gap-8 justify-evenly w-200 mx-auto">
                     {menuItems.map((item) => (
                         <li key={item.label}>
                             <a 
@@ -62,10 +63,10 @@ export default function Navigation({ onMenuClick }) {
                         onClick={onMenuClick}
                         className="p-2 cursor-pointer"
                     >
-                        <div className="w-[30px] h-5 flex flex-col justify-between">
-                            <span className="block w-full h-[3px] bg-deep-navy rounded"></span>
-                            <span className="block w-full h-[3px] bg-deep-navy rounded"></span>
-                            <span className="block w-full h-[3px] bg-deep-navy rounded"></span>
+                        <div className="w-7.5 h-5 flex flex-col justify-between">
+                            <span className="block w-full h-0.75 bg-deep-navy rounded"></span>
+                            <span className="block w-full h-0.75 bg-deep-navy rounded"></span>
+                            <span className="block w-full h-0.75 bg-deep-navy rounded"></span>
                         </div>
                     </button>
                 </div>

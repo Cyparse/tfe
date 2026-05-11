@@ -6,6 +6,8 @@ import ContentSection from './components/ContentSection';
 import MarketSection from './components/MarketSection';
 import MapSection from './components/MapSection';
 import Footer from './components/Footer';
+import ScheduleSection from './components/ScheduleSection';
+import WinnersSection from './components/WinnersSection';
 import Registration from './components/Registration';
 import Tickets from './components/Tickets';
 import AdminLogin from './admin/AdminLogin';
@@ -118,13 +120,15 @@ function App() {
 
     // Main public website
     return (
-        <div className="bg-gradient-to-b from-ice-blue via-midblue to-deep-navy min-h-screen relative overflow-x-hidden">
+        <div className="bg-linear-to-b from-ice-blue via-midblue to-deep-navy min-h-screen relative overflow-x-hidden">
             <Navigation onMenuClick={() => setMenuOpen(true)} />
             <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
             
             <main className="relative z-10 pt-20">
                 <Hero />
                 <ContentSection />
+                <ScheduleSection />
+                <WinnersSection />
                 <Registration />
                 <Tickets />                               
                 <MarketSection />
@@ -133,13 +137,6 @@ function App() {
             
             <Footer />
 
-            <a
-                href="#admin"
-                className="fixed bottom-6 right-6 bg-gray-900/80 backdrop-blur text-white px-4 py-2 rounded-full text-sm hover:bg-gray-900 transition-colors shadow-lg z-50 opacity-50 hover:opacity-100"
-                title="Admin Panel"
-            >
-                🔐 Admin
-            </a>
             <Analytics />
         </div>
     );

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 export default function MapSection() {
     const mapRef = useRef(null);
@@ -146,13 +148,13 @@ export default function MapSection() {
 
                 {/* Map Container */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20">
-                    <div 
+                    <div
                         ref={mapRef}
-                        className="w-full h-[500px] md:h-[600px]"
+                        className="w-full h-125 md:h-150"
                     />
-                    
+
                     {/* Map Overlay Info */}
-                    <div className={`absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-[1000] transition-transform duration-300 ${showInfo ? 'translate-y-0' : 'translate-y-[calc(100%+24px)]'}`}>
+                    <div className={`absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-1000 transition-transform duration-300 ${showInfo ? 'translate-y-0' : 'translate-y-[calc(100%+24px)]'}`}>
                         <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl max-w-md">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-2xl font-bold text-deep-navy">Getting Here</h3>
@@ -168,32 +170,26 @@ export default function MapSection() {
                             </div>
                             <div className="space-y-2 text-deep-navy/80">
                                 <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_subway</span>
-                                    <p className="text-sm">Metro: Festival Station (Line 1)</p>
+                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_car</span>
+                                    <p className="text-sm">By car: follow signs for the city centre, free parking available nearby</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_bus</span>
-                                    <p className="text-sm">Bus: Routes 12, 45, 78</p>
-
-                    {/* Mobile Toggle Button (when collapsed) */}
-                    {!showInfo && (
-                        <button
-                            onClick={() => setShowInfo(true)}
-                            className="md:hidden absolute bottom-6 left-6 z-[1000] bg-white/95 backdrop-blur-xl rounded-full p-4 shadow-xl"
-                            aria-label="Show info"
-                        >
-                            <span className="material-symbols-outlined text-deep-navy">info</span>
-                        </button>
-                    )}
+                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
+                                    <p className="text-sm">10-minute walk from the main train station</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">local_parking</span>
-                                    <p className="text-sm">Parking: 500+ spaces available</p>
+                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">pin_drop</span>
+                                    <p className="text-sm">GPS: 50.6029° N, 3.3810° E</p>
                                 </div>
                             </div>
-                            <button className="mt-4 w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider">
+                            <a
+                                href="https://www.google.com/maps/dir/?api=1&destination=50.602860262325706,3.3809785070446057"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-4 block w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider text-center"
+                            >
                                 Get Directions
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

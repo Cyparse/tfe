@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 
+const EDITIONS = [
+    { value: 'december', label: 'December Edition', date: 'Dec 6, 2026' },
+    { value: 'january',  label: 'January Edition',  date: 'Jan 10, 2027' },
+    { value: 'february', label: 'February Edition', date: 'Feb 7, 2027' },
+];
+
 export default function Tickets() {
     const [formData, setFormData] = useState({
+        edition: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -67,6 +74,10 @@ export default function Tickets() {
             newErrors.ticketCount = `Ticket count must be between 1 and ${MAX_TICKETS}`;
         }
 
+        if (!formData.edition) {
+            newErrors.edition = 'Please select a festival edition';
+        }
+
         if (!formData.terms) {
             newErrors.terms = 'You must accept the terms and conditions';
         }
@@ -90,6 +101,7 @@ export default function Tickets() {
                 .from('ticket_orders')
                 .insert([
                     {
+                        festival_edition: formData.edition,
                         first_name: formData.firstName,
                         last_name: formData.lastName,
                         email: formData.email,
@@ -146,6 +158,7 @@ export default function Tickets() {
 
     const handleReset = () => {
         setFormData({
+            edition: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -217,6 +230,34 @@ export default function Tickets() {
                             <p className="text-ice-blue/80 mb-2">Your {formData.ticketCount} free ticket(s) have been confirmed.</p>
                             <p className="text-sm text-ice-blue/60">Confirmation email sent to {formData.email}</p>
                         </div>                    ) : (                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Festival Edition */}
+                            <div>
+                                <label className="block text-sm font-semibold text-ice-blue mb-3">Festival Edition *</label>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    {EDITIONS.map((ed) => (
+                                        <label key={ed.value} className="flex-1 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="edition"
+                                                value={ed.value}
+                                                checked={formData.edition === ed.value}
+                                                onChange={handleChange}
+                                                className="sr-only"
+                                            />
+                                            <div className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                                formData.edition === ed.value
+                                                    ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow'
+                                                    : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
+                                            }`}>
+                                                <div className="font-semibold text-sm">{ed.label}</div>
+                                                <div className="text-xs mt-0.5 opacity-70">{ed.date}</div>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.edition && <p className="mt-1 text-sm text-red-400">{errors.edition}</p>}
+                            </div>
+
                             {/* Ticket Count */}
                             <div className="bg-festival-yellow/20 p-6 rounded-xl border-2 border-festival-yellow/50">
                                 <label htmlFor="ticketCount" className="block text-lg font-bold text-festival-yellow mb-3">

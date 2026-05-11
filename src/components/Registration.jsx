@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 export default function Registration() {
+const EDITIONS = [
+    { value: 'december', label: 'Édition Décembre', date: '6 déc. 2026' },
+    { value: 'january',  label: 'Édition Janvier',  date: '10 jan. 2027' },
+    { value: 'february', label: 'Édition Février',  date: '7 fév. 2027' },
+];
+
     const [formData, setFormData] = useState({
         type: 'amateur', // 'amateur' or 'pro'
+        edition: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -73,6 +80,10 @@ export default function Registration() {
             }
         }
 
+        if (!formData.edition) {
+            newErrors.edition = 'Please select a festival edition';
+        }
+
         if (!formData.terms) {
             newErrors.terms = 'You must accept the terms and conditions';
         }
@@ -112,6 +123,7 @@ export default function Registration() {
                 .insert([
                     {
                         type: formData.type,
+                        festival_edition: formData.edition,
                         first_name: formData.firstName,
                         last_name: formData.lastName,
                         email: formData.email,
@@ -145,6 +157,7 @@ export default function Registration() {
     const handleReset = () => {
         setFormData({
             type: 'amateur',
+            edition: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -185,22 +198,22 @@ export default function Registration() {
             {/* Content Card */}
             <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl relative border-l border-r border-b border-white/10">
                 <div className="mb-10">
-                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Artist Registration</h2>
-                    <p className="text-ice-blue/80 text-lg">Join our festival as an amateur or professional artist</p>
+                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Inscription Artiste</h2>
+                    <p className="text-ice-blue/80 text-lg">Participez au festival en tant qu'artiste amateur ou professionnel</p>
                 </div>
 
                 <div className="max-w-4xl mx-auto">
                     {submitSuccess ? (
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">✓</div>
-                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Registration Successful!</h3>
-                            <p className="text-ice-blue/80">You will receive a confirmation email shortly.</p>
+                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Inscription réussie !</h3>
+                            <p className="text-ice-blue/80">Vous recevrez un e-mail de confirmation sous peu.</p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Registration Type */}
                             <div>
-                                <label className="block text-sm font-semibold text-ice-blue mb-3">Registration Type</label>
+                                <label className="block text-sm font-semibold text-ice-blue mb-3">Type d'inscription</label>
                                 <div className="flex gap-4">
                                     <label className="flex-1 cursor-pointer">
                                         <input
@@ -212,8 +225,8 @@ export default function Registration() {
                                             className="sr-only"
                                         />
                                         <div className={`p-4 border-2 rounded-lg text-center transition-all ${
-                                            formData.type === 'amateur' 
-                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow' 
+                                            formData.type === 'amateur'
+                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow'
                                                 : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
                                         }`}>
                                             Amateur
@@ -229,21 +242,49 @@ export default function Registration() {
                                             className="sr-only"
                                         />
                                         <div className={`p-4 border-2 rounded-lg text-center transition-all ${
-                                            formData.type === 'pro' 
-                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow' 
+                                            formData.type === 'pro'
+                                                ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow'
                                                 : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
                                         }`}>
-                                            Professional
+                                            Professionnel
                                         </div>
                                     </label>
                                 </div>
                             </div>
 
-                            {/* Personal Information */}
+                            {/* Festival Edition */}
+                            <div>
+                                <label className="block text-sm font-semibold text-ice-blue mb-3">Édition du festival *</label>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                    {EDITIONS.map((ed) => (
+                                        <label key={ed.value} className="flex-1 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="edition"
+                                                value={ed.value}
+                                                checked={formData.edition === ed.value}
+                                                onChange={handleChange}
+                                                className="sr-only"
+                                            />
+                                            <div className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                                formData.edition === ed.value
+                                                    ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow'
+                                                    : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
+                                            }`}>
+                                                <div className="font-semibold text-sm">{ed.label}</div>
+                                                <div className="text-xs mt-0.5 opacity-70">{ed.date}</div>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.edition && <p className="mt-1 text-sm text-red-400">{errors.edition}</p>}
+                            </div>
+
+                            {/* Informations personnelles */}
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label htmlFor="firstName" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        First Name *
+                                        Prénom *
                                     </label>
                                     <input
                                         type="text"
@@ -259,7 +300,7 @@ export default function Registration() {
                                 </div>
                                 <div>
                                     <label htmlFor="lastName" className="block text-sm font-semibold text-ice-blue mb-2">
-                                        Last Name *
+                                        Nom *
                                     </label>
                                     <input
                                         type="text"
@@ -277,7 +318,7 @@ export default function Registration() {
 
                             <div>
                                 <label htmlFor="email" className="block text-sm font-semibold text-ice-blue mb-2">
-                                    Email *
+                                    E-mail *
                                 </label>
                                 <input
                                     type="email"
@@ -297,7 +338,7 @@ export default function Registration() {
 
                             <div>
                                 <label htmlFor="phone" className="block text-sm font-semibold text-ice-blue mb-2">
-                                    Phone Number *
+                                    Numéro de téléphone *
                                 </label>
                                 <input
                                     type="tel"
@@ -317,7 +358,7 @@ export default function Registration() {
                                 <>
                                     <div>
                                         <label htmlFor="organization" className="block text-sm font-semibold text-ice-blue mb-2">
-                                            Organization / Company *
+                                            Organisation / Entreprise *
                                         </label>
                                         <input
                                             type="text"

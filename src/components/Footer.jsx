@@ -45,30 +45,32 @@ export default function Footer() {
                             Quick Links
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
-                            {['About the Festival', 'Sculpture Competition', 'Market Vendors', 'Travel Guide'].map((link) => (
-                                <li key={link}>
-                                    <a href="#" className="hover:text-white transition-colors">{link}</a>
+                            [
+                                { label: 'Le Festival', href: '#festival' },
+                                { label: 'Programme', href: '#schedule' },
+                                { label: 'Inscription', href: '#registration' },
+                                { label: 'Billets', href: '#tickets' },
+                                { label: 'Marché d\'hiver', href: '#market' },
+                                { label: 'Nous Trouver', href: '#map' },
+                            ].map(({ label, href }) => (
+                                <li key={label}>
+                                    <a href={href} className="hover:text-white transition-colors">{label}</a>
                                 </li>
                             ))}
                         </ul>
                     </div>
-                    
+
                     {/* Support */}
                     <div>
                         <h4 className="font-bold uppercase tracking-[0.2em] text-xs mb-8 text-festival-yellow">
                             Support
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
-                            {['Help Center', 'Terms of Service', 'Privacy Policy', 'Contact Us'].map((link) => (
-                                <li key={link}>
-                                    <a href="#" className="hover:text-white transition-colors">{link}</a>
-                                </li>
-                            ))}
                             <li>
-                                <a href="#admin" className="hover:text-white transition-colors flex items-center gap-2">
-                                    <span>🔐</span>
-                                    <span>Admin Access</span>
-                                </a>
+                                <a href="#contact" className="hover:text-white transition-colors">Contact Us</a>
+                            </li>
+                            <li>
+                                <a href="#admin" className="hover:text-white transition-colors">Admin Access</a>
                             </li>
                         </ul>
                     </div>
@@ -76,12 +78,12 @@ export default function Footer() {
                 
                 {/* Footer Bottom */}
                 <div className="pt-16 mt-16 border-t border-white/10 text-center text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
-                    © 2024 Snow Wonder Festival. All rights reserved. Crafted for the Cold Season.
+                    © 2026 Snow Wonder Festival. All rights reserved. Crafted for the Cold Season.
                 </div>
             </div>
             
             {/* Footer Trees Background */}
-            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-[440px] bg-cover bg-bottom bg-no-repeat pointer-events-none z-0" 
+            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-110 bg-cover bg-bottom bg-no-repeat pointer-events-none z-0"
                  style={{backgroundImage: `url(${FooterImage})`}}></div>
         </footer>
     );

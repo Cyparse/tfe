@@ -22,25 +22,25 @@ export default function ContentSection() {
                     Winter Wonderland
                 </h2>
                 <h3 className="text-3xl font-bold mb-10 uppercase tracking-tight opacity-90">
-                    Festival de neige
+                    Festival de Neige
                 </h3>
                 <div className="grid md:grid-cols-2 gap-12">
                     <div className="flex flex-col gap-6 text-ice-blue/80 leading-relaxed text-lg">
                         <p>
-                            Experience the enchantment of winter at the world-renowned Snow Wonder Festival. Every
-                            year, master artisans gather from across the globe to transform pure ice and snow into
-                            breathtaking masterpieces that defy the imagination.
+                            Vivez l'enchantement de l'hiver au festival Snow Wonder. Chaque année, des artistes
+                            passionnés se réunissent pour transformer la neige et la glace en œuvres d'art
+                            spectaculaires qui défient l'imagination.
                         </p>
                         <p>
-                            From towering castles that reach for the stars to delicate crystalline carvings, the
-                            festival is a celebration of artistry and the fleeting beauty of the cold season.
+                            Des châteaux majestueux aux sculptures délicates, le festival célèbre la créativité
+                            et la beauté éphémère de la saison froide.
                         </p>
                     </div>
                     <div className="flex flex-col gap-6 text-ice-blue/80 leading-relaxed text-lg">
                         <p>
-                            Beyond the sculptures, immerse yourself in our interactive snow zones, evening light
-                            shows, and the warm camaraderie of our winter community. It's more than a festival; it's
-                            a seasonal legacy.
+                            Au-delà des sculptures, plongez dans nos zones interactives, les illuminations du
+                            soir et la chaleur de notre communauté hivernale. Plus qu'un festival, c'est
+                            un rendez-vous incontournable de l'hiver.
                         </p>
                         <div className="pt-4">
                             <img 

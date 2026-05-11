@@ -37,172 +37,41 @@ export default function MarketSection() {
         },
       ).addTo(leafletMapRef.current);
 
-      // Custom icons
+      const makeIcon = (src, border = '#7b563b', bg = '#ffffff', size = 50) =>
+        window.L.divIcon({
+          html: `<div style="background-color:${bg};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid ${border};box-shadow:0 3px 10px rgba(0,0,0,0.3);overflow:hidden;"><img src="${src}" style="width:${size * 0.84}px;height:${size * 0.84}px;object-fit:contain;" /></div>`,
+          className: 'custom-marker',
+          iconSize: [size, size],
+          iconAnchor: [size / 2, size],
+        });
 
-      const friesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/fries.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
+      const popup = (name, description) =>
+        `<div style="font-family:'Nunito',sans-serif;padding:8px;">
+          <h3 style="margin:0 0 8px 0;color:#002442;font-size:16px;font-weight:bold;">${name}</h3>
+          <p style="margin:0;color:#3a7ca5;font-size:14px;">${description}</p>
+        </div>`;
+
+      const vendors = [
+        { latlng: FriesLocation,    src: '/fries.png',   border: '#7b563b', name: 'Baraque Friture',        desc: 'Frites & Accompagnements' },
+        { latlng: PretzelLocation,  src: '/pretzel.png', border: '#7b563b', name: 'Doughy Delights',        desc: 'Pretzels, Bretzels & Snacks' },
+        { latlng: RacletteLocation, src: '/cheese.png',  border: '#7b563b', name: 'Raclette',               desc: 'Raclette & Fromages' },
+        { latlng: ClothesLocation,  src: '/gloves.png',  border: '#3a7ca5', name: 'Pas froid aux yeux',     desc: 'Gants, Bonnets & Écharpes' },
+        { latlng: HotDrinksLocation,src: '/coffee.png',  border: '#e8a94e', name: 'Chaud Cacao',            desc: 'Vin chaud & Boissons chaudes' },
+        { latlng: SausageLocation,  src: '/sausage.png', border: '#7b563b', name: 'Paradis de la saucisse', desc: 'Bratwurst, Currywurst & spécialités' },
+        { latlng: WafflesLocation,  src: '/waffle.png',  border: '#e8a94e', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
+        { latlng: CandyLocation,    src: '/candy.png',   border: '#e8a94e', name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
+        { latlng: GazeboLocation,   src: '/gazebo.png',  border: '#ffffff', bg: '#3a7ca5', size: 60, anchor: 'center', name: 'Espace Gazebo', desc: 'Pavillon & animations' },
+      ];
+
+      vendors.forEach(({ latlng, src, border, bg, size, anchor, name, desc }) => {
+        const icon = makeIcon(src, border, bg, size);
+        if (anchor === 'center') {
+          icon.options.iconAnchor = [size / 2, size / 2];
+        }
+        window.L.marker(latlng, { icon })
+          .addTo(leafletMapRef.current)
+          .bindPopup(popup(name, desc));
       });
-
-      const pretzelIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/pretzel.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const racletteIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/cheese.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const clothesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #3a7ca5; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/gloves.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const hotDrinksIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/coffee.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const sausageIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #7b563b; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/sausage.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const wafflesIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/waffle.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      // Custom marker icons
-      const candyIcon = window.L.divIcon({
-        html: '<div style="background-color: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #e8a94e; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/candy.png" style="width: 42px; height: 42px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [50, 50],
-        iconAnchor: [25, 50],
-      });
-
-      const gazeboIcon = window.L.divIcon({
-        html: '<div style="background-color: #3a7ca5; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #FFFFFF; box-shadow: 0 3px 10px rgba(0,0,0,0.3); overflow: hidden;"><img src="/gazebo.png" style="width: 32px; height: 32px; object-fit: contain;" /></div>',
-        className: "custom-marker",
-        iconSize: [60, 60],
-        iconAnchor: [30, 30],
-      });
-
-      // Add craft vendor marker
-      const friesMarker = window.L.marker(FriesLocation, {
-        icon: friesIcon,
-      }).addTo(leafletMapRef.current);
-      friesMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Baraque Friture</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Frites & Accompagnements</p>
-                </div>
-            `);
-
-      // Add food stall marker
-      const pretzelMarker = window.L.marker(PretzelLocation, {
-        icon: pretzelIcon,
-      }).addTo(leafletMapRef.current);
-      pretzelMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Doughy Delights</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Pretzels, Bretzels & Snacks</p>
-                </div>
-            `);
-
-      // Add ice rink marker
-      const racletteMarker = window.L.marker(RacletteLocation, {
-        icon: racletteIcon,
-      }).addTo(leafletMapRef.current);
-      racletteMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Raclette</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Raclette & Fromages</p>
-                </div>
-            `);
-
-      // Add hot cocoa marker
-      const clothesMarker = window.L.marker(ClothesLocation, {
-        icon: clothesIcon,
-      }).addTo(leafletMapRef.current);
-      clothesMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Pas froid aux yeux</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Gants, Bonnets & Écharpes</p>
-                </div>
-            `);
-
-      // Add toy shop marker
-      const hotDrinksMarker = window.L.marker(HotDrinksLocation, {
-        icon: hotDrinksIcon,
-      }).addTo(leafletMapRef.current);
-      hotDrinksMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Chaud Cacao</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Vin chaud & Boissons chaudes</p>
-                </div>
-            `);
-
-      // Add live stage marker
-      const sausageMarker = window.L.marker(SausageLocation, {
-        icon: sausageIcon,
-      }).addTo(leafletMapRef.current);
-      sausageMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Paradis de la saucisse</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Bradwurst, Currywurst & autres spécialités</p>
-                </div>
-            `);
-
-      // Add bakery marker
-      const wafflesMarker = window.L.marker(WafflesLocation, {
-        icon: wafflesIcon,
-      }).addTo(leafletMapRef.current);
-      wafflesMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Waffling About</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Gauffres & Crêpes</p>
-                </div>
-            `);
-
-      // Add market entrance marker
-      const candyMarker = window.L.marker(CandyLocation, {
-        icon: candyIcon,
-      }).addTo(leafletMapRef.current);
-
-      candyMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Chalet Sucré</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Bonbons, chouchous et chocolats</p>
-                </div>
-            `);
-
-      // Add gazebo marker
-      const gazeboMarker = window.L.marker(GazeboLocation, {
-        icon: gazeboIcon,
-      }).addTo(leafletMapRef.current);
-
-      gazeboMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: #002442; font-size: 16px; font-weight: bold;">Gazebo Area</h3>
-                    <p style="margin: 0 0 8px 0; color: #3a7ca5; font-size: 14px;">Outdoor Pavilion</p>
-                </div>
-            `);
     }
 
     // Cleanup when modal closes
@@ -284,12 +153,12 @@ export default function MarketSection() {
           >
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 bg-deep-navy text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-deep-navy/80 transition-colors z-[9999]"
+              className="absolute top-4 right-4 bg-deep-navy text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-deep-navy/80 transition-colors z-9999"
               aria-label="Close modal"
             >
               <span className="material-symbols-outlined">close</span>
             </button>
-            <div ref={mapRef} className="w-full h-[600px] rounded-2xl"></div>
+            <div ref={mapRef} className="w-full h-150 rounded-2xl"></div>
           </div>
         </div>
       )}
