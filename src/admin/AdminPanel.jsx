@@ -20,7 +20,7 @@ export default function AdminPanel({ user, onLogout }) {
     };
 
     return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--colormidblue) 0%, var(--color-deep-navy) 100%)', color: '#ffffff' }}>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--color-midblue) 0%, var(--color-deep-navy) 100%)', color: '#ffffff' }}>
             {/* Header */}
             <header className="sticky top-0 z-50 border-b"
                 style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>

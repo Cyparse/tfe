@@ -12,10 +12,22 @@
   --font-family-rubik: 'Rubik', sans-serif;
 }
 
+:root {
+  --color-ice-blue: #cae9ff;
+  --color-deep-navy: #002442;
+  --color-midblue: #3a7ca5;
+  --color-festival-yellow: #e8a94e;
+  --color-dark-brown: #3a2416;
+
+  --font-family-display: 'Lavishly Yours', cursive;
+  --font-family-body: 'Nunito', sans-serif;
+  --font-family-rubik: 'Rubik', sans-serif;
+}
+
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+  font-family: var(--font-family-body);
 }
