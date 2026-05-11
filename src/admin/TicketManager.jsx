@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getTicketOrders, deleteTicketOrder, exportTicketOrdersToCSV } from '../services/ticketService';
 
-const card = { background: '#1e2020', borderColor: '#333535' };
-const input = { background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', outline: 'none' };
-const labelStyle = { color: '#c3c6ce', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
+const card = { background: '#002442', borderColor: '#333535' };
+const input = { background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', outline: 'none' };
+const labelStyle = { color: '#cae9ff', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function TicketManager() {
     const [orders, setOrders] = useState([]);
@@ -43,16 +43,16 @@ export default function TicketManager() {
         const Field = ({ label, value }) => (
             <div>
                 <p style={labelStyle} className="mb-1">{label}</p>
-                <p className="text-sm" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>{value ?? '—'}</p>
+                <p className="text-sm" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>{value ?? '—'}</p>
             </div>
         );
         return (
             <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
                 <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-                    style={{ background: '#1e2020', borderColor: '#333535' }}>
+                    style={{ background: '#002442', borderColor: '#333535' }}>
                     <div className="p-6">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-semibold" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                            <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
                                 Ticket Order Details
                             </h3>
                             <button onClick={onClose} className="material-symbols-outlined" style={{ color: '#8d9198' }}>close</button>
@@ -72,7 +72,7 @@ export default function TicketManager() {
                             {order.special_requests && (
                                 <div className="col-span-2">
                                     <p style={labelStyle} className="mb-1">Special Requests</p>
-                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
+                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
                                         {order.special_requests}
                                     </p>
                                 </div>
@@ -82,7 +82,7 @@ export default function TicketManager() {
                         <div className="mt-6 flex justify-end">
                             <button onClick={onClose}
                                 className="px-4 py-2 rounded-lg text-sm font-bold border"
-                                style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
+                                style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
                                 Close
                             </button>
                         </div>
@@ -95,19 +95,19 @@ export default function TicketManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold" style={{ color: '#e2e2e2', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
                     Ticketing
                 </h2>
                 <div className="flex gap-3">
                     <button onClick={handleExport}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
-                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        style={{ background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">download</span>
                         Export CSV
                     </button>
                     <button onClick={loadOrders}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
-                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        style={{ background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">refresh</span>
                         Refresh
                     </button>
@@ -123,7 +123,7 @@ export default function TicketManager() {
                                 onChange={e => setFilters({ ...filters, search: e.target.value, page: 1 })}
                                 placeholder="Name or email…" className="w-full px-3 py-2 rounded-lg text-sm" style={input}
                                 onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                onBlur={e => e.target.style.borderColor = '#43474d'} />
+                                onBlur={e => e.target.style.borderColor = '#333535'} />
                         )},
                         { label: 'Sort By', element: (
                             <select value={filters.sortBy}
@@ -160,7 +160,7 @@ export default function TicketManager() {
                                     <tr style={{ borderBottom: '1px solid #333535' }}>
                                         {['Name', 'Email', 'Location', 'Tickets', 'Date', ''].map(h => (
                                             <th key={h} className={`px-6 py-3 text-left ${h === '' ? 'text-right' : ''}`}
-                                                style={{ ...labelStyle, background: '#282a2b' }}>
+                                                style={{ ...labelStyle, background: '#004075' }}>
                                                 {h}
                                             </th>
                                         ))}
@@ -170,9 +170,9 @@ export default function TicketManager() {
                                     {orders.map((order, i) => (
                                         <tr key={order.id}
                                             style={{ borderBottom: i < orders.length - 1 ? '1px solid #333535' : 'none' }}
-                                            onMouseEnter={e => e.currentTarget.style.background = '#282a2b'}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#004075'}
                                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                                            <td className="px-6 py-4 text-sm font-medium" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
+                                            <td className="px-6 py-4 text-sm font-medium" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
                                                 {order.first_name} {order.last_name}
                                             </td>
                                             <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{order.email}</td>
@@ -201,7 +201,7 @@ export default function TicketManager() {
                         </div>
 
                         <div className="px-6 py-4 flex items-center justify-between border-t"
-                            style={{ borderColor: '#333535', background: '#282a2b' }}>
+                            style={{ borderColor: '#333535', background: '#004075' }}>
                             <span className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
                                 {orders.length} of {pagination.count} orders
                             </span>
@@ -209,7 +209,7 @@ export default function TicketManager() {
                                 <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
                                     disabled={filters.page === 1}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
+                                    style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
                                     Previous
                                 </button>
                                 <span className="text-xs px-2" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
@@ -218,7 +218,7 @@ export default function TicketManager() {
                                 <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
                                     disabled={filters.page >= pagination.totalPages}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
+                                    style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
                                     Next
                                 </button>
                             </div>

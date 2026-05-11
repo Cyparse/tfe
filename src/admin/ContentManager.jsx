@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getItems, createItem, updateItem, deleteItem, getTableSchema } from '../services/contentService';
 
-const card = { background: '#1e2020', borderColor: '#333535' };
-const inputStyle = { background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', outline: 'none' };
-const labelStyle = { color: '#c3c6ce', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
+const card = { background: '#002442', borderColor: '#333535' };
+const inputStyle = { background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', outline: 'none' };
+const labelStyle = { color: '#cae9ff', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function ContentManager() {
     const [tableName, setTableName] = useState('');
@@ -60,10 +60,10 @@ export default function ContentManager() {
     const FormModal = ({ isEdit, onSubmit, onClose }) => (
         <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
             <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-                style={{ background: '#1e2020', borderColor: '#333535' }}>
+                style={{ background: '#002442', borderColor: '#333535' }}>
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-semibold" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                        <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
                             {isEdit ? 'Edit Item' : 'Create New Item'}
                         </h3>
                         <button onClick={onClose} className="material-symbols-outlined" style={{ color: '#8d9198' }}>close</button>
@@ -82,7 +82,7 @@ export default function ContentManager() {
                                         className="w-full px-3 py-2 rounded-lg text-sm"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#43474d'}
+                                        onBlur={e => e.target.style.borderColor = '#333535'}
                                     />
                                 ) : (
                                     <input
@@ -92,7 +92,7 @@ export default function ContentManager() {
                                         className="w-full px-3 py-2 rounded-lg text-sm"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#43474d'}
+                                        onBlur={e => e.target.style.borderColor = '#333535'}
                                     />
                                 )}
                             </div>
@@ -101,7 +101,7 @@ export default function ContentManager() {
                     <div className="mt-6 flex justify-end gap-3">
                         <button onClick={onClose}
                             className="px-4 py-2 rounded-lg text-sm font-bold border"
-                            style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
+                            style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
                             Cancel
                         </button>
                         <button onClick={onSubmit}
@@ -118,7 +118,7 @@ export default function ContentManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold" style={{ color: '#e2e2e2', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
                     Content
                 </h2>
                 {tableName && (
@@ -139,7 +139,7 @@ export default function ContentManager() {
                         <select value={tableName} onChange={e => setTableName(e.target.value)}
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
                             onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                            onBlur={e => e.target.style.borderColor = '#43474d'}>
+                            onBlur={e => e.target.style.borderColor = '#333535'}>
                             <option value="">— Choose a table —</option>
                             {commonTables.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
@@ -150,7 +150,7 @@ export default function ContentManager() {
                             placeholder="custom_table_name"
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
                             onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                            onBlur={e => e.target.style.borderColor = '#43474d'} />
+                            onBlur={e => e.target.style.borderColor = '#333535'} />
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@ export default function ContentManager() {
             {/* Data */}
             {!tableName ? (
                 <div className="rounded-xl border p-12 text-center" style={card}>
-                    <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: '#43474d' }}>table_view</span>
+                    <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: '#333535' }}>table_view</span>
                     <p style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>Select a table to manage content</p>
                 </div>
             ) : isLoading ? (
@@ -178,23 +178,23 @@ export default function ContentManager() {
                                 <tr style={{ borderBottom: '1px solid #333535' }}>
                                     {schema.map(f => (
                                         <th key={f} className="px-6 py-3 text-left"
-                                            style={{ ...labelStyle, background: '#282a2b' }}>
+                                            style={{ ...labelStyle, background: '#004075' }}>
                                             {f.replace(/_/g, ' ')}
                                         </th>
                                     ))}
                                     <th className="px-6 py-3 text-right"
-                                        style={{ ...labelStyle, background: '#282a2b' }}>Actions</th>
+                                        style={{ ...labelStyle, background: '#004075' }}>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {items.map((item, i) => (
                                     <tr key={item.id}
                                         style={{ borderBottom: i < items.length - 1 ? '1px solid #333535' : 'none' }}
-                                        onMouseEnter={e => e.currentTarget.style.background = '#282a2b'}
+                                        onMouseEnter={e => e.currentTarget.style.background = '#004075'}
                                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                                         {schema.map(f => (
                                             <td key={f} className="px-6 py-4 text-sm"
-                                                style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                 {String(item[f] || '').length > 50
                                                     ? String(item[f]).substring(0, 50) + '…'
                                                     : String(item[f] || '')}

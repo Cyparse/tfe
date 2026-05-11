@@ -20,7 +20,7 @@ export default function AdminPanel({ user, onLogout }) {
     };
 
     return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #1e2020 0%, #121414 100%)', color: '#e2e2e2' }}>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #002442 0%, #121414 100%)', color: '#ffffff' }}>
             {/* Header */}
             <header className="sticky top-0 z-50 border-b"
                 style={{ background: '#121414', borderColor: '#333535' }}>
@@ -33,17 +33,17 @@ export default function AdminPanel({ user, onLogout }) {
                                     style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>ac_unit</span>
                             </div>
                             <span className="font-semibold tracking-tight hidden sm:block"
-                                style={{ color: '#e2e2e2', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
+                                style={{ color: '#ffffff', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
                                 Snow Wonder
                             </span>
                         </div>
                         {/* Search */}
                         <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
-                            style={{ background: '#282a2b', borderColor: '#43474d', minWidth: '220px' }}>
+                            style={{ background: '#004075', borderColor: '#333535', minWidth: '220px' }}>
                             <span className="material-symbols-outlined text-sm" style={{ color: '#8d9198' }}>search</span>
                             <input
                                 className="bg-transparent border-none outline-none text-sm w-full"
-                                style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}
+                                style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}
                                 placeholder="Search…"
                             />
                         </div>
@@ -54,7 +54,7 @@ export default function AdminPanel({ user, onLogout }) {
                         <button className="material-symbols-outlined transition-colors"
                             style={{ color: '#8d9198', fontSize: '1.25rem' }}>notifications</button>
                         <div className="hidden sm:flex flex-col items-end">
-                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
+                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
                                 {user?.email?.split('@')[0]}
                             </span>
                             <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>

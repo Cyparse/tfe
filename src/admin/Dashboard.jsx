@@ -23,7 +23,7 @@ export default function Dashboard() {
     const StatCard = ({ title, value, subtitle, accent, highlight }) => (
         <div className="rounded-xl p-6 border transition-all"
             style={{
-                background: '#1e2020',
+                background: '#002442',
                 borderColor: highlight ? accent : '#333535',
                 borderTopWidth: highlight ? '2px' : '1px',
                 borderTopColor: highlight ? accent : '#333535',
@@ -33,7 +33,7 @@ export default function Dashboard() {
                 {title}
             </p>
             <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>{value}</span>
+                <span className="text-4xl font-bold" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>{value}</span>
                 {subtitle && (
                     <span className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{subtitle}</span>
                 )}
@@ -57,7 +57,7 @@ export default function Dashboard() {
             {/* Welcome Header */}
             <section className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
                 <div>
-                    <h2 className="text-4xl font-bold mb-1" style={{ color: '#e2e2e2', fontFamily: 'Rubik', letterSpacing: '-0.02em' }}>
+                    <h2 className="text-4xl font-bold mb-1" style={{ color: '#ffffff', fontFamily: 'Rubik', letterSpacing: '-0.02em' }}>
                         Dashboard Overview
                     </h2>
                     <p className="text-base" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
@@ -68,7 +68,7 @@ export default function Dashboard() {
                     <button
                         onClick={loadStats}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
-                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans' }}
+                        style={{ background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans' }}
                     >
                         <span className="material-symbols-outlined text-sm">refresh</span>
                         Refresh
@@ -85,7 +85,7 @@ export default function Dashboard() {
             {/* Registration Stats */}
             <section>
                 <h3 className="text-sm font-bold uppercase tracking-wider mb-4"
-                    style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                    style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                     Registrations
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -99,7 +99,7 @@ export default function Dashboard() {
             {/* Ticket Stats */}
             <section>
                 <h3 className="text-sm font-bold uppercase tracking-wider mb-4"
-                    style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                    style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                     Ticket Orders
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -115,7 +115,7 @@ export default function Dashboard() {
                 {/* Quick Actions */}
                 <section className="lg:col-span-2">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-semibold" style={{ color: '#e2e2e2', fontFamily: 'Rubik', fontSize: '1.1rem' }}>Quick Actions</h3>
+                        <h3 className="font-semibold" style={{ color: '#ffffff', fontFamily: 'Rubik', fontSize: '1.1rem' }}>Quick Actions</h3>
                         <button className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}>Manage All</button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -126,13 +126,13 @@ export default function Dashboard() {
                         ].map(a => (
                             <button key={a.title}
                                 className="rounded-xl p-5 border text-left transition-all"
-                                style={{ background: '#1e2020', borderColor: '#333535' }}
-                                onMouseEnter={e => e.currentTarget.style.background = '#282a2b'}
-                                onMouseLeave={e => e.currentTarget.style.background = '#1e2020'}
+                                style={{ background: '#002442', borderColor: '#333535' }}
+                                onMouseEnter={e => e.currentTarget.style.background = '#004075'}
+                                onMouseLeave={e => e.currentTarget.style.background = '#002442'}
                             >
                                 <span className="material-symbols-outlined mb-2 block" style={{ color: '#acc9ef' }}>{a.icon}</span>
                                 <h4 className="text-xs font-bold uppercase tracking-wider mb-1"
-                                    style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>{a.title}</h4>
+                                    style={{ color: '#ffffff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>{a.title}</h4>
                                 <p className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{a.desc}</p>
                             </button>
                         ))}
@@ -141,10 +141,10 @@ export default function Dashboard() {
 
                 {/* Recent Activity */}
                 <section>
-                    <h3 className="font-semibold mb-4" style={{ color: '#e2e2e2', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
+                    <h3 className="font-semibold mb-4" style={{ color: '#ffffff', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
                         Recent Activity
                     </h3>
-                    <div className="rounded-xl p-6 border space-y-4" style={{ background: '#1e2020', borderColor: '#333535' }}>
+                    <div className="rounded-xl p-6 border space-y-4" style={{ background: '#002442', borderColor: '#333535' }}>
                         {[
                             { dot: '#acc9ef', text: 'New professional registration', time: '2 hours ago' },
                             { dot: '#fcba5d', text: 'Ticket batch #104 issued', time: '5 hours ago' },
@@ -153,7 +153,7 @@ export default function Dashboard() {
                             <div key={i} className="flex items-start gap-3">
                                 <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ background: item.dot }} />
                                 <div>
-                                    <p className="text-sm" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>{item.text}</p>
+                                    <p className="text-sm" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>{item.text}</p>
                                     <p className="text-xs mt-0.5" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{item.time}</p>
                                 </div>
                             </div>

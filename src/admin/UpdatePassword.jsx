@@ -42,29 +42,29 @@ export default function UpdatePassword({ onReturnToAdmin }) {
     };
 
     const inputStyle = {
-        background: '#282a2b',
-        border: '1px solid #43474d',
-        color: '#e2e2e2',
+        background: '#004075',
+        border: '1px solid #333535',
+        color: '#ffffff',
         fontFamily: 'Nunito Sans',
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4"
-            style={{ background: 'linear-gradient(180deg, #1e2020 0%, #121414 100%)' }}>
+            style={{ background: 'linear-gradient(180deg, #002442 0%, #121414 100%)' }}>
             <div className="w-full max-w-md">
                 <div className="flex items-center justify-center gap-3 mb-8">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#fcba5d' }}>
                         <span className="material-symbols-outlined text-xl"
                             style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>ac_unit</span>
                     </div>
-                    <span className="text-2xl font-semibold tracking-tight" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                    <span className="text-2xl font-semibold tracking-tight" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
                         Snow Wonder
                     </span>
                 </div>
 
-                <div className="rounded-2xl p-8 border" style={{ background: '#1e2020', borderColor: '#333535' }}>
+                <div className="rounded-2xl p-8 border" style={{ background: '#002442', borderColor: '#333535' }}>
                     <div className="mb-8">
-                        <h1 className="text-2xl font-semibold mb-1" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                        <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
                             Set a new password
                         </h1>
                         <p className="text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
@@ -101,7 +101,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                             {['New Password', 'Confirm Password'].map((label, i) => (
                                 <div key={label}>
                                     <label className="block text-xs font-bold uppercase tracking-wider mb-2"
-                                        style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                                        style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                                         {label}
                                     </label>
                                     <input
@@ -114,7 +114,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                                         className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#43474d'}
+                                        onBlur={e => e.target.style.borderColor = '#333535'}
                                     />
                                 </div>
                             ))}
