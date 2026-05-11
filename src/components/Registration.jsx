@@ -137,6 +137,17 @@ const EDITIONS = [
 
             if (error) throw error;
 
+            // Send confirmation email (fire-and-forget — don't block success UI)
+            supabase.functions.invoke('send-confirmation', {
+                body: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    edition: formData.edition,
+                    category: formData.type,
+                    registrationId: data[0]?.id ?? '',
+                },
+            }).catch((err) => console.error('Email error:', err));
+
             setIsSubmitting(false);
             setSubmitSuccess(true);
 

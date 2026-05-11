@@ -120,6 +120,17 @@ export default function Tickets() {
 
             if (error) throw error;
 
+            // Send ticket confirmation email (fire-and-forget — don't block success UI)
+            supabase.functions.invoke('send-ticket', {
+                body: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    edition: formData.edition,
+                    quantity: formData.ticketCount,
+                    orderId: data[0]?.id ?? '',
+                },
+            }).catch((err) => console.error('Email error:', err));
+
             // If newsletter is opted in, add to newsletter subscribers
             if (formData.newsletter) {
                 // Use upsert to handle duplicate emails gracefully
