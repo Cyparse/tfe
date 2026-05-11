@@ -43,31 +43,31 @@ export default function UpdatePassword({ onReturnToAdmin }) {
 
     const inputStyle = {
         background: '#004075',
-        border: '1px solid #333535',
+        border: '1px solid var(--color-midblue)',
         color: '#ffffff',
-        fontFamily: 'Nunito Sans',
+        fontFamily: 'var(--font-family-body)',
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4"
-            style={{ background: 'linear-gradient(180deg, #002442 0%, #121414 100%)' }}>
+            style={{ background: 'linear-gradient(180deg, var(--color-deep-navy) 0%, #121414 100%)' }}>
             <div className="w-full max-w-md">
                 <div className="flex items-center justify-center gap-3 mb-8">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#fcba5d' }}>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-festival-yellow)' }}>
                         <span className="material-symbols-outlined text-xl"
-                            style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>ac_unit</span>
+                            style={{ fontVariationSettings: "'FILL' 1", color: 'var(--color-dark-brown)' }}>ac_unit</span>
                     </div>
-                    <span className="text-2xl font-semibold tracking-tight" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
+                    <span className="text-2xl font-semibold tracking-tight" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
                         Snow Wonder
                     </span>
                 </div>
 
-                <div className="rounded-2xl p-8 border" style={{ background: '#002442', borderColor: '#333535' }}>
+                <div className="rounded-2xl p-8 border" style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                     <div className="mb-8">
-                        <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
+                        <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
                             Set a new password
                         </h1>
-                        <p className="text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        <p className="text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                             {isRecoveryReady
                                 ? 'Choose a new password for your admin account.'
                                 : 'Open the password reset link from your email to continue.'}
@@ -76,7 +76,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
 
                     {error && (
                         <div className="rounded-lg p-3 text-sm border mb-5"
-                            style={{ background: 'rgba(147,0,10,0.2)', borderColor: 'rgba(147,0,10,0.5)', color: '#ffdad6', fontFamily: 'Nunito Sans' }}>
+                            style={{ background: 'rgba(147,0,10,0.2)', borderColor: 'rgba(147,0,10,0.5)', color: '#ffdad6', fontFamily: 'var(--font-family-body)' }}>
                             {error}
                         </div>
                     )}
@@ -84,14 +84,14 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                     {isComplete ? (
                         <div className="space-y-4">
                             <div className="rounded-lg p-3 text-sm border"
-                                style={{ background: 'rgba(3,38,54,0.6)', borderColor: '#accbe0', color: '#accbe0', fontFamily: 'Nunito Sans' }}>
+                                style={{ background: 'rgba(3,38,54,0.6)', borderColor: '#accbe0', color: '#accbe0', fontFamily: 'var(--font-family-body)' }}>
                                 Password updated successfully.
                             </div>
                             <button
                                 type="button"
                                 onClick={onReturnToAdmin}
                                 className="w-full py-3 px-6 rounded-lg font-bold text-sm transition-all"
-                                style={{ background: '#acc9ef', color: '#123250', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}
+                                style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                             >
                                 Return to admin login
                             </button>
@@ -101,7 +101,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                             {['New Password', 'Confirm Password'].map((label, i) => (
                                 <div key={label}>
                                     <label className="block text-xs font-bold uppercase tracking-wider mb-2"
-                                        style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                                        style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                                         {label}
                                     </label>
                                     <input
@@ -114,7 +114,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                                         className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#333535'}
+                                        onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
                                     />
                                 </div>
                             ))}
@@ -122,7 +122,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                                 type="submit"
                                 disabled={!isRecoveryReady || isLoading}
                                 className="w-full py-3 px-6 rounded-lg font-bold text-sm transition-all disabled:opacity-50"
-                                style={{ background: '#acc9ef', color: '#123250', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}
+                                style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                             >
                                 {isLoading ? 'Updating password…' : 'Save New Password'}
                             </button>

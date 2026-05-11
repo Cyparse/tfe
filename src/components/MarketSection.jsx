@@ -49,20 +49,20 @@ export default function MarketSection() {
 
       const popup = (name, description) =>
         `<div style="font-family:'Nunito',sans-serif;padding:8px;">
-          <h3 style="margin:0 0 8px 0;color:#002442;font-size:16px;font-weight:bold;">${name}</h3>
-          <p style="margin:0;color:#3a7ca5;font-size:14px;">${description}</p>
+          <h3 style="margin:0 0 8px 0;color:var(--color-deep-navy);font-size:16px;font-weight:bold;">${name}</h3>
+          <p style="margin:0;color:var(--color-midblue);font-size:14px;">${description}</p>
         </div>`;
 
       const vendors = [
         { latlng: FriesLocation,    src: '/fries.png',   border: '#7b563b', name: 'Baraque Friture',        desc: 'Frites & Accompagnements' },
         { latlng: PretzelLocation,  src: '/pretzel.png', border: '#7b563b', name: 'Doughy Delights',        desc: 'Pretzels, Bretzels & Snacks' },
         { latlng: RacletteLocation, src: '/cheese.png',  border: '#7b563b', name: 'Raclette',               desc: 'Raclette & Fromages' },
-        { latlng: ClothesLocation,  src: '/gloves.png',  border: '#3a7ca5', name: 'Pas froid aux yeux',     desc: 'Gants, Bonnets & Écharpes' },
-        { latlng: HotDrinksLocation,src: '/coffee.png',  border: '#e8a94e', name: 'Chaud Cacao',            desc: 'Vin chaud & Boissons chaudes' },
+        { latlng: ClothesLocation,  src: '/gloves.png',  border: 'var(--color-midblue)', name: 'Pas froid aux yeux',     desc: 'Gants, Bonnets & Écharpes' },
+        { latlng: HotDrinksLocation,src: '/coffee.png',  border: 'var(--color-festival-yellow)', name: 'Chaud Cacao',            desc: 'Vin chaud & Boissons chaudes' },
         { latlng: SausageLocation,  src: '/sausage.png', border: '#7b563b', name: 'Paradis de la saucisse', desc: 'Bratwurst, Currywurst & spécialités' },
-        { latlng: WafflesLocation,  src: '/waffle.png',  border: '#e8a94e', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
-        { latlng: CandyLocation,    src: '/candy.png',   border: '#e8a94e', name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
-        { latlng: GazeboLocation,   src: '/gazebo.png',  border: '#ffffff', bg: '#3a7ca5', size: 60, anchor: 'center', name: 'Espace Gazebo', desc: 'Pavillon & animations' },
+        { latlng: WafflesLocation,  src: '/waffle.png',  border: 'var(--color-festival-yellow)', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
+        { latlng: CandyLocation,    src: '/candy.png',   border: 'var(--color-festival-yellow)', name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
+        { latlng: GazeboLocation,   src: '/gazebo.png',  border: '#ffffff', bg: 'var(--color-midblue)', size: 60, anchor: 'center', name: 'Espace Gazebo', desc: 'Pavillon & animations' },
       ];
 
       vendors.forEach(({ latlng, src, border, bg, size, anchor, name, desc }) => {

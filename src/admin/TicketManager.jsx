@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getTicketOrders, deleteTicketOrder, exportTicketOrdersToCSV } from '../services/ticketService';
 
-const card = { background: '#002442', borderColor: '#333535' };
-const input = { background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', outline: 'none' };
-const labelStyle = { color: '#cae9ff', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
+const card = { background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' };
+const input = { background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', outline: 'none' };
+const labelStyle = { color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function TicketManager() {
     const [orders, setOrders] = useState([]);
@@ -43,19 +43,19 @@ export default function TicketManager() {
         const Field = ({ label, value }) => (
             <div>
                 <p style={labelStyle} className="mb-1">{label}</p>
-                <p className="text-sm" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>{value ?? '—'}</p>
+                <p className="text-sm" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>{value ?? '—'}</p>
             </div>
         );
         return (
             <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
                 <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-                    style={{ background: '#002442', borderColor: '#333535' }}>
+                    style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                     <div className="p-6">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
+                            <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
                                 Ticket Order Details
                             </h3>
-                            <button onClick={onClose} className="material-symbols-outlined" style={{ color: '#8d9198' }}>close</button>
+                            <button onClick={onClose} className="material-symbols-outlined" style={{ color: 'var(--color-festival-yellow)' }}>close</button>
                         </div>
                         <div className="grid grid-cols-2 gap-5">
                             <Field label="Order ID" value={order.id} />
@@ -72,7 +72,7 @@ export default function TicketManager() {
                             {order.special_requests && (
                                 <div className="col-span-2">
                                     <p style={labelStyle} className="mb-1">Special Requests</p>
-                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
+                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
                                         {order.special_requests}
                                     </p>
                                 </div>
@@ -82,7 +82,7 @@ export default function TicketManager() {
                         <div className="mt-6 flex justify-end">
                             <button onClick={onClose}
                                 className="px-4 py-2 rounded-lg text-sm font-bold border"
-                                style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
                                 Close
                             </button>
                         </div>
@@ -95,19 +95,19 @@ export default function TicketManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
                     Ticketing
                 </h2>
                 <div className="flex gap-3">
                     <button onClick={handleExport}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
-                        style={{ background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">download</span>
                         Export CSV
                     </button>
                     <button onClick={loadOrders}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
-                        style={{ background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">refresh</span>
                         Refresh
                     </button>
@@ -123,7 +123,7 @@ export default function TicketManager() {
                                 onChange={e => setFilters({ ...filters, search: e.target.value, page: 1 })}
                                 placeholder="Name or email…" className="w-full px-3 py-2 rounded-lg text-sm" style={input}
                                 onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                onBlur={e => e.target.style.borderColor = '#333535'} />
+                                onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'} />
                         )},
                         { label: 'Sort By', element: (
                             <select value={filters.sortBy}
@@ -147,17 +147,17 @@ export default function TicketManager() {
             <div className="rounded-xl border overflow-hidden" style={card}>
                 {isLoading ? (
                     <div className="p-12 text-center flex items-center justify-center gap-2"
-                        style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                         <span className="material-symbols-outlined animate-spin">progress_activity</span> Loading…
                     </div>
                 ) : orders.length === 0 ? (
-                    <div className="p-12 text-center" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>No ticket orders found</div>
+                    <div className="p-12 text-center" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>No ticket orders found</div>
                 ) : (
                     <>
                         <div className="overflow-x-auto">
                             <table className="min-w-full">
                                 <thead>
-                                    <tr style={{ borderBottom: '1px solid #333535' }}>
+                                    <tr style={{ borderBottom: '1px solid var(--color-midblue)' }}>
                                         {['Name', 'Email', 'Location', 'Tickets', 'Date', ''].map(h => (
                                             <th key={h} className={`px-6 py-3 text-left ${h === '' ? 'text-right' : ''}`}
                                                 style={{ ...labelStyle, background: '#004075' }}>
@@ -169,30 +169,30 @@ export default function TicketManager() {
                                 <tbody>
                                     {orders.map((order, i) => (
                                         <tr key={order.id}
-                                            style={{ borderBottom: i < orders.length - 1 ? '1px solid #333535' : 'none' }}
+                                            style={{ borderBottom: i < orders.length - 1 ? '1px solid var(--color-midblue)' : 'none' }}
                                             onMouseEnter={e => e.currentTarget.style.background = '#004075'}
                                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                                            <td className="px-6 py-4 text-sm font-medium" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
+                                            <td className="px-6 py-4 text-sm font-medium" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
                                                 {order.first_name} {order.last_name}
                                             </td>
-                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{order.email}</td>
-                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                            <td className="px-6 py-4 text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{order.email}</td>
+                                            <td className="px-6 py-4 text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                                 {order.city}, {order.country}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="px-2.5 py-1 text-xs font-bold rounded-full"
-                                                    style={{ background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'Nunito Sans' }}>
+                                                    style={{ background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>
                                                     {order.ticket_count}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                            <td className="px-6 py-4 text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                                 {new Date(order.created_at).toLocaleDateString()}
                                             </td>
                                             <td className="px-6 py-4 text-right space-x-3">
                                                 <button onClick={() => setSelectedOrder(order)}
-                                                    className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}>View</button>
+                                                    className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>View</button>
                                                 <button onClick={() => handleDelete(order.id)}
-                                                    className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans' }}>Delete</button>
+                                                    className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -201,24 +201,24 @@ export default function TicketManager() {
                         </div>
 
                         <div className="px-6 py-4 flex items-center justify-between border-t"
-                            style={{ borderColor: '#333535', background: '#004075' }}>
-                            <span className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                            style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
+                            <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                 {orders.length} of {pagination.count} orders
                             </span>
                             <div className="flex items-center gap-2">
                                 <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
                                     disabled={filters.page === 1}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
+                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
                                     Previous
                                 </button>
-                                <span className="text-xs px-2" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                     {filters.page} / {pagination.totalPages}
                                 </span>
                                 <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
                                     disabled={filters.page >= pagination.totalPages}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
+                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
                                     Next
                                 </button>
                             </div>

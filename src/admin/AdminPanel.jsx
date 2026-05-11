@@ -20,30 +20,30 @@ export default function AdminPanel({ user, onLogout }) {
     };
 
     return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #002442 0%, #121414 100%)', color: '#ffffff' }}>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--color-deep-navy) 0%, #121414 100%)', color: '#ffffff' }}>
             {/* Header */}
             <header className="sticky top-0 z-50 border-b"
-                style={{ background: '#121414', borderColor: '#333535' }}>
+                style={{ background: '#121414', borderColor: 'var(--color-midblue)' }}>
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
                     {/* Brand */}
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#fcba5d' }}>
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-festival-yellow)' }}>
                                 <span className="material-symbols-outlined text-xl"
-                                    style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>ac_unit</span>
+                                    style={{ fontVariationSettings: "'FILL' 1", color: 'var(--color-dark-brown)' }}>ac_unit</span>
                             </div>
                             <span className="font-semibold tracking-tight hidden sm:block"
-                                style={{ color: '#ffffff', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
+                                style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', fontSize: '1.1rem' }}>
                                 Snow Wonder
                             </span>
                         </div>
                         {/* Search */}
                         <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
-                            style={{ background: '#004075', borderColor: '#333535', minWidth: '220px' }}>
-                            <span className="material-symbols-outlined text-sm" style={{ color: '#8d9198' }}>search</span>
+                            style={{ background: '#004075', borderColor: 'var(--color-midblue)', minWidth: '220px' }}>
+                            <span className="material-symbols-outlined text-sm" style={{ color: 'var(--color-festival-yellow)' }}>search</span>
                             <input
                                 className="bg-transparent border-none outline-none text-sm w-full"
-                                style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}
+                                style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
                                 placeholder="Search…"
                             />
                         </div>
@@ -52,19 +52,19 @@ export default function AdminPanel({ user, onLogout }) {
                     {/* Right side */}
                     <div className="flex items-center gap-4">
                         <button className="material-symbols-outlined transition-colors"
-                            style={{ color: '#8d9198', fontSize: '1.25rem' }}>notifications</button>
+                            style={{ color: 'var(--color-festival-yellow)', fontSize: '1.25rem' }}>notifications</button>
                         <div className="hidden sm:flex flex-col items-end">
-                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#ffffff', fontFamily: 'Nunito Sans' }}>
+                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
                                 {user?.email?.split('@')[0]}
                             </span>
-                            <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                            <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                 Admin
                             </span>
                         </div>
                         <button
                             onClick={handleLogout}
                             className="text-xs font-bold uppercase tracking-wider transition-colors"
-                            style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}
+                            style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                         >
                             Log Out
                         </button>
@@ -80,9 +80,9 @@ export default function AdminPanel({ user, onLogout }) {
                                 onClick={() => setActiveTab(tab.id)}
                                 className="flex items-center gap-2 py-4 border-b-2 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors"
                                 style={{
-                                    borderBottomColor: activeTab === tab.id ? '#fcba5d' : 'transparent',
-                                    color: activeTab === tab.id ? '#fcba5d' : '#8d9198',
-                                    fontFamily: 'Nunito Sans',
+                                    borderBottomColor: activeTab === tab.id ? 'var(--color-festival-yellow)' : 'transparent',
+                                    color: activeTab === tab.id ? 'var(--color-festival-yellow)' : 'var(--color-festival-yellow)',
+                                    fontFamily: 'var(--font-family-body)',
                                     letterSpacing: '0.05em',
                                 }}
                             >

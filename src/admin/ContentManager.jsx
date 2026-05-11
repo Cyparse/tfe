@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getItems, createItem, updateItem, deleteItem, getTableSchema } from '../services/contentService';
 
-const card = { background: '#002442', borderColor: '#333535' };
-const inputStyle = { background: '#004075', border: '1px solid #333535', color: '#ffffff', fontFamily: 'Nunito Sans', outline: 'none' };
-const labelStyle = { color: '#cae9ff', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
+const card = { background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' };
+const inputStyle = { background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', outline: 'none' };
+const labelStyle = { color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function ContentManager() {
     const [tableName, setTableName] = useState('');
@@ -60,13 +60,13 @@ export default function ContentManager() {
     const FormModal = ({ isEdit, onSubmit, onClose }) => (
         <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
             <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-                style={{ background: '#002442', borderColor: '#333535' }}>
+                style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'Rubik' }}>
+                        <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
                             {isEdit ? 'Edit Item' : 'Create New Item'}
                         </h3>
-                        <button onClick={onClose} className="material-symbols-outlined" style={{ color: '#8d9198' }}>close</button>
+                        <button onClick={onClose} className="material-symbols-outlined" style={{ color: 'var(--color-festival-yellow)' }}>close</button>
                     </div>
                     <div className="space-y-4">
                         {Object.keys(formData).filter(f => !['id', 'created_at', 'updated_at'].includes(f)).map(field => (
@@ -82,7 +82,7 @@ export default function ContentManager() {
                                         className="w-full px-3 py-2 rounded-lg text-sm"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#333535'}
+                                        onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
                                     />
                                 ) : (
                                     <input
@@ -92,7 +92,7 @@ export default function ContentManager() {
                                         className="w-full px-3 py-2 rounded-lg text-sm"
                                         style={inputStyle}
                                         onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                        onBlur={e => e.target.style.borderColor = '#333535'}
+                                        onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
                                     />
                                 )}
                             </div>
@@ -101,12 +101,12 @@ export default function ContentManager() {
                     <div className="mt-6 flex justify-end gap-3">
                         <button onClick={onClose}
                             className="px-4 py-2 rounded-lg text-sm font-bold border"
-                            style={{ border: '1px solid #333535', color: '#cae9ff', fontFamily: 'Nunito Sans' }}>
+                            style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
                             Cancel
                         </button>
                         <button onClick={onSubmit}
                             className="px-4 py-2 rounded-lg text-sm font-bold"
-                            style={{ background: '#acc9ef', color: '#123250', fontFamily: 'Nunito Sans' }}>
+                            style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)' }}>
                             {isEdit ? 'Update' : 'Create'}
                         </button>
                     </div>
@@ -118,13 +118,13 @@ export default function ContentManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
                     Content
                 </h2>
                 {tableName && (
                     <button onClick={startCreate}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
-                        style={{ background: '#acc9ef', color: '#123250', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">add</span>
                         Create New
                     </button>
@@ -139,7 +139,7 @@ export default function ContentManager() {
                         <select value={tableName} onChange={e => setTableName(e.target.value)}
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
                             onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                            onBlur={e => e.target.style.borderColor = '#333535'}>
+                            onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}>
                             <option value="">— Choose a table —</option>
                             {commonTables.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
@@ -150,7 +150,7 @@ export default function ContentManager() {
                             placeholder="custom_table_name"
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
                             onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                            onBlur={e => e.target.style.borderColor = '#333535'} />
+                            onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'} />
                     </div>
                 </div>
             </div>
@@ -158,24 +158,24 @@ export default function ContentManager() {
             {/* Data */}
             {!tableName ? (
                 <div className="rounded-xl border p-12 text-center" style={card}>
-                    <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: '#333535' }}>table_view</span>
-                    <p style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>Select a table to manage content</p>
+                    <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: 'var(--color-midblue)' }}>table_view</span>
+                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Select a table to manage content</p>
                 </div>
             ) : isLoading ? (
                 <div className="rounded-xl border p-12 text-center flex items-center justify-center gap-2" style={card}>
-                    <span className="material-symbols-outlined animate-spin" style={{ color: '#8d9198' }}>progress_activity</span>
-                    <span style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>Loading…</span>
+                    <span className="material-symbols-outlined animate-spin" style={{ color: 'var(--color-festival-yellow)' }}>progress_activity</span>
+                    <span style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Loading…</span>
                 </div>
             ) : items.length === 0 ? (
                 <div className="rounded-xl border p-12 text-center" style={card}>
-                    <p style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>No items found in this table</p>
+                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>No items found in this table</p>
                 </div>
             ) : (
                 <div className="rounded-xl border overflow-hidden" style={card}>
                     <div className="overflow-x-auto">
                         <table className="min-w-full">
                             <thead>
-                                <tr style={{ borderBottom: '1px solid #333535' }}>
+                                <tr style={{ borderBottom: '1px solid var(--color-midblue)' }}>
                                     {schema.map(f => (
                                         <th key={f} className="px-6 py-3 text-left"
                                             style={{ ...labelStyle, background: '#004075' }}>
@@ -189,12 +189,12 @@ export default function ContentManager() {
                             <tbody>
                                 {items.map((item, i) => (
                                     <tr key={item.id}
-                                        style={{ borderBottom: i < items.length - 1 ? '1px solid #333535' : 'none' }}
+                                        style={{ borderBottom: i < items.length - 1 ? '1px solid var(--color-midblue)' : 'none' }}
                                         onMouseEnter={e => e.currentTarget.style.background = '#004075'}
                                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                                         {schema.map(f => (
                                             <td key={f} className="px-6 py-4 text-sm"
-                                                style={{ color: '#cae9ff', fontFamily: 'Nunito Sans', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                 {String(item[f] || '').length > 50
                                                     ? String(item[f]).substring(0, 50) + '…'
                                                     : String(item[f] || '')}
@@ -202,9 +202,9 @@ export default function ContentManager() {
                                         ))}
                                         <td className="px-6 py-4 text-right space-x-3">
                                             <button onClick={() => startEdit(item)}
-                                                className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}>Edit</button>
+                                                className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Edit</button>
                                             <button onClick={() => handleDelete(item.id)}
-                                                className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans' }}>Delete</button>
+                                                className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
