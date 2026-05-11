@@ -45,7 +45,7 @@ export default function Footer() {
                             Quick Links
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
-                            [
+                            {[
                                 { label: 'Le Festival', href: '#festival' },
                                 { label: 'Programme', href: '#schedule' },
                                 { label: 'Inscription', href: '#registration' },
