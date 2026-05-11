@@ -1,56 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import {
-    getTicketOrders,
-    deleteTicketOrder,
-    updateTicketOrder,
-    exportTicketOrdersToCSV
-} from '../services/ticketService';
+import { getTicketOrders, deleteTicketOrder, exportTicketOrdersToCSV } from '../services/ticketService';
+
+const card = { background: '#1e2020', borderColor: '#333535' };
+const input = { background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', outline: 'none' };
+const labelStyle = { color: '#c3c6ce', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function TicketManager() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [filters, setFilters] = useState({
-        search: '',
-        page: 1,
-        pageSize: 20,
-        sortBy: 'created_at',
-        sortOrder: 'desc'
-    });
-    const [pagination, setPagination] = useState({
-        count: 0,
-        totalPages: 0
-    });
+    const [filters, setFilters] = useState({ search: '', page: 1, pageSize: 20, sortBy: 'created_at', sortOrder: 'desc' });
+    const [pagination, setPagination] = useState({ count: 0, totalPages: 0 });
 
-    useEffect(() => {
-        loadOrders();
-    }, [filters]);
+    useEffect(() => { loadOrders(); }, [filters]);
 
     const loadOrders = async () => {
         try {
             setIsLoading(true);
             const result = await getTicketOrders(filters);
             setOrders(result.data);
-            setPagination({
-                count: result.count,
-                totalPages: result.totalPages
-            });
-        } catch (error) {
-            console.error('Error loading ticket orders:', error);
-        } finally {
-            setIsLoading(false);
-        }
+            setPagination({ count: result.count, totalPages: result.totalPages });
+        } catch (e) { console.error(e); }
+        finally { setIsLoading(false); }
     };
 
     const handleDelete = async (id) => {
-        if (!confirm('Are you sure you want to delete this ticket order?')) return;
-        
-        try {
-            await deleteTicketOrder(id);
-            loadOrders();
-        } catch (error) {
-            alert('Error deleting ticket order: ' + error.message);
-        }
+        if (!confirm('Delete this ticket order?')) return;
+        try { await deleteTicketOrder(id); loadOrders(); }
+        catch (e) { alert(e.message); }
     };
 
     const handleExport = () => {
@@ -58,107 +35,54 @@ export default function TicketManager() {
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `ticket_orders_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
+        a.href = url; a.download = `ticket_orders_${new Date().toISOString().split('T')[0]}.csv`; a.click();
     };
 
     const ViewModal = ({ order, onClose }) => {
         if (!order) return null;
-
+        const Field = ({ label, value }) => (
+            <div>
+                <p style={labelStyle} className="mb-1">{label}</p>
+                <p className="text-sm" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>{value ?? '—'}</p>
+            </div>
+        );
         return (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
+                <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                    style={{ background: '#1e2020', borderColor: '#333535' }}>
                     <div className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-xl font-bold text-gray-900">Ticket Order Details</h3>
-                            <button
-                                onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 text-2xl"
-                            >
-                                ×
-                            </button>
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                                Ticket Order Details
+                            </h3>
+                            <button onClick={onClose} className="material-symbols-outlined" style={{ color: '#8d9198' }}>close</button>
                         </div>
-
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Order ID</label>
-                                    <p className="mt-1 text-gray-900">{order.id}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Ticket Count</label>
-                                    <p className="mt-1 text-gray-900 font-semibold">{order.ticket_count}</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">First Name</label>
-                                    <p className="mt-1 text-gray-900">{order.first_name}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Last Name</label>
-                                    <p className="mt-1 text-gray-900">{order.last_name}</p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Email</label>
-                                <p className="mt-1 text-gray-900">{order.email}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Phone</label>
-                                <p className="mt-1 text-gray-900">{order.phone}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Address</label>
-                                <p className="mt-1 text-gray-900">{order.address}</p>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">City</label>
-                                    <p className="mt-1 text-gray-900">{order.city}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Postal Code</label>
-                                    <p className="mt-1 text-gray-900">{order.postal_code}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Country</label>
-                                    <p className="mt-1 text-gray-900">{order.country}</p>
-                                </div>
-                            </div>
-
+                        <div className="grid grid-cols-2 gap-5">
+                            <Field label="Order ID" value={order.id} />
+                            <Field label="Ticket Count" value={order.ticket_count} />
+                            <Field label="First Name" value={order.first_name} />
+                            <Field label="Last Name" value={order.last_name} />
+                            <Field label="Email" value={order.email} />
+                            <Field label="Phone" value={order.phone} />
+                            <div className="col-span-2"><Field label="Address" value={order.address} /></div>
+                            <Field label="City" value={order.city} />
+                            <Field label="Postal Code" value={order.postal_code} />
+                            <Field label="Country" value={order.country} />
+                            <Field label="Newsletter" value={order.newsletter ? 'Yes' : 'No'} />
                             {order.special_requests && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Special Requests</label>
-                                    <p className="mt-1 text-gray-900 whitespace-pre-wrap">{order.special_requests}</p>
-                                </div>
-                            )}
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Newsletter</label>
-                                    <p className="mt-1 text-gray-900">{order.newsletter ? 'Yes' : 'No'}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Created At</label>
-                                    <p className="mt-1 text-gray-900">
-                                        {new Date(order.created_at).toLocaleString()}
+                                <div className="col-span-2">
+                                    <p style={labelStyle} className="mb-1">Special Requests</p>
+                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
+                                        {order.special_requests}
                                     </p>
                                 </div>
-                            </div>
+                            )}
+                            <Field label="Created At" value={new Date(order.created_at).toLocaleString()} />
                         </div>
-
-                        <div className="mt-6 flex justify-end space-x-3">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                            >
+                        <div className="mt-6 flex justify-end">
+                            <button onClick={onClose}
+                                className="px-4 py-2 rounded-lg text-sm font-bold border"
+                                style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                 Close
                             </button>
                         </div>
@@ -171,104 +95,104 @@ export default function TicketManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Ticket Order Management</h2>
-                <div className="flex space-x-3">
-                    <button
-                        onClick={handleExport}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-                    >
+                <h2 className="text-3xl font-bold" style={{ color: '#e2e2e2', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                    Ticketing
+                </h2>
+                <div className="flex gap-3">
+                    <button onClick={handleExport}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
+                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        <span className="material-symbols-outlined text-sm">download</span>
                         Export CSV
                     </button>
-                    <button
-                        onClick={loadOrders}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                    >
+                    <button onClick={loadOrders}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
+                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        <span className="material-symbols-outlined text-sm">refresh</span>
                         Refresh
                     </button>
                 </div>
             </div>
 
             {/* Filters */}
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="rounded-xl border p-4" style={card}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                        <input
-                            type="text"
-                            value={filters.search}
-                            onChange={(e) => setFilters({ ...filters, search: e.target.value, page: 1 })}
-                            placeholder="Name or email..."
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                        <select
-                            value={filters.sortBy}
-                            onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="created_at">Date</option>
-                            <option value="last_name">Last Name</option>
-                            <option value="ticket_count">Ticket Count</option>
-                        </select>
-                    </div>
+                    {[
+                        { label: 'Search', element: (
+                            <input type="text" value={filters.search}
+                                onChange={e => setFilters({ ...filters, search: e.target.value, page: 1 })}
+                                placeholder="Name or email…" className="w-full px-3 py-2 rounded-lg text-sm" style={input}
+                                onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                                onBlur={e => e.target.style.borderColor = '#43474d'} />
+                        )},
+                        { label: 'Sort By', element: (
+                            <select value={filters.sortBy}
+                                onChange={e => setFilters({ ...filters, sortBy: e.target.value })}
+                                className="w-full px-3 py-2 rounded-lg text-sm" style={input}>
+                                <option value="created_at">Date</option>
+                                <option value="last_name">Last Name</option>
+                                <option value="ticket_count">Ticket Count</option>
+                            </select>
+                        )},
+                    ].map(f => (
+                        <div key={f.label}>
+                            <label className="block mb-1.5" style={labelStyle}>{f.label}</label>
+                            {f.element}
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="rounded-xl border overflow-hidden" style={card}>
                 {isLoading ? (
-                    <div className="p-8 text-center text-gray-500">Loading...</div>
+                    <div className="p-12 text-center flex items-center justify-center gap-2"
+                        style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Loading…
+                    </div>
                 ) : orders.length === 0 ? (
-                    <div className="p-8 text-center text-gray-500">No ticket orders found</div>
+                    <div className="p-12 text-center" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>No ticket orders found</div>
                 ) : (
                     <>
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tickets</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            <table className="min-w-full">
+                                <thead>
+                                    <tr style={{ borderBottom: '1px solid #333535' }}>
+                                        {['Name', 'Email', 'Location', 'Tickets', 'Date', ''].map(h => (
+                                            <th key={h} className={`px-6 py-3 text-left ${h === '' ? 'text-right' : ''}`}
+                                                style={{ ...labelStyle, background: '#282a2b' }}>
+                                                {h}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {orders.map((order) => (
-                                        <tr key={order.id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <tbody>
+                                    {orders.map((order, i) => (
+                                        <tr key={order.id}
+                                            style={{ borderBottom: i < orders.length - 1 ? '1px solid #333535' : 'none' }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#282a2b'}
+                                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                            <td className="px-6 py-4 text-sm font-medium" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
                                                 {order.first_name} {order.last_name}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                {order.email}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{order.email}</td>
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
                                                 {order.city}, {order.country}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                                            <td className="px-6 py-4">
+                                                <span className="px-2.5 py-1 text-xs font-bold rounded-full"
+                                                    style={{ background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'Nunito Sans' }}>
                                                     {order.ticket_count}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
                                                 {new Date(order.created_at).toLocaleDateString()}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
-                                                <button
-                                                    onClick={() => setSelectedOrder(order)}
-                                                    className="text-blue-600 hover:text-blue-900"
-                                                >
-                                                    View
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(order.id)}
-                                                    className="text-red-600 hover:text-red-900"
-                                                >
-                                                    Delete
-                                                </button>
+                                            <td className="px-6 py-4 text-right space-x-3">
+                                                <button onClick={() => setSelectedOrder(order)}
+                                                    className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}>View</button>
+                                                <button onClick={() => handleDelete(order.id)}
+                                                    className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans' }}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -276,27 +200,25 @@ export default function TicketManager() {
                             </table>
                         </div>
 
-                        {/* Pagination */}
-                        <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t">
-                            <div className="text-sm text-gray-700">
-                                Showing {orders.length} of {pagination.count} orders
-                            </div>
-                            <div className="flex space-x-2">
-                                <button
-                                    onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                        <div className="px-6 py-4 flex items-center justify-between border-t"
+                            style={{ borderColor: '#333535', background: '#282a2b' }}>
+                            <span className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                {orders.length} of {pagination.count} orders
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
                                     disabled={filters.page === 1}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-                                >
+                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
+                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                     Previous
                                 </button>
-                                <span className="px-4 py-2">
-                                    Page {filters.page} of {pagination.totalPages}
+                                <span className="text-xs px-2" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                    {filters.page} / {pagination.totalPages}
                                 </span>
-                                <button
-                                    onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                                <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
                                     disabled={filters.page >= pagination.totalPages}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-                                >
+                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
+                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                     Next
                                 </button>
                             </div>
@@ -305,13 +227,7 @@ export default function TicketManager() {
                 )}
             </div>
 
-            {/* View Modal */}
-            {selectedOrder && (
-                <ViewModal
-                    order={selectedOrder}
-                    onClose={() => setSelectedOrder(null)}
-                />
-            )}
+            {selectedOrder && <ViewModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
         </div>
     );
 }

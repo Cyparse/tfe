@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { signOut } from '../services/authService';
 import RegistrationManager from './RegistrationManager';
 import TicketManager from './TicketManager';
@@ -7,72 +7,99 @@ import Dashboard from './Dashboard';
 
 export default function AdminPanel({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('dashboard');
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const tabs = [
-        { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-        { id: 'registrations', label: 'Registrations', icon: '📝' },
-        { id: 'tickets', label: 'Tickets', icon: '🎫' },
-        { id: 'content', label: 'Content', icon: '📄' }
+        { id: 'dashboard',      label: 'Dashboard',      icon: 'dashboard' },
+        { id: 'registrations',  label: 'Registrations',  icon: 'edit_note' },
+        { id: 'tickets',        label: 'Ticketing',      icon: 'confirmation_number' },
+        { id: 'content',        label: 'Content',        icon: 'article' },
     ];
 
     const handleLogout = async () => {
-        try {
-            await signOut();
-            onLogout();
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
+        try { await signOut(); onLogout(); } catch (e) { console.error(e); }
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #1e2020 0%, #121414 100%)', color: '#e2e2e2' }}>
             {/* Header */}
-            <header className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
-                            <p className="text-sm text-gray-600">Welcome, {user?.email}</p>
+            <header className="sticky top-0 z-50 border-b"
+                style={{ background: '#121414', borderColor: '#333535' }}>
+                <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+                    {/* Brand */}
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#fcba5d' }}>
+                                <span className="material-symbols-outlined text-xl"
+                                    style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>ac_unit</span>
+                            </div>
+                            <span className="font-semibold tracking-tight hidden sm:block"
+                                style={{ color: '#e2e2e2', fontFamily: 'Rubik', fontSize: '1.1rem' }}>
+                                Snow Wonder
+                            </span>
+                        </div>
+                        {/* Search */}
+                        <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
+                            style={{ background: '#282a2b', borderColor: '#43474d', minWidth: '220px' }}>
+                            <span className="material-symbols-outlined text-sm" style={{ color: '#8d9198' }}>search</span>
+                            <input
+                                className="bg-transparent border-none outline-none text-sm w-full"
+                                style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}
+                                placeholder="Search…"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right side */}
+                    <div className="flex items-center gap-4">
+                        <button className="material-symbols-outlined transition-colors"
+                            style={{ color: '#8d9198', fontSize: '1.25rem' }}>notifications</button>
+                        <div className="hidden sm:flex flex-col items-end">
+                            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
+                                {user?.email?.split('@')[0]}
+                            </span>
+                            <span className="text-[10px] uppercase tracking-widest" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                Admin
+                            </span>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                            className="text-xs font-bold uppercase tracking-wider transition-colors"
+                            style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}
                         >
-                            Sign Out
+                            Log Out
                         </button>
                     </div>
                 </div>
-            </header>
 
-            {/* Navigation Tabs */}
-            <nav className="bg-white shadow-sm border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex space-x-8 overflow-x-auto">
+                {/* Tab Navigation */}
+                <div className="border-t" style={{ borderColor: 'rgba(51,53,53,0.4)', background: '#121414' }}>
+                    <nav className="max-w-7xl mx-auto px-6 lg:px-10 flex gap-6 overflow-x-auto">
                         {tabs.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`py-4 px-2 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'border-blue-600 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
+                                className="flex items-center gap-2 py-4 border-b-2 text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors"
+                                style={{
+                                    borderBottomColor: activeTab === tab.id ? '#fcba5d' : 'transparent',
+                                    color: activeTab === tab.id ? '#fcba5d' : '#8d9198',
+                                    fontFamily: 'Nunito Sans',
+                                    letterSpacing: '0.05em',
+                                }}
                             >
-                                <span className="mr-2">{tab.icon}</span>
+                                <span className="material-symbols-outlined text-base">{tab.icon}</span>
                                 {tab.label}
                             </button>
                         ))}
-                    </div>
+                    </nav>
                 </div>
-            </nav>
+            </header>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {activeTab === 'dashboard' && <Dashboard />}
+            <main className="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+                {activeTab === 'dashboard'     && <Dashboard />}
                 {activeTab === 'registrations' && <RegistrationManager />}
-                {activeTab === 'tickets' && <TicketManager />}
-                {activeTab === 'content' && <ContentManager />}
+                {activeTab === 'tickets'       && <TicketManager />}
+                {activeTab === 'content'       && <ContentManager />}
             </main>
         </div>
     );

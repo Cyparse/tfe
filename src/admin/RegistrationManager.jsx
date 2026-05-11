@@ -1,57 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import {
-    getRegistrations,
-    deleteRegistration,
-    updateRegistration,
-    exportRegistrationsToCSV
-} from '../services/registrationService';
+import { getRegistrations, deleteRegistration, exportRegistrationsToCSV } from '../services/registrationService';
+
+// Shared dark-theme primitives
+const card = { background: '#1e2020', borderColor: '#333535' };
+const input = { background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', outline: 'none' };
+const labelStyle = { color: '#c3c6ce', fontFamily: 'Nunito Sans', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
 
 export default function RegistrationManager() {
     const [registrations, setRegistrations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedReg, setSelectedReg] = useState(null);
-    const [filters, setFilters] = useState({
-        type: '',
-        search: '',
-        page: 1,
-        pageSize: 20,
-        sortBy: 'created_at',
-        sortOrder: 'desc'
-    });
-    const [pagination, setPagination] = useState({
-        count: 0,
-        totalPages: 0
-    });
+    const [filters, setFilters] = useState({ type: '', search: '', page: 1, pageSize: 20, sortBy: 'created_at', sortOrder: 'desc' });
+    const [pagination, setPagination] = useState({ count: 0, totalPages: 0 });
 
-    useEffect(() => {
-        loadRegistrations();
-    }, [filters]);
+    useEffect(() => { loadRegistrations(); }, [filters]);
 
     const loadRegistrations = async () => {
         try {
             setIsLoading(true);
             const result = await getRegistrations(filters);
             setRegistrations(result.data);
-            setPagination({
-                count: result.count,
-                totalPages: result.totalPages
-            });
-        } catch (error) {
-            console.error('Error loading registrations:', error);
-        } finally {
-            setIsLoading(false);
-        }
+            setPagination({ count: result.count, totalPages: result.totalPages });
+        } catch (e) { console.error(e); }
+        finally { setIsLoading(false); }
     };
 
     const handleDelete = async (id) => {
-        if (!confirm('Are you sure you want to delete this registration?')) return;
-        
-        try {
-            await deleteRegistration(id);
-            loadRegistrations();
-        } catch (error) {
-            alert('Error deleting registration: ' + error.message);
-        }
+        if (!confirm('Delete this registration?')) return;
+        try { await deleteRegistration(id); loadRegistrations(); }
+        catch (e) { alert(e.message); }
     };
 
     const handleExport = () => {
@@ -59,88 +36,49 @@ export default function RegistrationManager() {
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`;
-        a.click();
+        a.href = url; a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`; a.click();
     };
 
     const ViewModal = ({ registration, onClose }) => {
         if (!registration) return null;
-
+        const Field = ({ label, value }) => (
+            <div>
+                <p style={labelStyle} className="mb-1">{label}</p>
+                <p className="text-sm" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>{value || '—'}</p>
+            </div>
+        );
         return (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
+                <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                    style={{ background: '#1e2020', borderColor: '#333535' }}>
                     <div className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-xl font-bold text-gray-900">Registration Details</h3>
-                            <button
-                                onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 text-2xl"
-                            >
-                                ×
-                            </button>
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                                Registration Details
+                            </h3>
+                            <button onClick={onClose} className="material-symbols-outlined transition-colors"
+                                style={{ color: '#8d9198', fontSize: '1.25rem' }}>close</button>
                         </div>
-
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Type</label>
-                                    <p className="mt-1 text-gray-900 capitalize">{registration.type}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">ID</label>
-                                    <p className="mt-1 text-gray-900">{registration.id}</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">First Name</label>
-                                    <p className="mt-1 text-gray-900">{registration.first_name}</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Last Name</label>
-                                    <p className="mt-1 text-gray-900">{registration.last_name}</p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Email</label>
-                                <p className="mt-1 text-gray-900">{registration.email}</p>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Phone</label>
-                                <p className="mt-1 text-gray-900">{registration.phone}</p>
-                            </div>
-
-                            {registration.organization && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Organization</label>
-                                    <p className="mt-1 text-gray-900">{registration.organization}</p>
-                                </div>
-                            )}
-
+                        <div className="grid grid-cols-2 gap-5">
+                            <Field label="Type" value={registration.type} />
+                            <Field label="ID" value={registration.id} />
+                            <Field label="First Name" value={registration.first_name} />
+                            <Field label="Last Name" value={registration.last_name} />
+                            <Field label="Email" value={registration.email} />
+                            <Field label="Phone" value={registration.phone} />
+                            {registration.organization && <Field label="Organization" value={registration.organization} />}
                             {registration.experience && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-600">Experience</label>
-                                    <p className="mt-1 text-gray-900 whitespace-pre-wrap">{registration.experience}</p>
+                                <div className="col-span-2">
+                                    <p style={labelStyle} className="mb-1">Experience</p>
+                                    <p className="text-sm whitespace-pre-wrap" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>{registration.experience}</p>
                                 </div>
                             )}
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-600">Created At</label>
-                                <p className="mt-1 text-gray-900">
-                                    {new Date(registration.created_at).toLocaleString()}
-                                </p>
-                            </div>
+                            <Field label="Created At" value={new Date(registration.created_at).toLocaleString()} />
                         </div>
-
-                        <div className="mt-6 flex justify-end space-x-3">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                            >
+                        <div className="mt-6 flex justify-end">
+                            <button onClick={onClose}
+                                className="px-4 py-2 rounded-lg text-sm font-bold border transition-all"
+                                style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                 Close
                             </button>
                         </div>
@@ -152,121 +90,123 @@ export default function RegistrationManager() {
 
     return (
         <div className="space-y-6">
+            {/* Header */}
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Registration Management</h2>
-                <div className="flex space-x-3">
-                    <button
-                        onClick={handleExport}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-                    >
+                <h2 className="text-3xl font-bold" style={{ color: '#e2e2e2', fontFamily: 'Rubik', letterSpacing: '-0.01em' }}>
+                    Registrations
+                </h2>
+                <div className="flex gap-3">
+                    <button onClick={handleExport}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
+                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        <span className="material-symbols-outlined text-sm">download</span>
                         Export CSV
                     </button>
-                    <button
-                        onClick={loadRegistrations}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-                    >
+                    <button onClick={loadRegistrations}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
+                        style={{ background: '#282a2b', border: '1px solid #43474d', color: '#e2e2e2', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
+                        <span className="material-symbols-outlined text-sm">refresh</span>
                         Refresh
                     </button>
                 </div>
             </div>
 
             {/* Filters */}
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="rounded-xl border p-4" style={card}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                        <input
-                            type="text"
-                            value={filters.search}
-                            onChange={(e) => setFilters({ ...filters, search: e.target.value, page: 1 })}
-                            placeholder="Name or email..."
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                        <select
-                            value={filters.type}
-                            onChange={(e) => setFilters({ ...filters, type: e.target.value, page: 1 })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">All Types</option>
-                            <option value="amateur">Amateur</option>
-                            <option value="pro">Professional</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                        <select
-                            value={filters.sortBy}
-                            onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="created_at">Date</option>
-                            <option value="last_name">Last Name</option>
-                            <option value="email">Email</option>
-                        </select>
-                    </div>
+                    {[
+                        { label: 'Search', element: (
+                            <input type="text" value={filters.search}
+                                onChange={e => setFilters({ ...filters, search: e.target.value, page: 1 })}
+                                placeholder="Name or email…"
+                                className="w-full px-3 py-2 rounded-lg text-sm"
+                                style={input}
+                                onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                                onBlur={e => e.target.style.borderColor = '#43474d'} />
+                        )},
+                        { label: 'Type', element: (
+                            <select value={filters.type}
+                                onChange={e => setFilters({ ...filters, type: e.target.value, page: 1 })}
+                                className="w-full px-3 py-2 rounded-lg text-sm"
+                                style={input}>
+                                <option value="">All Types</option>
+                                <option value="amateur">Amateur</option>
+                                <option value="pro">Professional</option>
+                            </select>
+                        )},
+                        { label: 'Sort By', element: (
+                            <select value={filters.sortBy}
+                                onChange={e => setFilters({ ...filters, sortBy: e.target.value })}
+                                className="w-full px-3 py-2 rounded-lg text-sm"
+                                style={input}>
+                                <option value="created_at">Date</option>
+                                <option value="last_name">Last Name</option>
+                                <option value="email">Email</option>
+                            </select>
+                        )},
+                    ].map(f => (
+                        <div key={f.label}>
+                            <label className="block mb-1.5" style={labelStyle}>{f.label}</label>
+                            {f.element}
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="rounded-xl border overflow-hidden" style={card}>
                 {isLoading ? (
-                    <div className="p-8 text-center text-gray-500">Loading...</div>
+                    <div className="p-12 text-center flex items-center justify-center gap-2"
+                        style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Loading…
+                    </div>
                 ) : registrations.length === 0 ? (
-                    <div className="p-8 text-center text-gray-500">No registrations found</div>
+                    <div className="p-12 text-center" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        No registrations found
+                    </div>
                 ) : (
                     <>
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            <table className="min-w-full">
+                                <thead>
+                                    <tr style={{ borderBottom: '1px solid #333535' }}>
+                                        {['Type', 'Name', 'Email', 'Phone', 'Date', ''].map(h => (
+                                            <th key={h} className={`px-6 py-3 text-left ${h === '' ? 'text-right' : ''}`}
+                                                style={{ ...labelStyle, background: '#282a2b' }}>
+                                                {h}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    {registrations.map((reg) => (
-                                        <tr key={reg.id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className={`px-2 py-1 text-xs rounded-full ${
-                                                    reg.type === 'pro' 
-                                                        ? 'bg-purple-100 text-purple-800' 
-                                                        : 'bg-green-100 text-green-800'
-                                                }`}>
+                                <tbody>
+                                    {registrations.map((reg, i) => (
+                                        <tr key={reg.id}
+                                            style={{ borderBottom: i < registrations.length - 1 ? '1px solid #333535' : 'none' }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#282a2b'}
+                                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                                            <td className="px-6 py-4">
+                                                <span className="px-2.5 py-1 text-xs font-bold rounded-full"
+                                                    style={reg.type === 'pro'
+                                                        ? { background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'Nunito Sans' }
+                                                        : { background: 'rgba(252,186,93,0.15)', color: '#fcba5d', fontFamily: 'Nunito Sans' }}>
                                                     {reg.type}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#e2e2e2', fontFamily: 'Nunito Sans' }}>
                                                 {reg.first_name} {reg.last_name}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                {reg.email}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                {reg.phone}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{reg.email}</td>
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>{reg.phone}</td>
+                                            <td className="px-6 py-4 text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
                                                 {new Date(reg.created_at).toLocaleDateString()}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
-                                                <button
-                                                    onClick={() => setSelectedReg(reg)}
-                                                    className="text-blue-600 hover:text-blue-900"
-                                                >
-                                                    View
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(reg.id)}
-                                                    className="text-red-600 hover:text-red-900"
-                                                >
-                                                    Delete
-                                                </button>
+                                            <td className="px-6 py-4 text-right space-x-3">
+                                                <button onClick={() => setSelectedReg(reg)}
+                                                    className="text-xs font-bold transition-colors"
+                                                    style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}>View</button>
+                                                <button onClick={() => handleDelete(reg.id)}
+                                                    className="text-xs font-bold transition-colors"
+                                                    style={{ color: '#ffb4ab', fontFamily: 'Nunito Sans' }}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -275,26 +215,25 @@ export default function RegistrationManager() {
                         </div>
 
                         {/* Pagination */}
-                        <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t">
-                            <div className="text-sm text-gray-700">
-                                Showing {registrations.length} of {pagination.count} registrations
-                            </div>
-                            <div className="flex space-x-2">
-                                <button
-                                    onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                        <div className="px-6 py-4 flex items-center justify-between border-t"
+                            style={{ borderColor: '#333535', background: '#282a2b' }}>
+                            <span className="text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                {registrations.length} of {pagination.count} registrations
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
                                     disabled={filters.page === 1}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-                                >
+                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
+                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                     Previous
                                 </button>
-                                <span className="px-4 py-2">
-                                    Page {filters.page} of {pagination.totalPages}
+                                <span className="text-xs px-2" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                                    {filters.page} / {pagination.totalPages}
                                 </span>
-                                <button
-                                    onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                                <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
                                     disabled={filters.page >= pagination.totalPages}
-                                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-                                >
+                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
+                                    style={{ border: '1px solid #43474d', color: '#c3c6ce', fontFamily: 'Nunito Sans' }}>
                                     Next
                                 </button>
                             </div>
@@ -303,13 +242,7 @@ export default function RegistrationManager() {
                 )}
             </div>
 
-            {/* View Modal */}
-            {selectedReg && (
-                <ViewModal
-                    registration={selectedReg}
-                    onClose={() => setSelectedReg(null)}
-                />
-            )}
+            {selectedReg && <ViewModal registration={selectedReg} onClose={() => setSelectedReg(null)} />}
         </div>
     );
 }
