@@ -9,7 +9,7 @@ export default function MapSection() {
 
     useEffect(() => {
         // Initialize Leaflet map
-        if (mapRef.current && !leafletMapRef.current && window.L) {
+        if (mapRef.current && !leafletMapRef.current && L) {
             // Festival locations
             const mainFestivalLocation = [50.602860262325706, 3.3809785070446057];
             const foodVillageLocation = [50.602511757616966, 3.388043095146282];
@@ -21,12 +21,12 @@ export default function MapSection() {
             const zoomLevel = isMobile ? 15 : 16;
 
             // Create map centered between all locations
-            leafletMapRef.current = window.L.map(mapRef.current, {
+            leafletMapRef.current = L.map(mapRef.current, {
                 scrollWheelZoom: false
             }).setView([50.6022, 3.3870], zoomLevel);
 
             // Add tile layer with clean CartoDB style
-            window.L.tileLayer(
+            L.tileLayer(
                 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
                 {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -35,7 +35,7 @@ export default function MapSection() {
             ).addTo(leafletMapRef.current);
 
             // Custom marker icon for main festival (yellow)
-            const mainIcon = window.L.divIcon({
+            const mainIcon = L.divIcon({
                 html: '<div style="background-color: #e8a94e; width: 35px; height: 35px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
                 className: 'custom-marker',
                 iconSize: [35, 35],
@@ -43,7 +43,7 @@ export default function MapSection() {
             });
 
             // Custom marker icon for food village (orange-red)
-            const foodIcon = window.L.divIcon({
+            const foodIcon = L.divIcon({
                 html: '<div style="background-color: #ff6b6b; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
                 className: 'custom-marker',
                 iconSize: [30, 30],
@@ -51,7 +51,7 @@ export default function MapSection() {
             });
 
             // Custom marker icon for amateur location (light blue)
-            const amateurIcon = window.L.divIcon({
+            const amateurIcon = L.divIcon({
                 html: '<div style="background-color: #4ecdc4; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
                 className: 'custom-marker',
                 iconSize: [30, 30],
@@ -59,7 +59,7 @@ export default function MapSection() {
             });
 
             // Custom marker icon for gazebo (with image inside)
-            const gazeboIcon = window.L.divIcon({
+            const gazeboIcon = L.divIcon({
                 html: '<div style="background-color: white; width: 35px; height: 35px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid #8b4789; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="/gazebo.png" style="width: 20px; height: 20px; object-fit: contain; transform: rotate(45deg);" /></div>',
                 className: 'custom-marker',
                 iconSize: [35, 35],
@@ -67,7 +67,7 @@ export default function MapSection() {
             });
 
             // Add main festival marker
-            const mainMarker = window.L.marker(mainFestivalLocation, {
+            const mainMarker = L.marker(mainFestivalLocation, {
                 icon: mainIcon
             }).addTo(leafletMapRef.current);
 
@@ -80,7 +80,7 @@ export default function MapSection() {
             `);
 
             // Add food village marker
-            const foodMarker = window.L.marker(foodVillageLocation, {
+            const foodMarker = L.marker(foodVillageLocation, {
                 icon: foodIcon
             }).addTo(leafletMapRef.current);
 
@@ -93,7 +93,7 @@ export default function MapSection() {
             `);
 
             // Add amateur location marker
-            const amateurMarker = window.L.marker(amateurLocation, {
+            const amateurMarker = L.marker(amateurLocation, {
                 icon: amateurIcon
             }).addTo(leafletMapRef.current);
 
@@ -106,7 +106,7 @@ export default function MapSection() {
             `);
 
             // Add gazebo marker
-            const gazeboMarker = window.L.marker(gazeboLocation, {
+            const gazeboMarker = L.marker(gazeboLocation, {
                 icon: gazeboIcon
             }).addTo(leafletMapRef.current);
 

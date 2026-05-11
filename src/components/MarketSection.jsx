@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { MapBackground } from "../assets/images";
 
 export default function MarketSection() {
@@ -8,7 +10,7 @@ export default function MarketSection() {
 
   useEffect(() => {
     // Initialize Leaflet map when modal opens
-    if (isModalOpen && mapRef.current && !leafletMapRef.current && window.L) {
+    if (isModalOpen && mapRef.current && !leafletMapRef.current && L) {
       // Market vendor locations
       const FriesLocation = [50.602745, 3.388051];
       const PretzelLocation = [50.602816, 3.388209];
@@ -21,12 +23,12 @@ export default function MarketSection() {
       const GazeboLocation = [50.602631, 3.387923];
 
       // Create map
-      leafletMapRef.current = window.L.map(mapRef.current, {
+      leafletMapRef.current = L.map(mapRef.current, {
         scrollWheelZoom: true,
       }).setView([50.60278, 3.388435], 19);
 
       // Add tile layer
-      window.L.tileLayer(
+      L.tileLayer(
         "https://api.mapbox.com/styles/v1/cyparse/cmmj8gl6z00cc01qu9pm3a08y/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY3lwYXJzZSIsImEiOiJjbW1qN2c2czAxNjJ3MnBzOGQzdWs5Njk1In0.yIAmgxiT-MXxxf9WtJhR2g",
         {
           attribution:
@@ -38,7 +40,7 @@ export default function MarketSection() {
       ).addTo(leafletMapRef.current);
 
       const makeIcon = (src, border = '#7b563b', bg = '#ffffff', size = 50) =>
-        window.L.divIcon({
+        L.divIcon({
           html: `<div style="background-color:${bg};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid ${border};box-shadow:0 3px 10px rgba(0,0,0,0.3);overflow:hidden;"><img src="${src}" style="width:${size * 0.84}px;height:${size * 0.84}px;object-fit:contain;" /></div>`,
           className: 'custom-marker',
           iconSize: [size, size],
@@ -68,7 +70,7 @@ export default function MarketSection() {
         if (anchor === 'center') {
           icon.options.iconAnchor = [size / 2, size / 2];
         }
-        window.L.marker(latlng, { icon })
+        L.marker(latlng, { icon })
           .addTo(leafletMapRef.current)
           .bindPopup(popup(name, desc));
       });

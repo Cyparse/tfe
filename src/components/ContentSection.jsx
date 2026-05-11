@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeroImage } from '../assets/images';
 
 export default function ContentSection() {
     return (
@@ -43,10 +44,10 @@ export default function ContentSection() {
                             un rendez-vous incontournable de l'hiver.
                         </p>
                         <div className="pt-4">
-                            <img 
-                                alt="Grand Snow Sculpture" 
-                                className="rounded-2xl border border-white/20 shadow-xl w-full"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbmi8anxilc3U36hMcgj4YRT2vWls65cKkEmtaJ8DPSrJELN5fkU_pc2EmlbToWqnfHz_Vpz1sA5icbY46f-k7jx4MkhYoX1YtSeNohFoEe_qDXcbZtGcApgTPsRNkiU0Ijv-wCZJ1SrlSf69bO7U6YfXZY7Xyai0eftnc2bqiSJhDGPK-5nM6l2GZ49WXHqDgbUSK2nX2lPpJMirHS_xsfH-16VFfFa1JaI4fLc8aOahCJFKxj8vqLRpsNYDf5nSG7oPiXRhbBiw" 
+                            <img
+                                alt="Sculpture de neige"
+                                className="rounded-2xl border border-white/20 shadow-xl w-full object-cover"
+                                src={HeroImage}
                             />
                         </div>
                     </div>
