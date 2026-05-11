@@ -3,10 +3,7 @@ import ForgotPassword from './ForgotPassword';
 import { signInAdmin } from '../services/authService';
 
 export default function AdminLogin({ onLoginSuccess }) {
-    const [credentials, setCredentials] = useState({
-        email: '',
-        password: ''
-    });
+    const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -24,7 +21,6 @@ export default function AdminLogin({ onLoginSuccess }) {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-
         try {
             const result = await signInAdmin(credentials.email, credentials.password);
             onLoginSuccess(result);
@@ -36,32 +32,45 @@ export default function AdminLogin({ onLoginSuccess }) {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-            <div className="max-w-md w-full">
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
-                    <div className="flex items-center justify-between mb-6">
-                        <a 
-                            href="#"
-                            className="text-blue-200 hover:text-white text-sm flex items-center transition-colors"
-                        >
-                            ← Back to Home
-                        </a>
+        <div className="min-h-screen flex items-center justify-center p-4"
+            style={{ background: 'linear-gradient(180deg, #1e2020 0%, #121414 100%)' }}>
+            <div className="w-full max-w-md">
+                {/* Logo */}
+                <div className="flex items-center justify-center gap-3 mb-8">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                        style={{ background: '#fcba5d' }}>
+                        <span className="material-symbols-outlined text-xl"
+                            style={{ fontVariationSettings: "'FILL' 1", color: '#452b00' }}>
+                            ac_unit
+                        </span>
+                    </div>
+                    <span className="text-2xl font-semibold tracking-tight" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                        Snow Wonder
+                    </span>
+                </div>
+
+                {/* Card */}
+                <div className="rounded-2xl p-8 border" style={{ background: '#1e2020', borderColor: '#333535' }}>
+                    <div className="mb-8">
+                        <h1 className="text-2xl font-semibold mb-1" style={{ color: '#e2e2e2', fontFamily: 'Rubik' }}>
+                            Admin Portal
+                        </h1>
+                        <p className="text-sm" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                            Sign in to access the dashboard
+                        </p>
                     </div>
 
-                    <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-                        <p className="text-blue-200">Sign in to access the dashboard</p>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         {error && (
-                            <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-red-200 text-sm">
+                            <div className="rounded-lg p-3 text-sm border"
+                                style={{ background: 'rgba(147,0,10,0.2)', borderColor: 'rgba(147,0,10,0.5)', color: '#ffdad6', fontFamily: 'Nunito Sans' }}>
                                 {error}
                             </div>
                         )}
 
                         <div>
-                            <label className="block text-sm font-medium text-blue-200 mb-2">
+                            <label className="block text-xs font-bold uppercase tracking-wider mb-2"
+                                style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                                 Email Address
                             </label>
                             <input
@@ -69,14 +78,23 @@ export default function AdminLogin({ onLoginSuccess }) {
                                 required
                                 value={credentials.email}
                                 onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-300/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                                 placeholder="admin@example.com"
                                 disabled={isLoading}
+                                className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
+                                style={{
+                                    background: '#282a2b',
+                                    border: '1px solid #43474d',
+                                    color: '#e2e2e2',
+                                    fontFamily: 'Nunito Sans',
+                                }}
+                                onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                                onBlur={e => e.target.style.borderColor = '#43474d'}
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-blue-200 mb-2">
+                            <label className="block text-xs font-bold uppercase tracking-wider mb-2"
+                                style={{ color: '#c3c6ce', fontFamily: 'Nunito Sans', letterSpacing: '0.05em' }}>
                                 Password
                             </label>
                             <input
@@ -84,17 +102,25 @@ export default function AdminLogin({ onLoginSuccess }) {
                                 required
                                 value={credentials.password}
                                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-300/50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                                 placeholder="••••••••"
                                 disabled={isLoading}
+                                className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all"
+                                style={{
+                                    background: '#282a2b',
+                                    border: '1px solid #43474d',
+                                    color: '#e2e2e2',
+                                    fontFamily: 'Nunito Sans',
+                                }}
+                                onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                                onBlur={e => e.target.style.borderColor = '#43474d'}
                             />
-
-                            <div className="mt-3 text-right">
+                            <div className="mt-2 text-right">
                                 <button
                                     type="button"
                                     onClick={() => setShowForgotPassword(true)}
                                     disabled={isLoading}
-                                    className="text-sm text-blue-200 hover:text-white transition-colors disabled:opacity-50"
+                                    className="text-xs transition-colors disabled:opacity-50"
+                                    style={{ color: '#acc9ef', fontFamily: 'Nunito Sans' }}
                                 >
                                     Forgot password?
                                 </button>
@@ -104,15 +130,27 @@ export default function AdminLogin({ onLoginSuccess }) {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                            className="w-full py-3 px-6 rounded-lg font-bold text-sm transition-all disabled:opacity-50"
+                            style={{
+                                background: isLoading ? '#002442' : '#acc9ef',
+                                color: '#123250',
+                                fontFamily: 'Nunito Sans',
+                                letterSpacing: '0.05em',
+                            }}
                         >
-                            {isLoading ? 'Signing in...' : 'Sign In'}
+                            {isLoading ? 'Signing in…' : 'Sign In'}
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center text-sm text-blue-300">
-                        <p>Protected access only</p>
-                    </div>
+                    <p className="mt-6 text-center text-xs" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        Protected access only
+                    </p>
+                </div>
+
+                <div className="mt-6 text-center">
+                    <a href="#" className="text-xs transition-colors" style={{ color: '#8d9198', fontFamily: 'Nunito Sans' }}>
+                        ← Back to Home
+                    </a>
                 </div>
             </div>
         </div>
