@@ -25,7 +25,7 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4"
-            style={{ background: 'linear-gradient(180deg, var(--color-deep-navy) 0%, #121414 100%)' }}>
+            style={{ background: 'linear-gradient(180deg, var(--color-midblue) 0%, var(--color-deep-navy) 100%)' }}>
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="flex items-center justify-center gap-3 mb-8">

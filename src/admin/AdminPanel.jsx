@@ -20,10 +20,10 @@ export default function AdminPanel({ user, onLogout }) {
     };
 
     return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--color-deep-navy) 0%, #121414 100%)', color: '#ffffff' }}>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, var(--colormidblue) 0%, var(--color-deep-navy) 100%)', color: '#ffffff' }}>
             {/* Header */}
             <header className="sticky top-0 z-50 border-b"
-                style={{ background: '#121414', borderColor: 'var(--color-midblue)' }}>
+                style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                 <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
                     {/* Brand */}
                     <div className="flex items-center gap-6">
@@ -72,7 +72,7 @@ export default function AdminPanel({ user, onLogout }) {
                 </div>
 
                 {/* Tab Navigation */}
-                <div className="border-t" style={{ borderColor: 'rgba(51,53,53,0.4)', background: '#121414' }}>
+                <div className="border-t" style={{ borderColor: 'rgba(51,53,53,0.4)', background: 'var(--color-deep-navy)' }}>
                     <nav className="max-w-7xl mx-auto px-6 lg:px-10 flex gap-6 overflow-x-auto">
                         {tabs.map(tab => (
                             <button

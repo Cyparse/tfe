@@ -50,7 +50,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4"
-            style={{ background: 'linear-gradient(180deg, var(--color-deep-navy) 0%, #121414 100%)' }}>
+            style={{ background: 'linear-gradient(180deg, var(--color-midblue) 0%, var(--color-deep-navy) 100%)' }}>
             <div className="w-full max-w-md">
                 <div className="flex items-center justify-center gap-3 mb-8">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-festival-yellow)' }}>
