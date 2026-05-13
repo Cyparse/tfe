@@ -164,12 +164,12 @@ export function emailConfirmationBillets(donnees: {
             <!-- Cercle icône -->
             <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
               <tr>
-                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:26px;color:#d4af37;">&#9993;</td>
+                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:26px;color:#d4af37;">&#10052;</td>
               </tr>
             </table>
 
             <p style="margin:0 0 6px;font-family:'Rubik',Arial,sans-serif;font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(212,175,55,0.8);">Snow Wonder Festival</p>
-            <h1 style="margin:0 0 6px;font-family:'Rubik',Arial,sans-serif;font-size:24px;font-weight:600;color:#ffffff;line-height:1.25;">Village Gastronomique</h1>
+            <h1 style="margin:0 0 6px;font-family:'Rubik',Arial,sans-serif;font-size:24px;font-weight:600;color:#ffffff;line-height:1.25;">${pluriel ? "Billets" : "Billet"} d'entrée</h1>
             <p style="margin:0;font-family:'Rubik',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(168,196,232,0.9);">Réservation confirmée</p>
           </td>
         </tr>
