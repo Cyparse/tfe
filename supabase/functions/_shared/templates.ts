@@ -25,13 +25,12 @@ const ORNEMENT = `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
   <tr>
     <td style="border-top:1px solid rgba(212,175,55,0.45);width:45%;" height="1"></td>
-    <td style="width:10%;text-align:center;vertical-align:middle;line-height:0;padding:0 8px;font-size:10px;color:#d4af37;" height="1">&#9830;</td>
+    <td style="width:10%;text-align:center;vertical-align:middle;line-height:0;padding:0 8px;font-size:16px;color:#d4af37;" height="1">&#9830;</td>
     <td style="border-top:1px solid rgba(212,175,55,0.45);width:45%;" height="1"></td>
   </tr>
 </table>`;
 
-const FONTS = `<style>@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&family=Rubik:wght@500;600&display=swap');</style>`;
-
+const FONTS = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lavishly+Yours&family=Nunito+Sans:wght@300;400;600&family=Rubik:wght@500;600&display=swap">`;
 export function emailConfirmationConcours(donnees: {
   nom: string;
   email: string;
@@ -120,7 +119,7 @@ export function emailConfirmationConcours(donnees: {
           <td style="background-color:#f8f9ff;border-top:1px solid #eef0f8;padding:16px 36px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="font-family:'Rubik',Georgia,serif;font-size:13px;font-style:italic;color:#aaaaaa;">Snow Wonder Festival</td>
+<td style="font-family:'Lavishly Yours',Georgia,serif;font-size:16px;color:#aaaaaa;">Snow Wonder Festival</td>
                 <td style="font-size:11px;color:#cccccc;font-weight:300;text-align:right;">Envoyé à ${donnees.email}</td>
               </tr>
             </table>
@@ -221,7 +220,7 @@ export function emailConfirmationBillets(donnees: {
           <td style="background-color:#f8f9ff;border-top:1px solid #eef0f8;padding:16px 36px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="font-family:'Rubik',Georgia,serif;font-size:13px;font-style:italic;color:#aaaaaa;">Snow Wonder Festival</td>
+                <td style="font-family:'Lavishly Yours',Georgia,serif;font-size:16px;color:#aaaaaa;">Snow Wonder Festival</td>
                 <td style="font-size:11px;color:#cccccc;font-weight:300;text-align:right;">Envoyé à ${donnees.email}</td>
               </tr>
             </table>
