@@ -113,6 +113,7 @@ Deno.serve(async (req) => {
     const billets = Array.from({ length: quantite }, () => ({
       ticket_number: genererNumeroBillet(edition),
       order_id: idCommande,
+      edition,
       holder_name: nom,
       holder_email: email,
     }))
