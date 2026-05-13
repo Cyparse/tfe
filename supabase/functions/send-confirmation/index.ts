@@ -10,9 +10,9 @@ const SMTP_PASS = Deno.env.get('SMTP_PASS')!
 const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
 const DATES_EDITIONS: Record<string, string> = {
-  decembre: '6 décembre 2026',
-  janvier:  '10 janvier 2027',
-  fevrier:  '7 février 2027',
+  december: '6 décembre 2026',
+  january:  '10 janvier 2027',
+  february: '7 février 2027',
 }
 
 const LIEU = 'Lieu à confirmer — annonce prochainement'
@@ -103,7 +103,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { nom, email, edition, categorie, idInscription } = await req.json()
+    const { name: nom, email, edition, category, registrationId: idInscription } = await req.json()
+    const categorie = category === 'pro' ? 'professionnel' : 'amateur'
     console.log(`send-confirmation-concours: ${email} edition=${edition}`)
 
     let piecesJointes: object[] = []

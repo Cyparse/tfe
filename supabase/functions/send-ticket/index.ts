@@ -12,9 +12,9 @@ const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
 const DATES_EDITIONS: Record<string, string> = {
-  decembre: '6 décembre 2026',
-  janvier:  '10 janvier 2027',
-  fevrier:  '7 février 2027',
+  december: '6 décembre 2026',
+  january:  '10 janvier 2027',
+  february: '7 février 2027',
 }
 
 const LIEU = 'Lieu à confirmer — annonce prochainement'
@@ -107,7 +107,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { nom, email, edition, quantite, idCommande } = await req.json()
+    const { name: nom, email, edition, quantity: quantite, orderId: idCommande } = await req.json()
     console.log(`send-confirmation-billets: ${email} edition=${edition} qte=${quantite}`)
 
     const billets = Array.from({ length: quantite }, () => ({
@@ -118,7 +118,7 @@ Deno.serve(async (req) => {
       email_porteur: email,
     }))
 
-    const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/billets`, {
+    const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/tickets`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,

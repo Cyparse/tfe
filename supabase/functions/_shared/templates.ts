@@ -1,13 +1,13 @@
 // Pas de React nécessaire — template literals TypeScript
 // Deno ne supporte pas React/JSX sans configuration supplémentaire
 
-type Edition = 'decembre' | 'janvier' | 'fevrier'
+type Edition = 'december' | 'january' | 'february'
 type CategorieParticipant = 'amateur' | 'professionnel'
 
 const datesEditions: Record<Edition, string> = {
-  decembre: '6 décembre 2026',
-  janvier:  '10 janvier 2027',
-  fevrier:  '7 février 2027',
+  december: '6 décembre 2026',
+  january:  '10 janvier 2027',
+  february: '7 février 2027',
 }
 
 const headerStyles = `
