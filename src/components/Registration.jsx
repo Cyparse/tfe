@@ -348,13 +348,10 @@ const EDITIONS = [
                                     value={formData.email}
                                     onChange={handleChange}
                                     className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
-                                        errors.email || alreadyRegistered ? 'border-red-500' : 'border-ice-blue/30'
+                                        errors.email ? 'border-red-500' : 'border-ice-blue/30'
                                     }`}
                                 />
                                 {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
-                                {alreadyRegistered && !errors.email && (
-                                    <p className="mt-1 text-sm text-red-400">Cet e-mail est déjà enregistré</p>
-                                )}
                             </div>
 
                             <div>
