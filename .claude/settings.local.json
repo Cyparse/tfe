@@ -3,7 +3,10 @@
     "allow": [
       "Bash(supabase --version)",
       "Bash(supabase functions *)",
-      "Bash(supabase link *)"
+      "Bash(supabase link *)",
+      "Bash(git -C /Applications/MAMP/htdocs/tfe log --all --oneline)",
+      "Bash(git -C /Applications/MAMP/htdocs/tfe log --all --oneline --diff-filter=A -- \"*.sql\" \"*.ts\" \"*.js\")",
+      "Bash(git -C /Applications/MAMP/htdocs/tfe show 66a51c3 -- supabase/functions/send-ticket/index.ts)"
     ]
   }
 }

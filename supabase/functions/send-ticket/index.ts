@@ -111,11 +111,10 @@ Deno.serve(async (req) => {
     console.log(`send-confirmation-billets: ${email} edition=${edition} qte=${quantite}`)
 
     const billets = Array.from({ length: quantite }, () => ({
-      numero_billet: genererNumeroBillet(edition),
-      id_commande: idCommande,
-      edition,
-      nom_porteur: nom,
-      email_porteur: email,
+      ticket_number: genererNumeroBillet(edition),
+      order_id: idCommande,
+      holder_name: nom,
+      holder_email: email,
     }))
 
     const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/tickets`, {
@@ -138,9 +137,9 @@ Deno.serve(async (req) => {
     try {
       piecesJointes = await Promise.all(
         billets.map(async (b) => {
-          const pdfBytes = await genererBilletPDF(b.numero_billet, nom, edition, idCommande)
+          const pdfBytes = await genererBilletPDF(b.ticket_number, nom, edition, idCommande)
           return {
-            filename: `billet-${b.numero_billet}.pdf`,
+            filename: `billet-${b.ticket_number}.pdf`,
             content: Buffer.from(pdfBytes),
             contentType: 'application/pdf',
           }
@@ -171,7 +170,7 @@ Deno.serve(async (req) => {
     console.log('Email envoyé')
 
     return new Response(
-      JSON.stringify({ success: true, billets: billets.map((b) => b.numero_billet) }),
+      JSON.stringify({ success: true, billets: billets.map((b) => b.ticket_number) }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
     )
   } catch (err) {
