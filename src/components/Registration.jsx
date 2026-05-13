@@ -9,39 +9,39 @@ const EDITIONS = [
 ];
 
     const [formData, setFormData] = useState({
-        type: 'amateur', // 'amateur' or 'pro'
-        edition: '',
+        type: 'amateur',
+        editions: [],
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
-        organization: '', // For pro registrations
-        experience: '', // For pro registrations
+        organization: '',
+        experience: '',
         terms: false
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
-    const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+    const [registeredEditions, setRegisteredEditions] = useState([]);
 
     useEffect(() => {
-        // Check if user already registered
         const checkRegistration = async () => {
             if (formData.email && formData.email.includes('@')) {
                 const { data, error } = await supabase
                     .from('registrations')
-                    .select('email')
-                    .ilike('email', formData.email)
-                    .limit(1);
-                
-                if (!error && data && data.length > 0) {
-                    setAlreadyRegistered(true);
+                    .select('festival_edition')
+                    .ilike('email', formData.email);
+
+                if (!error && data) {
+                    setRegisteredEditions(data.map(r => r.festival_edition));
                 } else {
-                    setAlreadyRegistered(false);
+                    setRegisteredEditions([]);
                 }
+            } else {
+                setRegisteredEditions([]);
             }
         };
-        
+
         const timeoutId = setTimeout(checkRegistration, 500);
         return () => clearTimeout(timeoutId);
     }, [formData.email]);
@@ -80,8 +80,8 @@ const EDITIONS = [
             }
         }
 
-        if (!formData.edition) {
-            newErrors.edition = 'Veuillez sélectionner une édition du festival';
+        if (formData.editions.length === 0) {
+            newErrors.editions = 'Veuillez sélectionner au moins une édition';
         }
 
         if (!formData.terms) {
@@ -102,51 +102,47 @@ const EDITIONS = [
         setIsSubmitting(true);
 
         try {
-            // Check for double registration
-            const { data: existingRegistrations, error: checkError } = await supabase
-                .from('registrations')
-                .select('email')
-                .ilike('email', formData.email)
-                .limit(1);
-            
-            if (checkError) throw checkError;
-            
-            if (existingRegistrations && existingRegistrations.length > 0) {
-                setErrors({ submit: 'Cet e-mail est déjà enregistré. Les inscriptions en double ne sont pas autorisées.' });
+            // Filter out editions already registered for
+            const newEditions = formData.editions.filter(ed => !registeredEditions.includes(ed));
+
+            if (newEditions.length === 0) {
+                setErrors({ submit: 'Vous êtes déjà inscrit(e) pour toutes les éditions sélectionnées.' });
                 setIsSubmitting(false);
                 return;
             }
 
-            // Insert registration into Supabase
+            // Insert one registration per selected edition
+            const inserts = newEditions.map(ed => ({
+                type: formData.type,
+                festival_edition: ed,
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+                organization: formData.organization || null,
+                experience: formData.experience || null,
+                terms_accepted: formData.terms,
+            }));
+
             const { data, error } = await supabase
                 .from('registrations')
-                .insert([
-                    {
-                        type: formData.type,
-                        festival_edition: formData.edition,
-                        first_name: formData.firstName,
-                        last_name: formData.lastName,
-                        email: formData.email,
-                        phone: formData.phone,
-                        organization: formData.organization || null,
-                        experience: formData.experience || null,
-                        terms_accepted: formData.terms
-                    }
-                ])
+                .insert(inserts)
                 .select();
 
             if (error) throw error;
 
-            // Send confirmation email (fire-and-forget — don't block success UI)
-            supabase.functions.invoke('send-confirmation', {
-                body: {
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    email: formData.email,
-                    edition: formData.edition,
-                    category: formData.type,
-                    registrationId: data[0]?.id ?? '',
-                },
-            }).catch((err) => console.error('Email error:', err));
+            // Send one confirmation email per edition (fire-and-forget)
+            data.forEach((reg) => {
+                supabase.functions.invoke('send-confirmation', {
+                    body: {
+                        name: `${formData.firstName} ${formData.lastName}`,
+                        email: formData.email,
+                        edition: reg.festival_edition,
+                        category: formData.type,
+                        registrationId: reg.id,
+                    },
+                }).catch((err) => console.error('Email error:', err));
+            });
 
             setIsSubmitting(false);
             setSubmitSuccess(true);
@@ -168,7 +164,7 @@ const EDITIONS = [
     const handleReset = () => {
         setFormData({
             type: 'amateur',
-            edition: '',
+            editions: [],
             firstName: '',
             lastName: '',
             email: '',
@@ -178,7 +174,17 @@ const EDITIONS = [
             terms: false
         });
         setErrors({});
-        setAlreadyRegistered(false);
+        setRegisteredEditions([]);
+    };
+
+    const toggleEdition = (value) => {
+        setFormData(prev => ({
+            ...prev,
+            editions: prev.editions.includes(value)
+                ? prev.editions.filter(e => e !== value)
+                : [...prev.editions, value],
+        }));
+        if (errors.editions) setErrors(prev => ({ ...prev, editions: '' }));
     };
 
     const handleChange = (e) => {
@@ -263,32 +269,36 @@ const EDITIONS = [
                                 </div>
                             </div>
 
-                            {/* Festival Edition */}
+                            {/* Festival Edition — multiple selection allowed */}
                             <div>
-                                <label className="block text-sm font-semibold text-ice-blue mb-3">Édition du festival *</label>
+                                <label className="block text-sm font-semibold text-ice-blue mb-1">Édition(s) du festival *</label>
+                                <p className="text-xs text-ice-blue/60 mb-3">Vous pouvez vous inscrire à plusieurs éditions.</p>
                                 <div className="flex flex-col sm:flex-row gap-3">
-                                    {EDITIONS.map((ed) => (
-                                        <label key={ed.value} className="flex-1 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                name="edition"
-                                                value={ed.value}
-                                                checked={formData.edition === ed.value}
-                                                onChange={handleChange}
-                                                className="sr-only"
-                                            />
-                                            <div className={`p-4 border-2 rounded-lg text-center transition-all ${
-                                                formData.edition === ed.value
-                                                    ? 'border-festival-yellow bg-festival-yellow/20 font-semibold text-festival-yellow'
-                                                    : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
-                                            }`}>
+                                    {EDITIONS.map((ed) => {
+                                        const selected = formData.editions.includes(ed.value);
+                                        const alreadyDone = registeredEditions.includes(ed.value);
+                                        return (
+                                            <button
+                                                key={ed.value}
+                                                type="button"
+                                                disabled={alreadyDone}
+                                                onClick={() => !alreadyDone && toggleEdition(ed.value)}
+                                                className={`flex-1 p-4 border-2 rounded-lg text-center transition-all ${
+                                                    alreadyDone
+                                                        ? 'border-white/10 bg-white/5 text-white/30 cursor-not-allowed'
+                                                        : selected
+                                                            ? 'border-festival-yellow bg-festival-yellow/20 text-festival-yellow'
+                                                            : 'border-ice-blue/30 hover:border-ice-blue/50 text-ice-blue/80'
+                                                }`}
+                                            >
                                                 <div className="font-semibold text-sm">{ed.label}</div>
                                                 <div className="text-xs mt-0.5 opacity-70">{ed.date}</div>
-                                            </div>
-                                        </label>
-                                    ))}
+                                                {alreadyDone && <div className="text-xs mt-1 text-white/40">Déjà inscrit(e)</div>}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-                                {errors.edition && <p className="mt-1 text-sm text-red-400">{errors.edition}</p>}
+                                {errors.editions && <p className="mt-1 text-sm text-red-400">{errors.editions}</p>}
                             </div>
 
                             {/* Informations personnelles */}
@@ -437,7 +447,7 @@ const EDITIONS = [
                                 </button>
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting || alreadyRegistered}
+                                    disabled={isSubmitting}
                                     className="flex-1 px-6 py-3 bg-festival-yellow text-deep-navy rounded-lg font-bold hover:bg-amber-400 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? 'Envoi en cours...' : "S'inscrire"}

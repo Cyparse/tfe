@@ -74,15 +74,16 @@ export const getRegistrationById = async (id) => {
 // Create new registration
 export const createRegistration = async (registration) => {
     try {
-        // Check for duplicate email
+        // Check for duplicate (email + edition) pair
         const { data: existing } = await supabase
             .from('registrations')
             .select('email')
             .ilike('email', registration.email)
+            .eq('festival_edition', registration.festival_edition)
             .limit(1);
 
         if (existing && existing.length > 0) {
-            throw new Error('Email already registered');
+            throw new Error('Email already registered for this edition');
         }
 
         const { data, error } = await supabase

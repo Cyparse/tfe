@@ -34,6 +34,8 @@ export function contestConfirmationEmail(data: {
                padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
       .detail-row { display: flex; justify-content: space-between;
                     padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+      .attachment-note { margin-top: 24px; padding: 16px; background: #f0f4ff;
+                         border-left: 4px solid #1a3a6b; border-radius: 4px; }
       .footer { padding: 24px 32px; background: #f8f9ff; font-size: 12px; color: #999; }
     </style>
   </head>
@@ -41,7 +43,7 @@ export function contestConfirmationEmail(data: {
     <div class="card">
       <div class="header">
         <div class="snowflake">⛄</div>
-        <h1>Snow Festival — Snowman Contest</h1>
+        <h1>Snow Wonder Festival — Snowman Contest</h1>
         <p style="color:#a8c4e8; margin:8px 0 0">Registration Confirmed</p>
       </div>
       <div class="body">
@@ -58,7 +60,12 @@ export function contestConfirmationEmail(data: {
         </div>
         <div class="detail-row">
           <span>Registration ID</span>
-          <span style="font-family:monospace; color:#666">${data.registrationId}</span>
+          <span style="font-family:monospace; color:#666">${data.registrationId.slice(0, 8).toUpperCase()}</span>
+        </div>
+
+        <div class="attachment-note">
+          <strong>📎 Your registration card is attached to this email.</strong><br>
+          It contains a QR code — present it at the contest desk on arrival.
         </div>
 
         <p style="margin-top:24px; color:#555">
@@ -66,7 +73,7 @@ export function contestConfirmationEmail(data: {
         </p>
       </div>
       <div class="footer">
-        Snow Festival · This email was sent to ${data.email}
+        Snow Wonder Festival · This email was sent to ${data.email}
       </div>
     </div>
   </body>
@@ -98,6 +105,8 @@ export function ticketConfirmationEmail(data: {
                padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
       .detail-row { display: flex; justify-content: space-between;
                     padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+      .attachment-note { margin-top: 24px; padding: 16px; background: #f0f4ff;
+                         border-left: 4px solid #1a3a6b; border-radius: 4px; }
       .footer { padding: 24px 32px; background: #f8f9ff; font-size: 12px; color: #999; }
     </style>
   </head>
@@ -105,7 +114,7 @@ export function ticketConfirmationEmail(data: {
     <div class="card">
       <div class="header">
         <div class="icon">🎫</div>
-        <h1>Snow Festival — Food Village</h1>
+        <h1>Snow Wonder Festival — Food Village</h1>
         <p style="color:#a8c4e8; margin:8px 0 0">Booking Confirmed</p>
       </div>
       <div class="body">
@@ -122,7 +131,12 @@ export function ticketConfirmationEmail(data: {
         </div>
         <div class="detail-row">
           <span>Order ID</span>
-          <span style="font-family:monospace; color:#666">${data.orderId}</span>
+          <span style="font-family:monospace; color:#666">${data.orderId.slice(0, 8).toUpperCase()}</span>
+        </div>
+
+        <div class="attachment-note">
+          <strong>📎 Your ticket${data.quantity > 1 ? 's are' : ' is'} attached to this email.</strong><br>
+          Each PDF contains a QR code — present it at the entrance to be scanned.
         </div>
 
         <p style="margin-top:24px; color:#555">
@@ -130,7 +144,7 @@ export function ticketConfirmationEmail(data: {
         </p>
       </div>
       <div class="footer">
-        Snow Festival · This email was sent to ${data.email}
+        Snow Wonder Festival · This email was sent to ${data.email}
       </div>
     </div>
   </body>
