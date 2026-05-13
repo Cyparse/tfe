@@ -1,5 +1,5 @@
-import { SMTPClient } from 'https://deno.land/x/denomailer/mod.ts'
-import { encodeBase64 } from 'https://deno.land/std@0.208.0/encoding/base64.ts'
+import nodemailer from 'npm:nodemailer'
+import { Buffer } from 'node:buffer'
 import { corsHeaders } from '../_shared/cors.ts'
 import { contestConfirmationEmail } from '../_shared/templates.ts'
 
@@ -23,7 +23,6 @@ async function buildRegistrationPDF(
   edition: string,
   category: string,
 ): Promise<Uint8Array> {
-  // Dynamic import so failures are caught inside the request handler
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
   const qrRes = await fetch(
@@ -52,7 +51,6 @@ async function buildRegistrationPDF(
     page.drawText(text, { x: (width - w) / 2, y, font, size, color })
   }
 
-  // Header
   page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: navy })
   page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: iceBlue })
 
@@ -61,33 +59,26 @@ async function buildRegistrationPDF(
   cx(EDITION_DATES[edition] ?? edition, bold, 12, height - 104, white)
   cx('Registration Confirmed', regular, 10, height - 122, iceBlue)
 
-  // Category badge (plain rectangle, no borderRadius)
   const categoryLabel = category === 'pro' ? 'PROFESSIONAL' : 'AMATEUR'
   const badgeW = bold.widthOfTextAtSize(categoryLabel, 13)
   const badgeX = (width - badgeW - 24) / 2
   page.drawRectangle({ x: badgeX, y: height - 178, width: badgeW + 24, height: 26, color: gold })
   page.drawText(categoryLabel, { x: badgeX + 12, y: height - 167, font: bold, size: 13, color: navy })
 
-  // QR code
   const qrSize = 160
   page.drawImage(qrImage, { x: (width - qrSize) / 2, y: 320, width: qrSize, height: qrSize })
 
-  // ID below QR
   const shortId = registrationId.slice(0, 8).toUpperCase()
   cx(shortId, bold, 14, 298, navy)
   cx('Scan at the contest desk', regular, 9, 282, muted)
 
   page.drawLine({ start: { x: 40, y: 262 }, end: { x: width - 40, y: 262 }, thickness: 0.5, color: divider })
-
   page.drawText('REGISTRANT', { x: 40, y: 240, font: regular, size: 8, color: muted })
   page.drawText(holderName, { x: 40, y: 223, font: bold, size: 14, color: navy })
-
   page.drawLine({ start: { x: 40, y: 206 }, end: { x: width - 40, y: 206 }, thickness: 0.5, color: divider })
-
   page.drawText('VENUE', { x: 40, y: 184, font: regular, size: 8, color: muted })
   page.drawText(VENUE, { x: 40, y: 167, font: regular, size: 10, color: light })
 
-  // Footer
   page.drawRectangle({ x: 0, y: 0, width, height: 58, color: rgb(0.96, 0.97, 1.0) })
   page.drawLine({ start: { x: 0, y: 58 }, end: { x: width, y: 58 }, thickness: 0.5, color: divider })
   cx('Snow Wonder Festival · info@snow-wonder.be', regular, 9, 34, muted)
@@ -103,51 +94,45 @@ Deno.serve(async (req) => {
 
   try {
     const { name, email, edition, category, registrationId } = await req.json()
-
-    console.log(`send-confirmation called for ${email} edition=${edition}`)
+    console.log(`send-confirmation: ${email} edition=${edition}`)
 
     let attachments: object[] = []
     try {
       const pdfBytes = await buildRegistrationPDF(registrationId, name, edition, category)
       attachments = [{
         filename: `registration-${registrationId.slice(0, 8).toUpperCase()}.pdf`,
-        content: encodeBase64(pdfBytes),
+        content: Buffer.from(pdfBytes),
         contentType: 'application/pdf',
-        encoding: 'base64',
       }]
-      console.log('PDF generated successfully')
+      console.log('PDF ready')
     } catch (pdfErr) {
-      console.error('PDF generation failed:', pdfErr)
-      // Email still sends without attachment
+      console.error('PDF failed:', pdfErr)
     }
 
     const html = contestConfirmationEmail({ name, email, edition, category, registrationId })
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: SMTP_HOST,
-        port: SMTP_PORT,
-        tls: true,
-        auth: { username: SMTP_USER, password: SMTP_PASS },
-      },
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
 
-    await client.send({
+    await transporter.sendMail({
       from: FROM,
       to: email,
-      subject: `✅ Contest Registration — Snow Wonder Festival ${edition}`,
+      subject: `Contest Registration Confirmed — Snow Wonder Festival ${edition}`,
       html,
-      ...(attachments.length > 0 ? { attachments } : {}),
+      attachments,
     })
 
-    await client.close()
-    console.log('Email sent successfully')
+    console.log('Email sent')
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
-    console.error('Function error:', err)
+    console.error('Error:', err)
     return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

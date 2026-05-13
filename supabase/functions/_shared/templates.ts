@@ -44,7 +44,7 @@ export function contestConfirmationEmail(data: {
       <div class="header">
         <div class="snowflake">⛄</div>
         <h1>Snow Wonder Festival — Snowman Contest</h1>
-        <p style="color:#a8c4e8; margin:8px 0 0">Registration Confirmed</p>
+        <p style="color:#a8c4e8; margin:8px 0 0">Contest Registration Confirmed</p>
       </div>
       <div class="body">
         <p>Hi <strong>${data.name}</strong>,</p>

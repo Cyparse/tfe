@@ -1,6 +1,5 @@
-import { SMTPClient } from 'https://deno.land/x/denomailer/mod.ts'
-import { PDFDocument, rgb, StandardFonts } from 'npm:pdf-lib'
-import { encodeBase64 } from 'https://deno.land/std@0.208.0/encoding/base64.ts'
+import nodemailer from 'npm:nodemailer'
+import { Buffer } from 'node:buffer'
 import { corsHeaders } from '../_shared/cors.ts'
 import { ticketConfirmationEmail } from '../_shared/templates.ts'
 
@@ -33,6 +32,8 @@ async function buildTicketPDF(
   edition: string,
   orderId: string,
 ): Promise<Uint8Array> {
+  const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
+
   const qrRes = await fetch(
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(ticketNumber)}&format=png`,
   )
@@ -42,7 +43,7 @@ async function buildTicketPDF(
   const page = doc.addPage([440, 620])
   const { width, height } = page.getSize()
 
-  const bold = await doc.embedFont(StandardFonts.HelveticaBold)
+  const bold    = await doc.embedFont(StandardFonts.HelveticaBold)
   const regular = await doc.embedFont(StandardFonts.Helvetica)
   const qrImage = await doc.embedPng(qrBytes)
 
@@ -58,10 +59,7 @@ async function buildTicketPDF(
     page.drawText(text, { x: (width - w) / 2, y, font, size, color })
   }
 
-  // Header background
   page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: navy })
-
-  // Snowflake accent line
   page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: iceBlue })
 
   cx('SNOW WONDER FESTIVAL', bold, 18, height - 52, white)
@@ -69,45 +67,25 @@ async function buildTicketPDF(
   cx(EDITION_DATES[edition] ?? edition, bold, 12, height - 104, white)
   cx('snowman contest & food village', regular, 10, height - 122, iceBlue)
 
-  // QR code
   const qrSize = 170
   page.drawImage(qrImage, { x: (width - qrSize) / 2, y: 330, width: qrSize, height: qrSize })
 
-  // Ticket number
   cx(ticketNumber, bold, 15, 308, navy)
+  cx('Scan this QR code at the entrance', regular, 9, 292, muted)
 
-  const scanNote = 'Scan this QR code at the entrance'
-  cx(scanNote, regular, 9, 292, muted)
+  page.drawLine({ start: { x: 40, y: 272 }, end: { x: width - 40, y: 272 }, thickness: 0.5, color: divider })
 
-  // Divider
-  page.drawLine({
-    start: { x: 40, y: 272 },
-    end: { x: width - 40, y: 272 },
-    thickness: 0.5,
-    color: divider,
-  })
-
-  // Holder
   page.drawText('TICKET HOLDER', { x: 40, y: 250, font: regular, size: 8, color: muted })
   page.drawText(holderName, { x: 40, y: 233, font: bold, size: 14, color: navy })
 
-  // Order ref
   page.drawText('ORDER REFERENCE', { x: 40, y: 208, font: regular, size: 8, color: muted })
   page.drawText(orderId.slice(0, 8).toUpperCase(), { x: 40, y: 191, font: regular, size: 11, color: light })
 
-  // Divider
-  page.drawLine({
-    start: { x: 40, y: 174 },
-    end: { x: width - 40, y: 174 },
-    thickness: 0.5,
-    color: divider,
-  })
+  page.drawLine({ start: { x: 40, y: 174 }, end: { x: width - 40, y: 174 }, thickness: 0.5, color: divider })
 
-  // Venue
   page.drawText('VENUE', { x: 40, y: 152, font: regular, size: 8, color: muted })
   page.drawText(VENUE, { x: 40, y: 135, font: regular, size: 10, color: light })
 
-  // Footer
   page.drawRectangle({ x: 0, y: 0, width, height: 58, color: rgb(0.96, 0.97, 1.0) })
   page.drawLine({ start: { x: 0, y: 58 }, end: { x: width, y: 58 }, thickness: 0.5, color: divider })
   cx('Snow Wonder Festival · info@snow-wonder.be', regular, 9, 34, muted)
@@ -123,8 +101,8 @@ Deno.serve(async (req) => {
 
   try {
     const { name, email, edition, quantity, orderId } = await req.json()
+    console.log(`send-ticket: ${email} edition=${edition} qty=${quantity}`)
 
-    // Generate one ticket record per ticket in the order
     const tickets = Array.from({ length: quantity }, () => ({
       ticket_number: generateTicketNumber(edition),
       order_id: orderId,
@@ -133,7 +111,6 @@ Deno.serve(async (req) => {
       holder_email: email,
     }))
 
-    // Insert into tickets table using service role
     const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/tickets`, {
       method: 'POST',
       headers: {
@@ -150,46 +127,49 @@ Deno.serve(async (req) => {
       throw new Error(`DB insert failed: ${err}`)
     }
 
-    // Build a PDF for each ticket
-    const attachments = await Promise.all(
-      tickets.map(async (t) => {
-        const pdfBytes = await buildTicketPDF(t.ticket_number, name, edition, orderId)
-        return {
-          filename: `ticket-${t.ticket_number}.pdf`,
-          content: encodeBase64(pdfBytes),
-          contentType: 'application/pdf',
-          encoding: 'base64',
-        }
-      }),
-    )
+    let attachments: object[] = []
+    try {
+      attachments = await Promise.all(
+        tickets.map(async (t) => {
+          const pdfBytes = await buildTicketPDF(t.ticket_number, name, edition, orderId)
+          return {
+            filename: `ticket-${t.ticket_number}.pdf`,
+            content: Buffer.from(pdfBytes),
+            contentType: 'application/pdf',
+          }
+        }),
+      )
+      console.log(`${attachments.length} PDF(s) ready`)
+    } catch (pdfErr) {
+      console.error('PDF failed:', pdfErr)
+    }
 
     const html = ticketConfirmationEmail({ name, email, edition, quantity, orderId })
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: SMTP_HOST,
-        port: SMTP_PORT,
-        tls: true,
-        auth: { username: SMTP_USER, password: SMTP_PASS },
-      },
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
 
-    await client.send({
+    await transporter.sendMail({
       from: FROM,
       to: email,
-      subject: `🎫 Your Tickets — Snow Wonder Festival ${edition}`,
+      subject: `Your Tickets — Snow Wonder Festival ${edition}`,
       html,
       attachments,
     })
 
-    await client.close()
+    console.log('Email sent')
 
     return new Response(
       JSON.stringify({ success: true, tickets: tickets.map((t) => t.ticket_number) }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
     )
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    console.error('Error:', err)
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
