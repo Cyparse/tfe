@@ -1,5 +1,5 @@
 import { SMTPClient } from 'https://deno.land/x/denomailer/mod.ts'
-import { PDFDocument, rgb, StandardFonts } from 'https://esm.sh/pdf-lib@1.17.1'
+import { PDFDocument, rgb, StandardFonts } from 'npm:pdf-lib'
 import { encodeBase64 } from 'https://deno.land/std@0.208.0/encoding/base64.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { ticketConfirmationEmail } from '../_shared/templates.ts'

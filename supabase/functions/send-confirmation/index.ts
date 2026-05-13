@@ -1,5 +1,4 @@
 import { SMTPClient } from 'https://deno.land/x/denomailer/mod.ts'
-import { PDFDocument, rgb, StandardFonts } from 'https://esm.sh/pdf-lib@1.17.1'
 import { encodeBase64 } from 'https://deno.land/std@0.208.0/encoding/base64.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { contestConfirmationEmail } from '../_shared/templates.ts'
@@ -24,6 +23,9 @@ async function buildRegistrationPDF(
   edition: string,
   category: string,
 ): Promise<Uint8Array> {
+  // Dynamic import so failures are caught inside the request handler
+  const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
+
   const qrRes = await fetch(
     `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(registrationId)}&format=png`,
   )
@@ -50,7 +52,7 @@ async function buildRegistrationPDF(
     page.drawText(text, { x: (width - w) / 2, y, font, size, color })
   }
 
-  // Header background
+  // Header
   page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: navy })
   page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: iceBlue })
 
@@ -59,33 +61,29 @@ async function buildRegistrationPDF(
   cx(EDITION_DATES[edition] ?? edition, bold, 12, height - 104, white)
   cx('Registration Confirmed', regular, 10, height - 122, iceBlue)
 
-  // Category badge
-  const categoryLabel = category === 'pro' ? '🏆 PROFESSIONAL' : '🌟 AMATEUR'
+  // Category badge (plain rectangle, no borderRadius)
+  const categoryLabel = category === 'pro' ? 'PROFESSIONAL' : 'AMATEUR'
   const badgeW = bold.widthOfTextAtSize(categoryLabel, 13)
   const badgeX = (width - badgeW - 24) / 2
-  page.drawRectangle({ x: badgeX, y: height - 178, width: badgeW + 24, height: 28, color: gold, borderRadius: 4 })
+  page.drawRectangle({ x: badgeX, y: height - 178, width: badgeW + 24, height: 26, color: gold })
   page.drawText(categoryLabel, { x: badgeX + 12, y: height - 167, font: bold, size: 13, color: navy })
 
   // QR code
   const qrSize = 160
   page.drawImage(qrImage, { x: (width - qrSize) / 2, y: 320, width: qrSize, height: qrSize })
 
-  // Registration ID below QR
+  // ID below QR
   const shortId = registrationId.slice(0, 8).toUpperCase()
   cx(shortId, bold, 14, 298, navy)
   cx('Scan at the contest desk', regular, 9, 282, muted)
 
-  // Divider
   page.drawLine({ start: { x: 40, y: 262 }, end: { x: width - 40, y: 262 }, thickness: 0.5, color: divider })
 
-  // Holder info
   page.drawText('REGISTRANT', { x: 40, y: 240, font: regular, size: 8, color: muted })
   page.drawText(holderName, { x: 40, y: 223, font: bold, size: 14, color: navy })
 
-  // Divider
   page.drawLine({ start: { x: 40, y: 206 }, end: { x: width - 40, y: 206 }, thickness: 0.5, color: divider })
 
-  // Venue
   page.drawText('VENUE', { x: 40, y: 184, font: regular, size: 8, color: muted })
   page.drawText(VENUE, { x: 40, y: 167, font: regular, size: 10, color: light })
 
@@ -106,7 +104,22 @@ Deno.serve(async (req) => {
   try {
     const { name, email, edition, category, registrationId } = await req.json()
 
-    const pdfBytes = await buildRegistrationPDF(registrationId, name, edition, category)
+    console.log(`send-confirmation called for ${email} edition=${edition}`)
+
+    let attachments: object[] = []
+    try {
+      const pdfBytes = await buildRegistrationPDF(registrationId, name, edition, category)
+      attachments = [{
+        filename: `registration-${registrationId.slice(0, 8).toUpperCase()}.pdf`,
+        content: encodeBase64(pdfBytes),
+        contentType: 'application/pdf',
+        encoding: 'base64',
+      }]
+      console.log('PDF generated successfully')
+    } catch (pdfErr) {
+      console.error('PDF generation failed:', pdfErr)
+      // Email still sends without attachment
+    }
 
     const html = contestConfirmationEmail({ name, email, edition, category, registrationId })
 
@@ -124,23 +137,18 @@ Deno.serve(async (req) => {
       to: email,
       subject: `✅ Contest Registration — Snow Wonder Festival ${edition}`,
       html,
-      attachments: [
-        {
-          filename: `registration-${registrationId.slice(0, 8).toUpperCase()}.pdf`,
-          content: encodeBase64(pdfBytes),
-          contentType: 'application/pdf',
-          encoding: 'base64',
-        },
-      ],
+      ...(attachments.length > 0 ? { attachments } : {}),
     })
 
     await client.close()
+    console.log('Email sent successfully')
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    console.error('Function error:', err)
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
