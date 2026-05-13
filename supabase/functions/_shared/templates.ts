@@ -1,24 +1,28 @@
 // Pas de React nécessaire — template literals TypeScript
 // Tous les styles sont inline pour une compatibilité maximale avec les clients email
 
-type Edition = "decembre" | "janvier" | "fevrier";
-type CategorieParticipant = "amateur" | "professionnel";
+type Edition = 'decembre' | 'janvier' | 'fevrier' | 'december' | 'january' | 'february'
+type CategorieParticipant = 'amateur' | 'professionnel' | 'pro'
 
 const datesEditions: Record<Edition, string> = {
-  decembre: "6 décembre 2026",
-  janvier: "10 janvier 2027",
-  fevrier: "7 février 2027",
-};
+  // Clés françaises
+  decembre: '6 décembre 2026',
+  janvier:  '10 janvier 2027',
+  fevrier:  '7 février 2027',
+  // Clés anglaises (rétrocompatibilité)
+  december: '6 décembre 2026',
+  january:  '10 janvier 2027',
+  february: '7 février 2027',
+}
 
 export function emailConfirmationConcours(donnees: {
-  nom: string;
-  email: string;
-  edition: Edition;
-  categorie: CategorieParticipant;
-  idInscription: string;
+  nom: string
+  email: string
+  edition: Edition
+  categorie: CategorieParticipant
+  idInscription: string
 }) {
-  const labelCategorie =
-    donnees.categorie === "professionnel" ? "Professionnel" : "Amateur";
+  const labelCategorie = (donnees.categorie === 'professionnel' || donnees.categorie === 'pro') ? 'Professionnel' : 'Amateur'
 
   return `
 <!DOCTYPE html>
@@ -46,9 +50,11 @@ export function emailConfirmationConcours(donnees: {
             </table>
 
             <!-- Cercle icône -->
-            <div style="width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);display:inline-flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-              <span style="font-size:22px;color:#d4af37;font-weight:bold;">&#9733;</span>
-            </div>
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
+              <tr>
+                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:22px;color:#d4af37;font-weight:bold;">&#9733;</td>
+              </tr>
+            </table>
 
             <p style="margin:0 0 6px;font-size:10px;font-weight:bold;letter-spacing:0.18em;text-transform:uppercase;color:rgba(212,175,55,0.8);">Snow Wonder Festival</p>
             <h1 style="margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:600;color:#ffffff;line-height:1.25;">Concours de bonhomme de neige</h1>
@@ -116,17 +122,17 @@ export function emailConfirmationConcours(donnees: {
 
 </body>
 </html>
-  `;
+  `
 }
 
 export function emailConfirmationBillets(donnees: {
-  nom: string;
-  email: string;
-  edition: Edition;
-  quantite: number;
-  idCommande: string;
+  nom: string
+  email: string
+  edition: Edition
+  quantite: number
+  idCommande: string
 }) {
-  const pluriel = donnees.quantite > 1;
+  const pluriel = donnees.quantite > 1
 
   return `
 <!DOCTYPE html>
@@ -154,9 +160,11 @@ export function emailConfirmationBillets(donnees: {
             </table>
 
             <!-- Cercle icône -->
-            <div style="width:64px;height:64px;border-radius:50%;border:1px solid rgba(212,175,55,0.4);display:inline-flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-              <span style="font-size:22px;color:#d4af37;font-weight:bold;">&#10756;</span>
-            </div>
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
+              <tr>
+                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:22px;color:#d4af37;font-weight:bold;">&#9670;</td>
+              </tr>
+            </table>
 
             <p style="margin:0 0 6px;font-size:10px;font-weight:bold;letter-spacing:0.18em;text-transform:uppercase;color:rgba(212,175,55,0.8);">Snow Wonder Festival</p>
             <h1 style="margin:0 0 6px;font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:600;color:#ffffff;line-height:1.25;">Village Gastronomique</h1>
@@ -168,15 +176,15 @@ export function emailConfirmationBillets(donnees: {
         <tr>
           <td style="padding:32px 36px;">
             <p style="margin:0 0 4px;font-size:15px;color:#1a1a2e;">Cher(e) <strong style="font-weight:600;">${donnees.nom}</strong>,</p>
-            <p style="margin:0 0 24px;font-size:14px;color:#777777;font-weight:300;line-height:1.6;">${pluriel ? "Vos billets sont confirmés." : "Votre billet est confirmé."} Retrouvez ci-dessous les détails de votre réservation.</p>
+            <p style="margin:0 0 24px;font-size:14px;color:#777777;font-weight:300;line-height:1.6;">${pluriel ? 'Vos billets sont confirmés.' : 'Votre billet est confirmé.'} Retrouvez ci-dessous les détails de votre réservation.</p>
 
             <!-- Tableau détails -->
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
 
               <tr style="border-bottom:1px solid #f0f0f0;">
-                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;width:45%;">${pluriel ? "Billets" : "Billet"}</td>
+                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;width:45%;">${pluriel ? 'Billets' : 'Billet'}</td>
                 <td style="padding:11px 0;font-size:13px;text-align:right;">
-                  <span style="display:inline-block;background-color:#e8f0fe;color:#1a3f7a;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;">${donnees.quantite} billet${pluriel ? "s" : ""} (entrée gratuite)</span>
+                  <span style="display:inline-block;background-color:#e8f0fe;color:#1a3f7a;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;">${donnees.quantite} billet${pluriel ? 's' : ''} (entrée gratuite)</span>
                 </td>
               </tr>
 
@@ -196,8 +204,8 @@ export function emailConfirmationBillets(donnees: {
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
               <tr>
                 <td style="border-left:3px solid #1a3a6b;padding:12px 16px;background-color:#f0f4ff;">
-                  <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#1a3a6b;">${pluriel ? "Vos billets sont joints à cet email." : "Votre billet est joint à cet email."}</p>
-                  <p style="margin:0;font-size:12px;color:#777777;font-weight:300;">Chaque PDF contient un code QR — ${pluriel ? "présentez-les" : "présentez-le"} à l'entrée pour le faire scanner.</p>
+                  <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#1a3a6b;">${pluriel ? 'Vos billets sont joints à cet email.' : 'Votre billet est joint à cet email.'}</p>
+                  <p style="margin:0;font-size:12px;color:#777777;font-weight:300;">Chaque PDF contient un code QR — ${pluriel ? 'présentez-les' : 'présentez-le'} à l'entrée pour le faire scanner.</p>
                 </td>
               </tr>
             </table>
@@ -224,5 +232,5 @@ export function emailConfirmationBillets(donnees: {
 
 </body>
 </html>
-  `;
+  `
 }
