@@ -21,17 +21,11 @@ const datesEditions: Record<Edition, string> = {
   february: "7 février 2027",
 };
 
-const SVG_TROPHY = `<svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#d4af37"><path d="M280-120v-80h160v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80v-80h400v80h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h160v80H280Zm0-408v-152h-80v40q0 38 22 68.5t58 43.5Zm285 93q35-35 35-85v-240H360v240q0 50 35 85t85 35q50 0 85-35Zm115-93q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z"/></svg>`;
-
-const SVG_TICKET = `<svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#d4af37"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm0-160q17 0 28.5-11.5T520-480q0-17-11.5-28.5T480-520q-17 0-28.5 11.5T440-480q0 17 11.5 28.5T480-440Zm0-160q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm320 440H160q-33 0-56.5-23.5T80-240v-160q33 0 56.5-23.5T160-480q0-33-23.5-56.5T80-560v-160q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v160q-33 0-56.5 23.5T800-480q0 33 23.5 56.5T880-400v160q0 33-23.5 56.5T800-160Zm0-80v-102q-37-22-58.5-58.5T720-480q0-43 21.5-79.5T800-618v-102H160v102q37 22 58.5 58.5T240-480q0 43-21.5 79.5T160-342v102h640ZM480-480Z"/></svg>`;
-
 const ORNEMENT = `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
   <tr>
     <td style="border-top:1px solid rgba(212,175,55,0.45);width:45%;" height="1"></td>
-    <td style="width:10%;text-align:center;vertical-align:middle;line-height:0;padding:0 8px;" height="1">
-      <div style="width:8px;height:8px;background-color:#d4af37;transform:rotate(45deg);display:inline-block;position:relative;top:-1px;"></div>
-    </td>
+    <td style="width:10%;text-align:center;vertical-align:middle;line-height:0;padding:0 8px;font-size:10px;color:#d4af37;" height="1">&#9830;</td>
     <td style="border-top:1px solid rgba(212,175,55,0.45);width:45%;" height="1"></td>
   </tr>
 </table>`;
@@ -69,9 +63,7 @@ export function emailConfirmationConcours(donnees: {
             <!-- Cercle icône -->
             <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
               <tr>
-                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);">
-                  ${SVG_TROPHY}
-                </td>
+                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:26px;color:#d4af37;">&#9733;</td>
               </tr>
             </table>
 
@@ -172,9 +164,7 @@ export function emailConfirmationBillets(donnees: {
             <!-- Cercle icône -->
             <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
               <tr>
-                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);">
-                  ${SVG_TICKET}
-                </td>
+                <td width="64" height="64" align="center" valign="middle" style="border-radius:50%;border:1px solid rgba(212,175,55,0.4);font-size:26px;color:#d4af37;">&#9993;</td>
               </tr>
             </table>
 
