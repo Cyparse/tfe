@@ -1,7 +1,7 @@
 import nodemailer from 'npm:nodemailer'
 import { Buffer } from 'node:buffer'
 import { corsHeaders } from '../_shared/cors.ts'
-import { contestConfirmationEmail } from '../_shared/templates.ts'
+import { emailConfirmationConcours } from '../_shared/templates.ts'
 
 const SMTP_HOST = Deno.env.get('SMTP_HOST')!
 const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') ?? '465')
@@ -9,80 +9,90 @@ const SMTP_USER = Deno.env.get('SMTP_USER')!
 const SMTP_PASS = Deno.env.get('SMTP_PASS')!
 const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
-const EDITION_DATES: Record<string, string> = {
-  december: 'December 6, 2026',
-  january: 'January 10, 2027',
-  february: 'February 7, 2027',
+const DATES_EDITIONS: Record<string, string> = {
+  decembre: '6 décembre 2026',
+  janvier:  '10 janvier 2027',
+  fevrier:  '7 février 2027',
 }
 
-const VENUE = 'Venue TBD — to be announced'
+const LIEU = 'Lieu à confirmer — annonce prochainement'
 
-async function buildRegistrationPDF(
-  registrationId: string,
-  holderName: string,
+async function genererCartePDF(
+  idInscription: string,
+  nomParticipant: string,
   edition: string,
-  category: string,
+  categorie: string,
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
   const qrRes = await fetch(
-    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(registrationId)}&format=png`,
+    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(idInscription)}&format=png`,
   )
   const qrBytes = new Uint8Array(await qrRes.arrayBuffer())
 
-  const doc = await PDFDocument.create()
+  const doc  = await PDFDocument.create()
   const page = doc.addPage([440, 620])
   const { width, height } = page.getSize()
 
-  const bold    = await doc.embedFont(StandardFonts.HelveticaBold)
-  const regular = await doc.embedFont(StandardFonts.Helvetica)
-  const qrImage = await doc.embedPng(qrBytes)
+  const gras       = await doc.embedFont(StandardFonts.HelveticaBold)
+  const regular    = await doc.embedFont(StandardFonts.Helvetica)
+  const qrImage    = await doc.embedPng(qrBytes)
 
-  const navy    = rgb(0.10, 0.23, 0.42)
-  const iceBlue = rgb(0.66, 0.77, 0.91)
-  const white   = rgb(1, 1, 1)
-  const muted   = rgb(0.45, 0.45, 0.45)
-  const light   = rgb(0.30, 0.30, 0.30)
-  const divider = rgb(0.88, 0.88, 0.88)
-  const gold    = rgb(0.98, 0.82, 0.25)
+  const marine     = rgb(0.10, 0.23, 0.42)
+  const glace      = rgb(0.66, 0.77, 0.91)
+  const blanc      = rgb(1, 1, 1)
+  const discret    = rgb(0.45, 0.45, 0.45)
+  const clair      = rgb(0.30, 0.30, 0.30)
+  const separateur = rgb(0.88, 0.88, 0.88)
+  const or         = rgb(0.83, 0.69, 0.22)
 
-  const cx = (text: string, font: typeof bold, size: number, y: number, color: typeof white) => {
-    const w = font.widthOfTextAtSize(text, size)
-    page.drawText(text, { x: (width - w) / 2, y, font, size, color })
+  const cx = (texte: string, fonte: typeof gras, taille: number, y: number, couleur: typeof blanc) => {
+    const l = fonte.widthOfTextAtSize(texte, taille)
+    page.drawText(texte, { x: (width - l) / 2, y, font: fonte, size: taille, color: couleur })
   }
 
-  page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: navy })
-  page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: iceBlue })
+  // En-tête marine
+  page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: marine })
+  page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: glace })
 
-  cx('SNOW WONDER FESTIVAL', bold, 18, height - 52, white)
-  cx('SNOWMAN CONTEST', regular, 11, height - 76, iceBlue)
-  cx(EDITION_DATES[edition] ?? edition, bold, 12, height - 104, white)
-  cx('Registration Confirmed', regular, 10, height - 122, iceBlue)
+  cx('SNOW WONDER FESTIVAL', gras, 18, height - 52, blanc)
+  cx('CONCOURS DE BONHOMME DE NEIGE', regular, 11, height - 76, glace)
+  cx(DATES_EDITIONS[edition] ?? edition, gras, 12, height - 104, blanc)
+  cx('Inscription confirmée', regular, 10, height - 122, glace)
 
-  const categoryLabel = category === 'pro' ? 'PROFESSIONAL' : 'AMATEUR'
-  const badgeW = bold.widthOfTextAtSize(categoryLabel, 13)
-  const badgeX = (width - badgeW - 24) / 2
-  page.drawRectangle({ x: badgeX, y: height - 178, width: badgeW + 24, height: 26, color: gold })
-  page.drawText(categoryLabel, { x: badgeX + 12, y: height - 167, font: bold, size: 13, color: navy })
+  // Badge catégorie
+  const labelCategorie = categorie === 'professionnel' ? 'PROFESSIONNEL' : 'AMATEUR'
+  const largeurBadge = gras.widthOfTextAtSize(labelCategorie, 13)
+  const xBadge = (width - largeurBadge - 24) / 2
+  page.drawRectangle({ x: xBadge, y: height - 178, width: largeurBadge + 24, height: 26, color: or })
+  page.drawText(labelCategorie, { x: xBadge + 12, y: height - 167, font: gras, size: 13, color: marine })
 
-  const qrSize = 160
-  page.drawImage(qrImage, { x: (width - qrSize) / 2, y: 320, width: qrSize, height: qrSize })
+  // QR code
+  const tailleQR = 160
+  page.drawImage(qrImage, { x: (width - tailleQR) / 2, y: 320, width: tailleQR, height: tailleQR })
 
-  const shortId = registrationId.slice(0, 8).toUpperCase()
-  cx(shortId, bold, 14, 298, navy)
-  cx('Scan at the contest desk', regular, 9, 282, muted)
+  const shortId = idInscription.slice(0, 8).toUpperCase()
+  cx(shortId, gras, 14, 298, marine)
+  cx("À présenter au bureau d'accueil", regular, 9, 282, discret)
 
-  page.drawLine({ start: { x: 40, y: 262 }, end: { x: width - 40, y: 262 }, thickness: 0.5, color: divider })
-  page.drawText('REGISTRANT', { x: 40, y: 240, font: regular, size: 8, color: muted })
-  page.drawText(holderName, { x: 40, y: 223, font: bold, size: 14, color: navy })
-  page.drawLine({ start: { x: 40, y: 206 }, end: { x: width - 40, y: 206 }, thickness: 0.5, color: divider })
-  page.drawText('VENUE', { x: 40, y: 184, font: regular, size: 8, color: muted })
-  page.drawText(VENUE, { x: 40, y: 167, font: regular, size: 10, color: light })
+  // Séparateur
+  page.drawLine({ start: { x: 40, y: 262 }, end: { x: width - 40, y: 262 }, thickness: 0.5, color: separateur })
 
+  // Participant
+  page.drawText('PARTICIPANT', { x: 40, y: 240, font: regular, size: 8, color: discret })
+  page.drawText(nomParticipant, { x: 40, y: 223, font: gras, size: 14, color: marine })
+
+  page.drawLine({ start: { x: 40, y: 206 }, end: { x: width - 40, y: 206 }, thickness: 0.5, color: separateur })
+
+  // Lieu
+  page.drawText('LIEU', { x: 40, y: 184, font: regular, size: 8, color: discret })
+  page.drawText(LIEU, { x: 40, y: 167, font: regular, size: 10, color: clair })
+
+  // Pied de page
   page.drawRectangle({ x: 0, y: 0, width, height: 58, color: rgb(0.96, 0.97, 1.0) })
-  page.drawLine({ start: { x: 0, y: 58 }, end: { x: width, y: 58 }, thickness: 0.5, color: divider })
-  cx('Snow Wonder Festival · info@snow-wonder.be', regular, 9, 34, muted)
-  cx('This card is personal and non-transferable', regular, 8, 18, muted)
+  page.drawLine({ start: { x: 0, y: 58 }, end: { x: width, y: 58 }, thickness: 0.5, color: separateur })
+  cx('Snow Wonder Festival · info@snow-wonder.be', regular, 9, 34, discret)
+  cx('Cette carte est personnelle et non transférable', regular, 8, 18, discret)
 
   return doc.save()
 }
@@ -93,46 +103,46 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name, email, edition, category, registrationId } = await req.json()
-    console.log(`send-confirmation: ${email} edition=${edition}`)
+    const { nom, email, edition, categorie, idInscription } = await req.json()
+    console.log(`send-confirmation-concours: ${email} edition=${edition}`)
 
-    let attachments: object[] = []
+    let piecesJointes: object[] = []
     try {
-      const pdfBytes = await buildRegistrationPDF(registrationId, name, edition, category)
-      attachments = [{
-        filename: `registration-${registrationId.slice(0, 8).toUpperCase()}.pdf`,
+      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie)
+      piecesJointes = [{
+        filename: `inscription-${idInscription.slice(0, 8).toUpperCase()}.pdf`,
         content: Buffer.from(pdfBytes),
         contentType: 'application/pdf',
       }]
-      console.log('PDF ready')
-    } catch (pdfErr) {
-      console.error('PDF failed:', pdfErr)
+      console.log('PDF prêt')
+    } catch (erreurPdf) {
+      console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = contestConfirmationEmail({ name, email, edition, category, registrationId })
+    const html = emailConfirmationConcours({ nom, email, edition, categorie, idInscription })
 
-    const transporter = nodemailer.createTransport({
+    const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,
       port: SMTP_PORT,
       secure: SMTP_PORT === 465,
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
 
-    await transporter.sendMail({
+    await transporteur.sendMail({
       from: FROM,
       to: email,
-      subject: `Contest Registration Confirmed — Snow Wonder Festival ${edition}`,
+      subject: `Inscription au concours confirmée — Snow Wonder Festival ${edition}`,
       html,
-      attachments,
+      attachments: piecesJointes,
     })
 
-    console.log('Email sent')
+    console.log('Email envoyé')
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
-    console.error('Error:', err)
+    console.error('Erreur :', err)
     return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
