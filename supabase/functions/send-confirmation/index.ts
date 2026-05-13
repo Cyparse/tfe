@@ -1,8 +1,12 @@
+import { SMTPClient } from 'https://deno.land/x/denomailer/mod.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { contestConfirmationEmail } from '../_shared/templates.ts'
 
-const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
-const FROM = 'Snow Festival <noreply@yourfestival.com>'
+const SMTP_HOST = Deno.env.get('SMTP_HOST')!
+const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') ?? '465')
+const SMTP_USER = Deno.env.get('SMTP_USER')!
+const SMTP_PASS = Deno.env.get('SMTP_PASS')!
+const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -15,25 +19,25 @@ Deno.serve(async (req) => {
 
     const html = contestConfirmationEmail({ name, email, edition, category, registrationId })
 
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
+    const client = new SMTPClient({
+      connection: {
+        hostname: SMTP_HOST,
+        port: SMTP_PORT,
+        tls: true,
+        auth: { username: SMTP_USER, password: SMTP_PASS },
       },
-      body: JSON.stringify({
-        from: FROM,
-        to: [email],
-        subject: `✅ Contest Registration — Snow Festival ${edition}`,
-        html,
-      }),
     })
 
-    const data = await res.json()
+    await client.send({
+      from: FROM,
+      to: email,
+      subject: `✅ Contest Registration — Snow Wonder Festival ${edition}`,
+      html,
+    })
 
-    if (!res.ok) throw new Error(data.message ?? 'Resend error')
+    await client.close()
 
-    return new Response(JSON.stringify({ success: true, id: data.id }), {
+    return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
