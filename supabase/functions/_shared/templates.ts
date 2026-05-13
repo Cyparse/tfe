@@ -1,6 +1,3 @@
-// Pas de React nécessaire — template literals TypeScript
-// Deno ne supporte pas React/JSX sans configuration supplémentaire
-
 type Edition = 'december' | 'january' | 'february'
 type CategorieParticipant = 'amateur' | 'professionnel'
 
@@ -10,57 +7,6 @@ const datesEditions: Record<Edition, string> = {
   february: '7 février 2027',
 }
 
-const headerStyles = `
-  body { font-family: 'Nunito', Arial, sans-serif; background: #f0f4ff; margin: 0; padding: 0; }
-  .carte { max-width: 560px; margin: 40px auto; background: white;
-           border-radius: 20px; overflow: hidden; border: 1px solid #e0e8f0; }
-  .entete { background: linear-gradient(160deg, #0d2a5e 0%, #1a3f7a 50%, #0d2a5e 100%);
-            padding: 40px 36px 36px; text-align: center; }
-  .ornement { display: flex; align-items: center; justify-content: center;
-              gap: 12px; margin-bottom: 20px; }
-  .ligne-ornement { flex: 1; max-width: 60px; height: 1px;
-                    background: linear-gradient(to right, transparent, rgba(212,175,55,0.6)); }
-  .ligne-ornement-droite { background: linear-gradient(to left, transparent, rgba(212,175,55,0.6)); }
-  .losange { width: 6px; height: 6px; background: #d4af37; transform: rotate(45deg); }
-  .cercle-icone { width: 72px; height: 72px; border-radius: 50%;
-                  border: 1px solid rgba(212,175,55,0.35);
-                  display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
-  .libelle-festival { font-size: 10px; font-weight: 500; letter-spacing: 0.18em;
-                      text-transform: uppercase; color: rgba(212,175,55,0.75);
-                      margin: 0 0 8px; }
-  .titre-email { font-family: 'Rubik', Arial, sans-serif; font-size: 26px;
-                 font-weight: 600; color: #ffffff; margin: 0 0 6px; line-height: 1.2; }
-  .sous-titre-email { font-family: 'Rubik', Arial, sans-serif; font-size: 12px; font-weight: 300; letter-spacing: 0.12em;
-                      text-transform: uppercase; color: rgba(168,196,232,0.9); margin: 0; }
-  .corps { padding: 32px 36px; }
-  .salutation { font-size: 15px; color: #1a1a2e; margin: 0 0 6px; }
-  .intro { font-size: 14px; color: #666; margin: 0 0 24px; font-weight: 300; }
-  .tableau-details { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-  .tableau-details tr { border-bottom: 1px solid #f0f0f0; }
-  .tableau-details tr:last-child { border-bottom: none; }
-  .tableau-details td { padding: 11px 0; font-size: 13px; }
-  .tableau-details td:first-child { color: #888; font-weight: 300; width: 45%; }
-  .tableau-details td:last-child { text-align: right; }
-  .badge { display: inline-block; background: #e8f0fe; color: #1a3f7a;
-           padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-  .valeur-date { font-weight: 500; color: #1a1a2e; font-size: 13px; }
-  .valeur-id { font-family: 'Courier New', monospace; font-size: 12px;
-               color: #888; letter-spacing: 0.08em; }
-  .avis-pj { background: #f0f4ff; border-left: 3px solid #1a3a6b;
-             padding: 14px 16px; margin-bottom: 24px; }
-  .avis-pj strong { display: block; font-size: 13px; font-weight: 500;
-                    color: #1a3a6b; margin-bottom: 4px; }
-  .avis-pj p { font-size: 12px; color: #666; margin: 0; font-weight: 300; }
-  .texte-cloture { font-size: 13px; color: #888; font-weight: 300;
-                   margin: 0; font-style: italic; }
-  .pied-page { padding: 16px 36px; background: #f8f9ff;
-               border-top: 1px solid #eef0f8;
-               display: flex; justify-content: space-between; align-items: center; }
-  .marque { font-family: 'Rubik', Arial, sans-serif; font-size: 13px;
-            font-style: italic; color: #888; }
-  .email-destinataire { font-size: 11px; color: #aaa; font-weight: 300; }
-`
-
 export function emailConfirmationConcours(donnees: {
   nom: string
   email: string
@@ -68,71 +14,124 @@ export function emailConfirmationConcours(donnees: {
   categorie: CategorieParticipant
   idInscription: string
 }) {
-  return `
-  <!DOCTYPE html>
-  <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <style>${headerStyles}</style>
-  </head>
-  <body>
-    <div class="carte">
-      <div class="entete">
-        <div class="ornement">
-          <div class="ligne-ornement"></div>
-          <div class="losange"></div>
-          <div class="ligne-ornement ligne-ornement-droite"></div>
-        </div>
-        <div class="cercle-icone">
-          <span style="font-size:26px; color:#d4af37;">&#x2605;</span>
-        </div>
-        <p class="libelle-festival">Snow Wonder Festival</p>
-        <h1 class="titre-email">Concours de bonhomme de neige</h1>
-        <p class="sous-titre-email">Inscription confirmée</p>
-      </div>
+  const dateEdition = datesEditions[donnees.edition] ?? donnees.edition
+  const labelCategorie = donnees.categorie === 'professionnel' ? 'Professionnel' : 'Amateur'
+  const shortId = donnees.idInscription.slice(0, 8).toUpperCase()
 
-      <div class="corps">
-        <p class="salutation">Cher(e) <strong>${donnees.nom}</strong>,</p>
-        <p class="intro">Votre inscription au concours a bien été enregistrée.
-          Retrouvez ci-dessous le récapitulatif de votre participation.</p>
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription confirmée — Snow Wonder Festival</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0f4ff;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f4ff;padding:32px 0;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e0e8f0;">
 
-        <table class="tableau-details">
+          <!-- En-tête -->
           <tr>
-            <td>Catégorie</td>
-            <td>
-              <span class="badge">
-                ${donnees.categorie === 'professionnel' ? 'Professionnel' : 'Amateur'}
-              </span>
+            <td style="background-color:#0d2a5e;padding:40px 36px 32px;text-align:center;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-bottom:20px;text-align:center;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                      <tr>
+                        <td width="60" style="height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,0.6));font-size:1px;">&nbsp;</td>
+                        <td width="10" style="text-align:center;padding:0 6px;">
+                          <div style="width:6px;height:6px;background:#d4af37;display:inline-block;transform:rotate(45deg);"></div>
+                        </td>
+                        <td width="60" style="height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));font-size:1px;">&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:18px;text-align:center;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;width:72px;height:72px;border-radius:50%;border:1px solid rgba(212,175,55,0.35);">
+                      <tr>
+                        <td align="center" valign="middle" style="font-size:28px;color:#d4af37;">&#x2605;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:8px;">
+                    <p style="margin:0;font-size:10px;font-weight:bold;letter-spacing:0.18em;text-transform:uppercase;color:rgba(212,175,55,0.8);text-align:center;">Snow Wonder Festival</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:6px;">
+                    <h1 style="margin:0;font-size:24px;font-weight:600;color:#ffffff;text-align:center;line-height:1.2;">Concours de bonhomme de neige</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style="margin:0;font-size:11px;font-weight:300;letter-spacing:0.12em;text-transform:uppercase;color:rgba(168,196,232,0.9);text-align:center;">Inscription confirmée</p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
+
+          <!-- Corps -->
           <tr>
-            <td>Édition</td>
-            <td><span class="valeur-date">${datesEditions[donnees.edition]}</span></td>
+            <td style="padding:32px 36px;">
+              <p style="margin:0 0 6px;font-size:15px;color:#1a1a2e;">Cher(e) <strong>${donnees.nom}</strong>,</p>
+              <p style="margin:0 0 24px;font-size:14px;color:#666666;font-weight:300;">Votre inscription au concours a bien été enregistrée. Retrouvez ci-dessous le récapitulatif de votre participation.</p>
+
+              <!-- Tableau détails -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;border-bottom:1px solid #f0f0f0;">Catégorie</td>
+                  <td style="padding:11px 0;font-size:13px;text-align:right;border-bottom:1px solid #f0f0f0;">
+                    <span style="display:inline-block;background:#e8f0fe;color:#1a3f7a;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;">${labelCategorie}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;border-bottom:1px solid #f0f0f0;">Édition</td>
+                  <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:500;color:#1a1a2e;border-bottom:1px solid #f0f0f0;">${dateEdition}</td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;">Numéro d'inscription</td>
+                  <td style="padding:11px 0;font-size:12px;text-align:right;font-family:'Courier New',monospace;color:#888888;letter-spacing:0.08em;">${shortId}</td>
+                </tr>
+              </table>
+
+              <!-- Avis pièce jointe -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="background:#f0f4ff;border-left:3px solid #1a3a6b;padding:14px 16px;">
+                    <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#1a3a6b;">Votre carte d'inscription est jointe à cet email.</p>
+                    <p style="margin:0;font-size:12px;color:#666666;font-weight:300;">Elle contient un code QR — présentez-la au bureau d'accueil à votre arrivée.</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:13px;color:#888888;font-weight:300;font-style:italic;">Apportez votre créativité et vos gants les plus chauds. Bonne chance !</p>
+            </td>
           </tr>
+
+          <!-- Pied de page -->
           <tr>
-            <td>Numéro d'inscription</td>
-            <td><span class="valeur-id">${donnees.idInscription.slice(0, 8).toUpperCase()}</span></td>
+            <td style="padding:16px 36px;background:#f8f9ff;border-top:1px solid #eef0f8;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-size:13px;font-style:italic;color:#888888;">Snow Wonder Festival</td>
+                  <td style="font-size:11px;color:#aaaaaa;font-weight:300;text-align:right;">Envoyé à ${donnees.email}</td>
+                </tr>
+              </table>
+            </td>
           </tr>
+
         </table>
-
-        <div class="avis-pj">
-          <strong>Votre carte d'inscription est jointe à cet email.</strong>
-          <p>Elle contient un code QR — présentez-la au bureau d'accueil à votre arrivée.</p>
-        </div>
-
-        <p class="texte-cloture">
-          Apportez votre créativité et vos gants les plus chauds. Bonne chance !
-        </p>
-      </div>
-
-      <div class="pied-page">
-        <span class="marque">Snow Wonder Festival</span>
-        <span class="email-destinataire">Envoyé à ${donnees.email}</span>
-      </div>
-    </div>
-  </body>
-  </html>
-  `
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
 }
 
 export function emailConfirmationBillets(donnees: {
@@ -143,78 +142,121 @@ export function emailConfirmationBillets(donnees: {
   idCommande: string
 }) {
   const pluriel = donnees.quantite > 1
+  const dateEdition = datesEditions[donnees.edition] ?? donnees.edition
+  const shortId = donnees.idCommande.slice(0, 8).toUpperCase()
 
-  return `
-  <!DOCTYPE html>
-  <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <style>${headerStyles}</style>
-  </head>
-  <body>
-    <div class="carte">
-      <div class="entete">
-        <div class="ornement">
-          <div class="ligne-ornement"></div>
-          <div class="losange"></div>
-          <div class="ligne-ornement ligne-ornement-droite"></div>
-        </div>
-        <div class="cercle-icone">
-          <span style="font-size:26px; color:#d4af37;">&#x2756;</span>
-        </div>
-        <p class="libelle-festival">Snow Wonder Festival</p>
-        <h1 class="titre-email">${pluriel ? 'Billets' : 'Billet'} d'entrée</h1>
-        <p class="sous-titre-email">Réservation confirmée</p>
-      </div>
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Billets — Snow Wonder Festival</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0f4ff;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f4ff;padding:32px 0;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e0e8f0;">
 
-      <div class="corps">
-        <p class="salutation">Cher(e) <strong>${donnees.nom}</strong>,</p>
-        <p class="intro">
-          ${pluriel ? 'Vos billets sont confirmés.' : 'Votre billet est confirmé.'}
-          Retrouvez ci-dessous les détails de votre réservation.
-        </p>
-
-        <table class="tableau-details">
+          <!-- En-tête -->
           <tr>
-            <td>${pluriel ? 'Billets' : 'Billet'}</td>
-            <td>
-              <span class="badge">
-                ${donnees.quantite} billet${pluriel ? 's' : ''} (entrée gratuite)
-              </span>
+            <td style="background-color:#0d2a5e;padding:40px 36px 32px;text-align:center;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-bottom:20px;text-align:center;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                      <tr>
+                        <td width="60" style="height:1px;background:linear-gradient(to right,transparent,rgba(212,175,55,0.6));font-size:1px;">&nbsp;</td>
+                        <td width="10" style="text-align:center;padding:0 6px;">
+                          <div style="width:6px;height:6px;background:#d4af37;display:inline-block;transform:rotate(45deg);"></div>
+                        </td>
+                        <td width="60" style="height:1px;background:linear-gradient(to left,transparent,rgba(212,175,55,0.6));font-size:1px;">&nbsp;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:18px;text-align:center;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;width:72px;height:72px;border-radius:50%;border:1px solid rgba(212,175,55,0.35);">
+                      <tr>
+                        <td align="center" valign="middle" style="font-size:28px;color:#d4af37;">&#x2756;</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:8px;">
+                    <p style="margin:0;font-size:10px;font-weight:bold;letter-spacing:0.18em;text-transform:uppercase;color:rgba(212,175,55,0.8);text-align:center;">Snow Wonder Festival</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom:6px;">
+                    <h1 style="margin:0;font-size:24px;font-weight:600;color:#ffffff;text-align:center;line-height:1.2;">${pluriel ? 'Billets' : 'Billet'} d'entrée</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p style="margin:0;font-size:11px;font-weight:300;letter-spacing:0.12em;text-transform:uppercase;color:rgba(168,196,232,0.9);text-align:center;">Réservation confirmée</p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
+
+          <!-- Corps -->
           <tr>
-            <td>Édition</td>
-            <td><span class="valeur-date">${datesEditions[donnees.edition]}</span></td>
+            <td style="padding:32px 36px;">
+              <p style="margin:0 0 6px;font-size:15px;color:#1a1a2e;">Cher(e) <strong>${donnees.nom}</strong>,</p>
+              <p style="margin:0 0 24px;font-size:14px;color:#666666;font-weight:300;">${pluriel ? 'Vos billets sont confirmés.' : 'Votre billet est confirmé.'} Retrouvez ci-dessous les détails de votre réservation.</p>
+
+              <!-- Tableau détails -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;border-bottom:1px solid #f0f0f0;">${pluriel ? 'Billets' : 'Billet'}</td>
+                  <td style="padding:11px 0;font-size:13px;text-align:right;border-bottom:1px solid #f0f0f0;">
+                    <span style="display:inline-block;background:#e8f0fe;color:#1a3f7a;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;">${donnees.quantite} billet${pluriel ? 's' : ''} (entrée gratuite)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;border-bottom:1px solid #f0f0f0;">Édition</td>
+                  <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:500;color:#1a1a2e;border-bottom:1px solid #f0f0f0;">${dateEdition}</td>
+                </tr>
+                <tr>
+                  <td style="padding:11px 0;font-size:13px;color:#888888;font-weight:300;width:45%;">Référence commande</td>
+                  <td style="padding:11px 0;font-size:12px;text-align:right;font-family:'Courier New',monospace;color:#888888;letter-spacing:0.08em;">${shortId}</td>
+                </tr>
+              </table>
+
+              <!-- Avis pièce jointe -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="background:#f0f4ff;border-left:3px solid #1a3a6b;padding:14px 16px;">
+                    <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#1a3a6b;">${pluriel ? 'Vos billets sont joints à cet email.' : 'Votre billet est joint à cet email.'}</p>
+                    <p style="margin:0;font-size:12px;color:#666666;font-weight:300;">Chaque PDF contient un code QR — ${pluriel ? 'présentez-les' : 'présentez-le'} à l'entrée pour le faire scanner.</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:13px;color:#888888;font-weight:300;font-style:italic;">Nous nous réjouissons de vous accueillir au festival. Profitez de la gastronomie, de la neige et de l'ambiance !</p>
+            </td>
           </tr>
+
+          <!-- Pied de page -->
           <tr>
-            <td>Référence commande</td>
-            <td><span class="valeur-id">${donnees.idCommande.slice(0, 8).toUpperCase()}</span></td>
+            <td style="padding:16px 36px;background:#f8f9ff;border-top:1px solid #eef0f8;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="font-size:13px;font-style:italic;color:#888888;">Snow Wonder Festival</td>
+                  <td style="font-size:11px;color:#aaaaaa;font-weight:300;text-align:right;">Envoyé à ${donnees.email}</td>
+                </tr>
+              </table>
+            </td>
           </tr>
+
         </table>
-
-        <div class="avis-pj">
-          <strong>
-            ${pluriel ? 'Vos billets sont joints à cet email.' : 'Votre billet est joint à cet email.'}
-          </strong>
-          <p>
-            Chaque PDF contient un code QR —
-            ${pluriel ? 'présentez-les' : 'présentez-le'} à l'entrée pour le faire scanner.
-          </p>
-        </div>
-
-        <p class="texte-cloture">
-          Nous nous réjouissons de vous accueillir au festival.
-          Profitez de la gastronomie, de la neige et de l'ambiance !
-        </p>
-      </div>
-
-      <div class="pied-page">
-        <span class="marque">Snow Wonder Festival</span>
-        <span class="email-destinataire">Envoyé à ${donnees.email}</span>
-      </div>
-    </div>
-  </body>
-  </html>
-  `
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
 }
