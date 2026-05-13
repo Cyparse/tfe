@@ -43,9 +43,9 @@ async function genererBilletPDF(
   const page = doc.addPage([440, 620])
   const { width, height } = page.getSize()
 
-  const gras       = await doc.embedFont(StandardFonts.HelveticaBold)
-  const regular    = await doc.embedFont(StandardFonts.Helvetica)
-  const qrImage    = await doc.embedPng(qrBytes)
+  const gras    = await doc.embedFont(StandardFonts.HelveticaBold)
+  const regular = await doc.embedFont(StandardFonts.Helvetica)
+  const qrImage = await doc.embedPng(qrBytes)
 
   const marine     = rgb(0.10, 0.23, 0.42)
   const glace      = rgb(0.66, 0.77, 0.91)
@@ -59,44 +59,54 @@ async function genererBilletPDF(
     page.drawText(texte, { x: (width - l) / 2, y, font: fonte, size: taille, color: couleur })
   }
 
-  // En-tête marine
-  page.drawRectangle({ x: 0, y: height - 130, width, height: 130, color: marine })
-  page.drawRectangle({ x: 0, y: height - 132, width, height: 2, color: glace })
+  // ─── En-tête (y: 490–620) ───────────────────────────────────────────────
+  const headerH = 130
+  page.drawRectangle({ x: 0, y: height - headerH, width, height: headerH, color: marine })
+  page.drawRectangle({ x: 0, y: height - headerH - 2, width, height: 2, color: glace })
 
-  cx('SNOW WONDER FESTIVAL', gras, 18, height - 52, blanc)
-  cx("BILLET D'ENTRÉE", regular, 11, height - 76, glace)
-  cx(DATES_EDITIONS[edition] ?? edition, gras, 12, height - 104, blanc)
-  cx('Concours & Village Gastronomique', regular, 10, height - 122, glace)
+  cx('SNOW WONDER FESTIVAL',              gras,    18, height - 50,  blanc)
+  cx("BILLET D'ENTRÉE",                   regular, 11, height - 74,  glace)
+  cx(DATES_EDITIONS[edition] ?? edition,  gras,    12, height - 100, blanc)
+  cx('Concours & Village Gastronomique',  regular, 10, height - 118, glace)
 
-  // QR code
-  const tailleQR = 170
-  page.drawImage(qrImage, { x: (width - tailleQR) / 2, y: 330, width: tailleQR, height: tailleQR })
+  // ─── QR code  (y: 330–500, centré sous l'en-tête) ───────────────────────
+  const tailleQR = 160
+  const qrY = height - headerH - 20 - tailleQR   // = 620 - 130 - 20 - 160 = 310
+  page.drawImage(qrImage, { x: (width - tailleQR) / 2, y: qrY, width: tailleQR, height: tailleQR })
 
-  cx(numeroBillet, gras, 15, 308, marine)
-  cx("À scanner à l'entrée", regular, 9, 292, discret)
+  // Numéro de billet + sous-titre (sous le QR)
+  cx(numeroBillet,          gras,    14, qrY - 22, marine)
+  cx("À scanner à l'entrée", regular,  9, qrY - 36, discret)
 
-  // Séparateur
-  page.drawLine({ start: { x: 40, y: 272 }, end: { x: width - 40, y: 272 }, thickness: 0.5, color: separateur })
+  // ─── Séparateur 1 (sous le numéro) ──────────────────────────────────────
+  const sep1Y = qrY - 52
+  page.drawLine({ start: { x: 40, y: sep1Y }, end: { x: width - 40, y: sep1Y }, thickness: 0.5, color: separateur })
 
-  // Porteur du billet
-  page.drawText('TITULAIRE DU BILLET', { x: 40, y: 250, font: regular, size: 8, color: discret })
-  page.drawText(nomPorteur, { x: 40, y: 233, font: gras, size: 14, color: marine })
+  // ─── Titulaire (sous sep1) ───────────────────────────────────────────────
+  const titulaireY = sep1Y - 20
+  page.drawText('TITULAIRE DU BILLET', { x: 40, y: titulaireY,      font: regular, size: 8,  color: discret })
+  page.drawText(nomPorteur,            { x: 40, y: titulaireY - 17, font: gras,    size: 14, color: marine  })
 
-  // Référence commande
-  page.drawText('RÉFÉRENCE COMMANDE', { x: 40, y: 208, font: regular, size: 8, color: discret })
-  page.drawText(idCommande.slice(0, 8).toUpperCase(), { x: 40, y: 191, font: regular, size: 11, color: clair })
+  // ─── Référence commande ──────────────────────────────────────────────────
+  const refY = titulaireY - 50
+  page.drawText('RÉFÉRENCE COMMANDE',                    { x: 40, y: refY,      font: regular, size: 8,  color: discret })
+  page.drawText(idCommande.slice(0, 8).toUpperCase(),    { x: 40, y: refY - 17, font: regular, size: 11, color: clair   })
 
-  page.drawLine({ start: { x: 40, y: 174 }, end: { x: width - 40, y: 174 }, thickness: 0.5, color: separateur })
+  // ─── Séparateur 2 ────────────────────────────────────────────────────────
+  const sep2Y = refY - 38
+  page.drawLine({ start: { x: 40, y: sep2Y }, end: { x: width - 40, y: sep2Y }, thickness: 0.5, color: separateur })
 
-  // Lieu
-  page.drawText('LIEU', { x: 40, y: 152, font: regular, size: 8, color: discret })
-  page.drawText(LIEU, { x: 40, y: 135, font: regular, size: 10, color: clair })
+  // ─── Lieu ────────────────────────────────────────────────────────────────
+  const lieuY = sep2Y - 20
+  page.drawText('LIEU', { x: 40, y: lieuY,      font: regular, size: 8,  color: discret })
+  page.drawText(LIEU,   { x: 40, y: lieuY - 17, font: regular, size: 10, color: clair   })
 
-  // Pied de page
-  page.drawRectangle({ x: 0, y: 0, width, height: 58, color: rgb(0.96, 0.97, 1.0) })
-  page.drawLine({ start: { x: 0, y: 58 }, end: { x: width, y: 58 }, thickness: 0.5, color: separateur })
+  // ─── Pied de page (y: 0–58) ──────────────────────────────────────────────
+  const footerH = 58
+  page.drawRectangle({ x: 0, y: 0, width, height: footerH, color: rgb(0.96, 0.97, 1.0) })
+  page.drawLine({ start: { x: 0, y: footerH }, end: { x: width, y: footerH }, thickness: 0.5, color: separateur })
   cx('Snow Wonder Festival · info@snow-wonder.be', regular, 9, 34, discret)
-  cx('Ce billet est valable pour une personne', regular, 8, 18, discret)
+  cx('Ce billet est valable pour une personne',     regular, 8, 18, discret)
 
   return doc.save()
 }
