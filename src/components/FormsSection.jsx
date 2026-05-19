@@ -27,8 +27,7 @@ function MobileFormsSection() {
   return (
     <section
       style={{
-        background: "linear-gradient(180deg, #7ab8e0 0%, #4a8fc2 50%, #3070a8 100%)",
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Nunito', sans-serif",
         position: "relative",
         overflow: "hidden",
         paddingBottom: "40px",
@@ -70,35 +69,86 @@ function MobileFormsSection() {
   );
 }
 
+function TabletFormsSection() {
+  return (
+    <section
+      style={{
+        fontFamily: "'Nunito', sans-serif",
+        position: "relative",
+        overflow: "hidden",
+        padding: "64px 40px",
+      }}
+    >
+      <div style={{ position: "absolute", width: "700px", height: "700px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.12)", top: "-260px", left: "-260px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "560px", height: "560px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.08)", top: "-160px", left: "-160px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "700px", height: "700px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.12)", bottom: "-260px", right: "-260px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "560px", height: "560px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.08)", bottom: "-160px", right: "-160px", pointerEvents: "none" }} />
+
+      <div style={{ display: "flex", gap: "28px", alignItems: "flex-start", position: "relative" }}>
+        <div
+          style={{
+            ...glassCard,
+            borderRadius: "28px",
+            padding: "40px 32px",
+            flex: 1,
+            maxHeight: "85vh",
+            overflowY: "auto",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          <Registration inCircle />
+        </div>
+        <div
+          style={{
+            ...glassCard,
+            borderRadius: "28px",
+            padding: "40px 32px",
+            flex: 1,
+            maxHeight: "85vh",
+            overflowY: "auto",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          <Tickets inCircle />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function FormsSection() {
   return (
     <>
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=DM+Serif+Display&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=DM+Serif+Display&display=swap"
         rel="stylesheet"
       />
-      {/* Mobile */}
+      {/* Mobile — < 768px */}
       <div className="md:hidden">
         <MobileFormsSection />
       </div>
 
-      {/* Desktop */}
-      <div className="hidden md:block">
+      {/* Tablet — 768px to 1279px */}
+      <div className="hidden md:block xl:hidden">
+        <TabletFormsSection />
+      </div>
+
+      {/* Desktop — ≥ 1280px */}
+      <div className="hidden xl:block">
         <section
           style={{
             position: "relative",
             minHeight: "1480px",
-            background: "linear-gradient(180deg, #7ab8e0 0%, #4a8fc2 50%, #3070a8 100%)",
             overflow: "hidden",
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Nunito', sans-serif",
           }}
         >
           <div
             style={{
               position: "absolute",
               inset: 0,
-              backgroundImage:
-                "radial-gradient(circle at 30% 25%, rgba(255,255,255,0.08) 0%, transparent 50%), radial-gradient(circle at 70% 75%, rgba(255,255,255,0.06) 0%, transparent 50%)",
               pointerEvents: "none",
             }}
           />
@@ -122,13 +172,13 @@ export default function FormsSection() {
           </div>
 
           {/* Bottom circle: Tickets */}
-          <div style={{ ...circleStyle, left: "640px", bottom: "-45px" }}>
+          <div style={{ ...circleStyle, right: "-80px", bottom: "50px" }}>
             <div
               style={{
                 position: "absolute",
-                left: "150px",
-                right: "150px",
-                top: "70px",
+                left: "160px",
+                right: "160px",
+                top: "150px",
                 bottom: "155px",
                 overflowY: "auto",
                 scrollbarWidth: "none",
