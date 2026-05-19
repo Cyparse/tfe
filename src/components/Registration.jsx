@@ -105,9 +105,6 @@ const EDITIONS = [
         setIsSubmitting(true);
 
         try {
-            // TEST — supprimer après vérification
-            throw { message: 'Forced test error', code: '23505' };
-
             // Filter out editions already registered for
             const newEditions = formData.editions.filter(ed => !registeredEditions.includes(ed));
 

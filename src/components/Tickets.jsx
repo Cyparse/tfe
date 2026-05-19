@@ -99,9 +99,6 @@ export default function Tickets({ inCircle = false }) {
         setIsSubmitting(true);
 
         try {
-            // TEST — supprimer après vérification
-            throw { message: 'Forced test error', code: '23505' };
-
             // Insert ticket order into Supabase (tickets are free)
             const { data, error } = await supabase
                 .from('ticket_orders')
