@@ -214,20 +214,7 @@ export default function Tickets() {
     };
 
     return (
-        <section id="tickets" className="max-w-7xl mx-auto px-6 relative z-20 pb-20">
-            {/* Wave Top */}
-            {/* <div className="relative w-full overflow-hidden leading-none -mb-px">
-                <svg preserveAspectRatio="none" viewBox="0 0 1200 120" className="w-full h-16 fill-white">
-                    <path d="M0,0 C150,90 400,10 600,60 C800,110 1050,10 1200,80 L1200,120 L0,120 Z"></path>
-                </svg>
-                {/* Wave decorations */}
-                {/* <div className="absolute top-0 left-14 w-2 h-2 bg-white rounded-full opacity-60"></div>
-                <div className="absolute top-2.5 left-24 w-1.5 h-1.5 bg-white rounded-full opacity-40"></div>
-                <div className="absolute top-5 right-16 w-3 h-3 bg-white rounded-full opacity-50"></div>
-            </div> */} 
-            
-            {/* Content Card */}
-            <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl relative border-l border-r border-b border-white/10">
+        <div className="p-8 md:p-12 text-white h-full">
                 <div className="mb-10">
                     <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Vos Billets</h2>
                     <p className="text-ice-blue/80 text-lg">Entrée gratuite ! Limité à {MAX_TICKETS} billets par personne</p>
@@ -529,7 +516,6 @@ export default function Tickets() {
                         </form>
                     )}
                 </div>
-            </div>
-        </section>
+        </div>
     );
 }
