@@ -7,7 +7,7 @@ const EDITIONS = [
         date: '6 décembre 2026',
         theme: 'Édition Ouverture',
         accent: '#249eff',
-        icon: 'calendar_month',
+        icon: 'ac_unit',
         description: 'Lancement du festival, illuminations et premières sculptures de neige.',
         events: [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
@@ -35,7 +35,7 @@ const EDITIONS = [
         date: '7 février 2027',
         theme: 'Grande Finale',
         accent: '#ffffff',
-        icon: 'trophy',
+        icon: 'ac_unit',
         description: 'Dernière édition, remise des prix et final spectaculaire du festival.',
         events: [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
@@ -49,6 +49,18 @@ const EDITIONS = [
 export default function ScheduleSection() {
     return (
         <section id="schedule" className="schedule-section">
+            <div className="schedule-wave-top">
+                <svg preserveAspectRatio="none" viewBox="0 0 1200 120" className="w-full h-16 fill-white">
+                    <path d="M0,0 C150,90 400,10 600,60 C800,110 1050,10 1200,80 L1200,120 L0,120 Z"></path>
+                </svg>
+                {/* Wave decorations */}
+                <div className="absolute top-0 left-14 w-2 h-2 bg-white rounded-full opacity-60"></div>
+                <div className="absolute top-2.5 left-24 w-1.5 h-1.5 bg-white rounded-full opacity-40"></div>
+                <div className="absolute top-5 right-16 w-3 h-3 bg-white rounded-full opacity-50"></div>
+                <div className="absolute top-0 right-8 w-2 h-2 bg-white rounded-full opacity-60"></div>
+                <div className="absolute top-3 right-6 w-1.5 h-1.5 bg-white rounded-full opacity-40"></div>
+            </div>
+
             <div className="schedule-container">
                 <div className="schedule-header">
                     <div className="schedule-eyebrow">
@@ -75,7 +87,7 @@ export default function ScheduleSection() {
                                     <div className="schedule-icon-box">
                                         <span
                                             className="material-symbols-outlined"
-                                            style={{ color: ed.accent === '#ffffff' ? '#1a1a1a' : ed.accent }}
+                                            style={{ color: ed.accent }}
                                         >
                                             {ed.icon}
                                         </span>
@@ -84,9 +96,8 @@ export default function ScheduleSection() {
 
                                 <div className="schedule-content">
                                     <h3>{ed.theme}</h3>
-                                    <p className="schedule-month">{ed.month}</p>
-                                    <p className="schedule-description">{ed.description}</p>
                                     <p className="schedule-date">{ed.date}</p>
+                                    <p className="schedule-description">{ed.description}</p>
 
                                     <ul className="schedule-events">
                                         {ed.events.map(({ icon, label }) => (
