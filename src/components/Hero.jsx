@@ -135,11 +135,7 @@ export default function Hero() {
             </button>
           </div>
         </div>
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-4">
-          <div className="w-2 h-2 rounded-full bg-deep-navy/20"></div>
-          <div className="w-2 h-2 rounded-full bg-deep-navy/60"></div>
-          <div className="w-2 h-2 rounded-full bg-deep-navy/20"></div>
-        </div>
+       
       </div>
     </section>
   );

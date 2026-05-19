@@ -6,7 +6,7 @@ const EDITIONS = [
         month: 'Décembre',
         date: '6 décembre 2026',
         theme: 'Édition Ouverture',
-        accent: '#249eff',
+        accent: '#4289b6',
         icon: 'ac_unit',
         description: 'Lancement du festival, illuminations et premières sculptures de neige.',
         events: [
@@ -20,7 +20,7 @@ const EDITIONS = [
         month: 'Janvier',
         date: '10 janvier 2027',
         theme: 'Édition Mi-Hiver',
-        accent: '#7dd3fc',
+        accent: '#CAE9FF',
         icon: 'ac_unit',
         description: 'Ambiance glacée, animations nocturnes et énergie hivernale maximale.',
         events: [
@@ -69,9 +69,7 @@ export default function ScheduleSection() {
                         <span className="schedule-eyebrow-line"></span>
                     </div>
                     <h2 className="schedule-title">Programme du Festival</h2>
-                    <p className="schedule-subtitle">
-                        Trois cartes, trois ambiances, une même identité hivernale. Chaque édition garde le même langage visuel.
-                    </p>
+                    
                 </div>
 
                 <div className="schedule-grid">
@@ -118,7 +116,7 @@ export default function ScheduleSection() {
                                         className="schedule-btn"
                                         style={{ background: ed.accent, color: '#1a1a1a' }}
                                     >
-                                        Voir l'édition
+                                        Réserver mes billets
                                     </a>
                                 </div>
 
