@@ -76,7 +76,7 @@ function TabletFormsSection() {
         fontFamily: "'Nunito', sans-serif",
         position: "relative",
         overflow: "hidden",
-        padding: "64px 40px",
+        padding: "64px 40px 120px",
       }}
     >
       <div style={{ position: "absolute", width: "700px", height: "700px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.12)", top: "-260px", left: "-260px", pointerEvents: "none" }} />
