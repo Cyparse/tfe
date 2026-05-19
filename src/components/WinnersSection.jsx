@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import {Carousel} from './Carousel';
 
 const EDITION_LABELS = {
     december: 'Décembre 2026',
@@ -59,6 +60,7 @@ export default function WinnersSection() {
                     </p>
                 </div>
 
+            <Carousel cards={editionWinners} />
                 {/* Edition Tabs */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
                     {Object.entries(EDITION_LABELS).map(([value, label]) => (
