@@ -8,6 +8,7 @@
 @media (min-width: 768px) {
   .schedule-section {
     padding: 112px 24px;
+    margin-top: 90px;
   }
 }
 
@@ -116,8 +117,6 @@
   }
 }
 
-
-
 /* Card */
 .schedule-card {
   position: relative;
@@ -133,7 +132,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .schedule-card {
+  .schedule-card {
     width: 300px;
   }
 }
@@ -172,7 +171,11 @@
 
 .schedule-icon-box .material-symbols-outlined {
   font-size: 4rem;
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 300,
+    "GRAD" 0,
+    "opsz" 48;
 }
 
 /* Content */
