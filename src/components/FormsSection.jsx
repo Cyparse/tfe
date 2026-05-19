@@ -130,13 +130,13 @@ export default function FormsSection() {
         <MobileFormsSection />
       </div>
 
-      {/* Tablet — 768px to 1279px */}
-      <div className="hidden md:block xl:hidden">
+      {/* Tablet — 768px to 1399px */}
+      <div className="hidden md:block wide:hidden">
         <TabletFormsSection />
       </div>
 
-      {/* Desktop — ≥ 1280px */}
-      <div className="hidden xl:block">
+      {/* Desktop — ≥ 1400px */}
+      <div className="hidden wide:block">
         <section
           style={{
             position: "relative",

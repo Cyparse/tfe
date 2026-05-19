@@ -6,10 +6,12 @@
   --color-midblue: #3a7ca5;
   --color-festival-yellow: #e8a94e;
   --color-dark-brown: #3a2416;
-  
+
   --font-family-display: 'Lavishly Yours', cursive;
   --font-family-body: 'Nunito', sans-serif;
   --font-family-rubik: 'Rubik', sans-serif;
+
+  --breakpoint-wide: 1400px;
 }
 
 :root {
