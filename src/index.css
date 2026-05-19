@@ -14,6 +14,20 @@
   --breakpoint-wide: 1400px;
 }
 
+.forms-mobile  { display: block; }
+.forms-tablet  { display: none;  }
+.forms-desktop { display: none;  }
+
+@media (min-width: 768px) {
+  .forms-mobile  { display: none;  }
+  .forms-tablet  { display: block; }
+}
+
+@media (min-width: 1400px) {
+  .forms-tablet  { display: none;  }
+  .forms-desktop { display: block; }
+}
+
 :root {
   --color-ice-blue: #cae9ff;
   --color-deep-navy: #002442;

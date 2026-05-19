@@ -125,18 +125,15 @@ export default function FormsSection() {
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=DM+Serif+Display&display=swap"
         rel="stylesheet"
       />
-      {/* Mobile — < 768px */}
-      <div className="md:hidden">
+      <div className="forms-mobile">
         <MobileFormsSection />
       </div>
 
-      {/* Tablet — 768px to 1399px */}
-      <div className="hidden md:block wide:hidden">
+      <div className="forms-tablet">
         <TabletFormsSection />
       </div>
 
-      {/* Desktop — ≥ 1400px */}
-      <div className="hidden wide:block">
+      <div className="forms-desktop">
         <section
           style={{
             position: "relative",
