@@ -12,7 +12,7 @@ const EDITIONS = [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
             { icon: 'star', label: 'Concours de bonhommes de neige pro' },
             { icon: 'storefront', label: 'Village gastronomique ouvert' },
-            { icon: 'celebration', label: 'Cérémonie d\'ouverture & illuminations' },
+            { icon: 'celebration', label: "Cérémonie d'ouverture & illuminations" },
         ],
     },
     {
@@ -44,10 +44,40 @@ const EDITIONS = [
         ],
     },
 ];
- 
+
+const styles = `
+  .schedule-card {
+    background: var(--clr);
+  }
+  .schedule-icon::before {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border-top-left-radius: 30px;
+    box-shadow: -5px -5px 0 5px var(--clr);
+  }
+  .schedule-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border-top-left-radius: 30px;
+    box-shadow: -5px -5px 0 5px var(--clr);
+  }
+`;
+
 export default function ScheduleSection() {
     return (
         <section id="schedule" className="relative z-20 px-6 py-20 md:py-28">
+            <style>{styles}</style>
+
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-14 md:mb-16 text-white">
                     <div className="flex items-center justify-center gap-3 text-white/75 font-bold uppercase tracking-[0.3em] text-[11px] mb-5">
@@ -65,33 +95,43 @@ export default function ScheduleSection() {
                     {EDITIONS.map((ed) => (
                         <article
                             key={ed.month}
-                            className="schedule-card relative w-75 h-112.5 rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
-                            style={{ '--clr': ed.accent }}
+                            className="schedule-card relative w-[300px] h-[490px] rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
+                            style={{ '--clr': ed.accent } as React.CSSProperties}
                         >
-                            <div className="absolute inset-2.5 rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
-                                <div className="schedule-icon absolute top-0 left-0 w-35 h-35 rounded-br-full bg-(--clr) transition-all duration-500">
-                                    <div className="absolute inset-2.5 rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
+                            {/* Inner dark panel */}
+                            <div className="absolute inset-[10px] rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
+
+                                {/* Icon blob */}
+                                <div
+                                    className="schedule-icon absolute top-0 left-0 w-[140px] h-[140px] rounded-br-full transition-all duration-500"
+                                    style={{ background: 'var(--clr)' }}
+                                >
+                                    <div className="absolute inset-[10px] rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
                                         <span
                                             className="material-symbols-outlined text-[4rem]"
-                                            style={{ color: ed.accent === '#ffffff' ? '#1a1a1a' : 'var(--clr)', fontVariationSettings: '"FILL" 0, "wght" 300, "GRAD" 0, "opsz" 48' }}
+                                            style={{
+                                                color: ed.accent === '#ffffff' ? '#1a1a1a' : ed.accent,
+                                                fontVariationSettings: '"FILL" 0, "wght" 300, "GRAD" 0, "opsz" 48',
+                                            }}
                                         >
                                             {ed.icon}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="absolute top-40 left-5 right-5 text-center text-white">
+                                {/* Content */}
+                                <div className="absolute top-[160px] left-[20px] right-[20px] text-center text-white">
                                     <h3 className="text-[1.35em] font-bold uppercase tracking-[0.12em]">{ed.theme}</h3>
                                     <p className="text-[0.95em] text-white/75 mb-1">{ed.month}</p>
-                                    <p className="text-[0.95em] text-white/75 leading-relaxed mb-4">{ed.description}</p>
-                                    <p className="text-[0.78em] text-white/55 uppercase tracking-[0.35em] mb-5">{ed.date}</p>
+                                    <p className="text-[0.95em] text-white/75 leading-relaxed mb-3">{ed.description}</p>
+                                    <p className="text-[0.78em] text-white/55 uppercase tracking-[0.35em] mb-4">{ed.date}</p>
 
-                                    <ul className="text-left flex flex-col gap-3">
+                                    <ul className="text-left flex flex-col gap-2.5">
                                         {ed.events.map(({ icon, label }) => (
                                             <li key={label} className="flex items-start gap-3 text-xs text-white/75 leading-relaxed">
                                                 <span
                                                     className="material-symbols-outlined text-base shrink-0 mt-0.5"
-                                                    style={{ color: 'var(--clr)' }}
+                                                    style={{ color: ed.accent }}
                                                 >
                                                     {icon}
                                                 </span>
@@ -102,11 +142,16 @@ export default function ScheduleSection() {
 
                                     <a
                                         href="#tickets"
-                                        className="mt-6 inline-block bg-(--clr) px-6 py-2.5 no-underline text-[#1a1a1a] font-semibold uppercase rounded-full transition-all duration-500 hover:tracking-[0.2em]"
+                                        className="mt-5 inline-block px-6 py-2.5 no-underline font-semibold uppercase rounded-full transition-all duration-500 hover:tracking-[0.2em]"
+                                        style={{
+                                            background: ed.accent,
+                                            color: '#1a1a1a',
+                                        }}
                                     >
                                         Voir l'édition
                                     </a>
                                 </div>
+
                             </div>
                         </article>
                     ))}
