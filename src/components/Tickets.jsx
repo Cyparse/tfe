@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { supabase } from '../supabaseClient';
+import { logError, friendlyError } from '../utils/errorLogger';
 
 const EDITIONS = [
     { value: 'december', label: 'December Edition', date: 'Dec 6, 2026' },
@@ -26,6 +27,8 @@ export default function Tickets({ inCircle = false }) {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [emailStatus, setEmailStatus] = useState(null); // null | 'sent' | 'failed'
+    const debounceTimers = useRef({});
 
     const MAX_TICKETS = 10;
 
@@ -95,6 +98,9 @@ export default function Tickets({ inCircle = false }) {
 
         setIsSubmitting(true);
 
+        // TEST — supprimer après vérification
+        throw { message: 'Forced test error', code: '23505' };
+
         try {
             // Insert ticket order into Supabase (tickets are free)
             const { data, error } = await supabase
@@ -120,8 +126,8 @@ export default function Tickets({ inCircle = false }) {
 
             if (error) throw error;
 
-            // Send ticket confirmation email (fire-and-forget — don't block success UI)
-            supabase.functions.invoke('send-ticket', {
+            // Send ticket confirmation email and track status
+            const emailResult = await supabase.functions.invoke('send-ticket', {
                 body: {
                     name: `${formData.firstName} ${formData.lastName}`,
                     email: formData.email,
@@ -129,7 +135,10 @@ export default function Tickets({ inCircle = false }) {
                     quantity: formData.ticketCount,
                     orderId: data[0]?.id ?? '',
                 },
-            }).catch((err) => console.error('Email error:', err));
+            }).catch((err) => ({ error: err }));
+            const emailFailed = !!emailResult?.error;
+            if (emailFailed) logError('tickets:email', emailResult.error, { email: formData.email, edition: formData.edition });
+            setEmailStatus(emailFailed ? 'failed' : 'sent');
 
             // If newsletter is opted in, add to newsletter subscribers
             if (formData.newsletter) {
@@ -161,8 +170,8 @@ export default function Tickets({ inCircle = false }) {
             }, 4000);
 
         } catch (error) {
-            console.error('Ticket order error:', error);
-            setErrors({ submit: `La commande a échoué : ${error.message}. Veuillez réessayer.` });
+            logError('tickets:submit', error, { email: formData.email, edition: formData.edition });
+            setErrors({ submit: friendlyError(error) });
             setIsSubmitting(false);
         }
     };
@@ -184,32 +193,51 @@ export default function Tickets({ inCircle = false }) {
             terms: false
         });
         setErrors({});
+        setEmailStatus(null);
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+        switch (name) {
+            case 'firstName': if (!value.trim()) error = 'Le prénom est requis'; break;
+            case 'lastName':  if (!value.trim()) error = 'Le nom est requis'; break;
+            case 'email': {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!value.trim()) error = "L'e-mail est requis";
+                else if (!emailRegex.test(value)) error = "Format d'e-mail invalide";
+                break;
+            }
+            case 'phone': {
+                const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+                if (!value.trim()) error = 'Le numéro de téléphone est requis';
+                else if (!phoneRegex.test(value)) error = 'Numéro de téléphone invalide';
+                break;
+            }
+            case 'address':    if (!value.trim()) error = "L'adresse est requise"; break;
+            case 'city':       if (!value.trim()) error = 'La ville est requise'; break;
+            case 'postalCode': if (!value.trim()) error = 'Le code postal est requis'; break;
+            case 'country':    if (!value.trim()) error = 'Le pays est requis'; break;
+            default: return;
+        }
+        setErrors(prev => ({ ...prev, [name]: error }));
     };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         let finalValue = type === 'checkbox' ? checked : value;
 
-        // Additional validation for ticket count
         if (name === 'ticketCount') {
             const numValue = parseInt(value);
-            if (numValue > MAX_TICKETS) {
-                finalValue = MAX_TICKETS;
-            } else if (numValue < 1) {
-                finalValue = 1;
-            } else {
-                finalValue = numValue;
-            }
+            finalValue = numValue > MAX_TICKETS ? MAX_TICKETS : numValue < 1 ? 1 : numValue;
         }
 
-        setFormData(prev => ({
-            ...prev,
-            [name]: finalValue
-        }));
+        setFormData(prev => ({ ...prev, [name]: finalValue }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
 
-        // Clear error for this field
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: '' }));
+        const debounceFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'postalCode', 'country'];
+        if (debounceFields.includes(name)) {
+            clearTimeout(debounceTimers.current[name]);
+            debounceTimers.current[name] = setTimeout(() => validateField(name, finalValue), 600);
         }
     };
 
@@ -234,8 +262,15 @@ export default function Tickets({ inCircle = false }) {
                         <div style={{ fontSize: "36px", marginBottom: "8px" }}>🎫</div>
                         <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a3a5c", marginBottom: "4px" }}>Billets confirmés !</div>
                         <div style={{ fontSize: "12px", color: "#4a6a8c" }}>
-                            {formData.ticketCount} billet{formData.ticketCount > 1 ? "s" : ""} envoyés à {formData.email}
+                            {emailStatus === 'failed'
+                                ? `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} réservé${formData.ticketCount > 1 ? "s" : ""}.`
+                                : `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} envoyés à ${formData.email}`}
                         </div>
+                        {emailStatus === 'failed' && (
+                            <div style={{ fontSize: "11px", color: "#d97706", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
+                                L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit}>
@@ -402,7 +437,13 @@ export default function Tickets({ inCircle = false }) {
                             <div className="text-6xl mb-4">🎫</div>
                             <h3 className="text-2xl font-bold text-festival-yellow mb-2">Billets confirmés !</h3>
                             <p className="text-ice-blue/80 mb-2">Vos {formData.ticketCount} billet{formData.ticketCount > 1 ? 's' : ''} gratuit{formData.ticketCount > 1 ? 's' : ''} ont été confirmés.</p>
-                            <p className="text-sm text-ice-blue/60">E-mail de confirmation envoyé à {formData.email}</p>
+                            {emailStatus === 'failed' ? (
+                                <p className="text-sm text-amber-400 mt-2">
+                                    L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
+                                </p>
+                            ) : (
+                                <p className="text-sm text-ice-blue/60">E-mail de confirmation envoyé à {formData.email}</p>
+                            )}
                         </div>                    ) : (                        <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Festival Edition */}
                             <div>

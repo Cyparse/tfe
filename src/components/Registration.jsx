@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
+import { logError, friendlyError } from '../utils/errorLogger';
 
 export default function Registration({ inCircle = false }) {
 const EDITIONS = [
@@ -23,6 +24,8 @@ const EDITIONS = [
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [registeredEditions, setRegisteredEditions] = useState([]);
+    const [emailStatus, setEmailStatus] = useState(null); // null | 'sent' | 'failed'
+    const debounceTimers = useRef({});
 
     useEffect(() => {
         const checkRegistration = async () => {
@@ -101,6 +104,9 @@ const EDITIONS = [
 
         setIsSubmitting(true);
 
+        // TEST — supprimer après vérification
+        throw { message: 'Forced test error', code: '23505' };
+
         try {
             // Filter out editions already registered for
             const newEditions = formData.editions.filter(ed => !registeredEditions.includes(ed));
@@ -131,19 +137,23 @@ const EDITIONS = [
 
             if (error) throw error;
 
-            // Send one confirmation email per edition (fire-and-forget)
-            data.forEach((reg) => {
-                supabase.functions.invoke('send-confirmation', {
-                    body: {
-                        name: `${formData.firstName} ${formData.lastName}`,
-                        email: formData.email,
-                        edition: reg.festival_edition,
-                        category: formData.type,
-                        registrationId: reg.id,
-                    },
-                }).catch((err) => console.error('Email error:', err));
-            });
-
+            // Send confirmation emails and track status
+            const emailResults = await Promise.allSettled(
+                data.map((reg) =>
+                    supabase.functions.invoke('send-confirmation', {
+                        body: {
+                            name: `${formData.firstName} ${formData.lastName}`,
+                            email: formData.email,
+                            edition: reg.festival_edition,
+                            category: formData.type,
+                            registrationId: reg.id,
+                        },
+                    })
+                )
+            );
+            const emailFailed = emailResults.some(r => r.status === 'rejected' || r.value?.error);
+            if (emailFailed) logError('registration:email', new Error('Email confirmation failed'), { editions: newEditions, email: formData.email });
+            setEmailStatus(emailFailed ? 'failed' : 'sent');
             setIsSubmitting(false);
             setSubmitSuccess(true);
 
@@ -155,8 +165,8 @@ const EDITIONS = [
             }, 3000);
 
         } catch (error) {
-            console.error('Registration error:', error);
-            setErrors({ submit: `L'inscription a échoué : ${error.message}. Veuillez réessayer.` });
+            logError('registration:submit', error, { email: formData.email, editions: formData.editions });
+            setErrors({ submit: friendlyError(error) });
             setIsSubmitting(false);
         }
     };
@@ -175,6 +185,35 @@ const EDITIONS = [
         });
         setErrors({});
         setRegisteredEditions([]);
+        setEmailStatus(null);
+    };
+
+    const validateField = (name, value) => {
+        let error = '';
+        switch (name) {
+            case 'firstName': if (!value.trim()) error = 'Le prénom est requis'; break;
+            case 'lastName':  if (!value.trim()) error = 'Le nom est requis'; break;
+            case 'email': {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!value.trim()) error = "L'e-mail est requis";
+                else if (!emailRegex.test(value)) error = "Format d'e-mail invalide";
+                break;
+            }
+            case 'phone': {
+                const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+                if (!value.trim()) error = 'Le numéro de téléphone est requis';
+                else if (!phoneRegex.test(value)) error = 'Numéro de téléphone invalide';
+                break;
+            }
+            case 'organization':
+                if (formData.type === 'pro' && !value.trim()) error = "L'organisation est requise pour les professionnels";
+                break;
+            case 'experience':
+                if (formData.type === 'pro' && !value.trim()) error = "Les détails d'expérience sont requis";
+                break;
+            default: return;
+        }
+        setErrors(prev => ({ ...prev, [name]: error }));
     };
 
     const toggleEdition = (value) => {
@@ -189,13 +228,13 @@ const EDITIONS = [
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-        // Clear error for this field
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: '' }));
+        const finalValue = type === 'checkbox' ? checked : value;
+        setFormData(prev => ({ ...prev, [name]: finalValue }));
+        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+        const debounceFields = ['firstName', 'lastName', 'email', 'phone', 'organization', 'experience'];
+        if (debounceFields.includes(name)) {
+            clearTimeout(debounceTimers.current[name]);
+            debounceTimers.current[name] = setTimeout(() => validateField(name, finalValue), 600);
         }
     };
 
@@ -219,7 +258,14 @@ const EDITIONS = [
                     <div style={{ textAlign: "center", padding: "24px 16px", background: "rgba(30,120,80,0.12)", borderRadius: "12px", border: "1.5px solid rgba(30,120,80,0.35)" }}>
                         <div style={{ fontSize: "36px", marginBottom: "8px" }}>✓</div>
                         <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a3a5c", marginBottom: "4px" }}>Inscription réussie !</div>
-                        <div style={{ fontSize: "12px", color: "#4a6a8c" }}>E-mail de confirmation envoyé.</div>
+                        <div style={{ fontSize: "12px", color: "#4a6a8c" }}>
+                            {emailStatus === 'failed' ? "Votre inscription est bien enregistrée." : "E-mail de confirmation envoyé."}
+                        </div>
+                        {emailStatus === 'failed' && (
+                            <div style={{ fontSize: "11px", color: "#d97706", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
+                                L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit}>
@@ -370,7 +416,14 @@ const EDITIONS = [
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">✓</div>
                             <h3 className="text-2xl font-bold text-festival-yellow mb-2">Inscription réussie !</h3>
-                            <p className="text-ice-blue/80">Vous recevrez un e-mail de confirmation sous peu.</p>
+                            <p className="text-ice-blue/80">
+                                {emailStatus === 'failed' ? "Votre inscription est bien enregistrée." : "Vous recevrez un e-mail de confirmation sous peu."}
+                            </p>
+                            {emailStatus === 'failed' && (
+                                <p className="text-sm text-amber-400 mt-2">
+                                    L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
+                                </p>
+                            )}
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
