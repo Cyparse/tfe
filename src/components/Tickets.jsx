@@ -7,7 +7,7 @@ const EDITIONS = [
     { value: 'february', label: 'February Edition', date: 'Feb 7, 2027' },
 ];
 
-export default function Tickets() {
+export default function Tickets({ inCircle = false }) {
     const [formData, setFormData] = useState({
         edition: '',
         firstName: '',
@@ -213,8 +213,184 @@ export default function Tickets() {
         }
     };
 
+    const cInput = { width: "100%", padding: "7px 10px", borderRadius: "7px", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.28)", color: "#1a2a3a", fontSize: "13px", outline: "none", boxSizing: "border-box", fontFamily: "inherit" };
+    const cLabel = { fontSize: "10px", fontWeight: "600", letterSpacing: "0.07em", textTransform: "uppercase", color: "#2c4a6e", marginBottom: "3px", display: "block" };
+    const cErr = { fontSize: "11px", color: "#dc2626", marginTop: "2px" };
+    const cField = { marginBottom: "10px" };
+    const ci = (hasErr) => hasErr ? { ...cInput, borderColor: "#f87171", background: "rgba(239,68,68,0.08)" } : cInput;
+
+    if (inCircle) {
+        return (
+            <div>
+                <p style={{ fontSize: "19px", fontWeight: 700, color: "#1a3a5c", fontFamily: "'DM Serif Display', serif", marginBottom: "2px", letterSpacing: "-0.01em" }}>
+                    Vos Billets
+                </p>
+                <p style={{ fontSize: "12px", color: "#4a6a8c", marginBottom: "14px" }}>
+                    Gratuit · max {MAX_TICKETS} billets
+                </p>
+
+                {submitSuccess ? (
+                    <div style={{ textAlign: "center", padding: "24px 16px", background: "rgba(30,120,80,0.12)", borderRadius: "12px", border: "1.5px solid rgba(30,120,80,0.35)" }}>
+                        <div style={{ fontSize: "36px", marginBottom: "8px" }}>🎫</div>
+                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a3a5c", marginBottom: "4px" }}>Billets confirmés !</div>
+                        <div style={{ fontSize: "12px", color: "#4a6a8c" }}>
+                            {formData.ticketCount} billet{formData.ticketCount > 1 ? "s" : ""} envoyés à {formData.email}
+                        </div>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        {/* Edition */}
+                        <div style={cField}>
+                            <label style={cLabel}>Édition *</label>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                                {EDITIONS.map(ed => (
+                                    <label key={ed.value} style={{ cursor: "pointer" }}>
+                                        <input type="radio" name="edition" value={ed.value} checked={formData.edition === ed.value} onChange={handleChange} style={{ display: "none" }} />
+                                        <div style={{
+                                            padding: "6px 10px", borderRadius: "7px",
+                                            border: `1.5px solid ${formData.edition === ed.value ? "rgba(24,72,140,0.65)" : "rgba(255,255,255,0.55)"}`,
+                                            background: formData.edition === ed.value ? "rgba(24,72,140,0.12)" : "rgba(255,255,255,0.18)",
+                                            color: formData.edition === ed.value ? "#1a3a5c" : "#4a6a8c",
+                                            fontSize: "12px", fontWeight: 600,
+                                            display: "flex", justifyContent: "space-between", alignItems: "center",
+                                            transition: "all 0.15s",
+                                        }}>
+                                            <span>{ed.label}</span>
+                                            <span style={{ fontSize: "11px", opacity: 0.7 }}>{ed.date}</span>
+                                        </div>
+                                    </label>
+                                ))}
+                            </div>
+                            {errors.edition && <p style={cErr}>{errors.edition}</p>}
+                        </div>
+
+                        {/* Ticket count */}
+                        <div style={cField}>
+                            <label style={cLabel}>Nombre de billets *</label>
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                <input
+                                    type="number"
+                                    name="ticketCount"
+                                    value={formData.ticketCount}
+                                    onChange={handleChange}
+                                    min="1"
+                                    max={MAX_TICKETS}
+                                    style={{ ...cInput, width: "70px", textAlign: "center", fontSize: "16px", fontWeight: 700 }}
+                                />
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max={MAX_TICKETS}
+                                    value={formData.ticketCount}
+                                    onChange={(e) => handleChange({ target: { name: "ticketCount", value: e.target.value } })}
+                                    style={{ flex: 1, accentColor: "#18488c" }}
+                                />
+                            </div>
+                            {errors.ticketCount && <p style={cErr}>{errors.ticketCount}</p>}
+                        </div>
+
+                        {/* Names */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "10px" }}>
+                            <div>
+                                <label style={cLabel}>Prénom *</label>
+                                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Marie" style={ci(errors.firstName)} autoComplete="given-name" />
+                                {errors.firstName && <p style={cErr}>{errors.firstName}</p>}
+                            </div>
+                            <div>
+                                <label style={cLabel}>Nom *</label>
+                                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Dupont" style={ci(errors.lastName)} autoComplete="family-name" />
+                                {errors.lastName && <p style={cErr}>{errors.lastName}</p>}
+                            </div>
+                        </div>
+
+                        {/* Email */}
+                        <div style={cField}>
+                            <label style={cLabel}>E-mail *</label>
+                            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="marie@exemple.com" style={ci(errors.email)} autoComplete="email" />
+                            {errors.email && <p style={cErr}>{errors.email}</p>}
+                        </div>
+
+                        {/* Phone */}
+                        <div style={cField}>
+                            <label style={cLabel}>Téléphone *</label>
+                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+32 470 00 00 00" style={ci(errors.phone)} autoComplete="tel" />
+                            {errors.phone && <p style={cErr}>{errors.phone}</p>}
+                        </div>
+
+                        {/* Address */}
+                        <div style={cField}>
+                            <label style={cLabel}>Adresse *</label>
+                            <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Rue du Marché 12" style={ci(errors.address)} autoComplete="street-address" />
+                            {errors.address && <p style={cErr}>{errors.address}</p>}
+                        </div>
+
+                        {/* City / Postal / Country */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 80px 1fr", gap: "8px", marginBottom: "10px" }}>
+                            <div>
+                                <label style={cLabel}>Ville *</label>
+                                <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Bruxelles" style={ci(errors.city)} autoComplete="address-level2" />
+                                {errors.city && <p style={cErr}>{errors.city}</p>}
+                            </div>
+                            <div>
+                                <label style={cLabel}>CP *</label>
+                                <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="1000" style={ci(errors.postalCode)} autoComplete="postal-code" />
+                                {errors.postalCode && <p style={cErr}>{errors.postalCode}</p>}
+                            </div>
+                            <div>
+                                <label style={cLabel}>Pays *</label>
+                                <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Belgique" style={ci(errors.country)} autoComplete="country-name" />
+                                {errors.country && <p style={cErr}>{errors.country}</p>}
+                            </div>
+                        </div>
+
+                        {/* Newsletter */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+                            <input type="checkbox" name="newsletter" checked={formData.newsletter} onChange={handleChange} style={{ accentColor: "#18488c", flexShrink: 0 }} />
+                            <label style={{ fontSize: "11px", color: "#4a6a8c", cursor: "pointer" }}>
+                                S'abonner à la newsletter
+                            </label>
+                        </div>
+
+                        {/* Terms */}
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "4px" }}>
+                            <input type="checkbox" name="terms" checked={formData.terms} onChange={handleChange} style={{ marginTop: "2px", accentColor: "#18488c", flexShrink: 0 }} />
+                            <label style={{ fontSize: "11px", color: "#4a6a8c", cursor: "pointer", lineHeight: 1.4 }}>
+                                J'accepte les conditions générales et la politique de confidentialité *
+                            </label>
+                        </div>
+                        {errors.terms && <p style={cErr}>{errors.terms}</p>}
+
+                        {errors.submit && (
+                            <p style={{ ...cErr, padding: "8px", background: "rgba(239,68,68,0.08)", borderRadius: "6px", marginTop: "6px" }}>
+                                {errors.submit}
+                            </p>
+                        )}
+
+                        {/* Buttons */}
+                        <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+                            <button
+                                type="button"
+                                onClick={handleReset}
+                                style={{ padding: "8px 14px", borderRadius: "8px", border: "1.5px solid rgba(100,140,180,0.4)", background: "rgba(255,255,255,0.3)", color: "#1a3a5c", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                            >
+                                Réinitialiser
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                style={{ flex: 1, padding: "8px 0", borderRadius: "8px", border: "none", background: isSubmitting ? "rgba(24,72,140,0.5)" : "rgba(24,72,140,0.85)", color: "#fff", fontSize: "12px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", cursor: isSubmitting ? "not-allowed" : "pointer", fontFamily: "inherit" }}
+                            >
+                                {isSubmitting ? "Traitement..." : `Obtenir ${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""}`}
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
+        );
+    }
+
     return (
-        <div className="p-8 md:p-12 text-white h-full">
+        <div id="tickets" className="flex-1 bg-deep-navy/40 p-8 md:p-12 text-white rounded-3xl shadow-2xl border border-white/10">
                 <div className="mb-10">
                     <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Vos Billets</h2>
                     <p className="text-ice-blue/80 text-lg">Entrée gratuite ! Limité à {MAX_TICKETS} billets par personne</p>

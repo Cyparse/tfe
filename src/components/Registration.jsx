@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
-export default function Registration() {
+export default function Registration({ inCircle = false }) {
 const EDITIONS = [
     { value: 'december', label: 'Édition Décembre', date: '6 déc. 2026' },
     { value: 'january',  label: 'Édition Janvier',  date: '10 jan. 2027' },
@@ -199,8 +199,167 @@ const EDITIONS = [
         }
     };
 
+    const cInput = { width: "100%", padding: "7px 10px", borderRadius: "7px", border: "1.5px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.28)", color: "#1a2a3a", fontSize: "13px", outline: "none", boxSizing: "border-box", fontFamily: "inherit" };
+    const cLabel = { fontSize: "10px", fontWeight: "600", letterSpacing: "0.07em", textTransform: "uppercase", color: "#2c4a6e", marginBottom: "3px", display: "block" };
+    const cErr = { fontSize: "11px", color: "#dc2626", marginTop: "2px" };
+    const cField = { marginBottom: "10px" };
+    const ci = (hasErr) => hasErr ? { ...cInput, borderColor: "#f87171", background: "rgba(239,68,68,0.08)" } : cInput;
+
+    if (inCircle) {
+        return (
+            <div>
+                <p style={{ fontSize: "19px", fontWeight: 700, color: "#1a3a5c", fontFamily: "'DM Serif Display', serif", marginBottom: "2px", letterSpacing: "-0.01em" }}>
+                    Inscription Artiste
+                </p>
+                <p style={{ fontSize: "12px", color: "#4a6a8c", marginBottom: "14px" }}>
+                    Amateur ou professionnel
+                </p>
+
+                {submitSuccess ? (
+                    <div style={{ textAlign: "center", padding: "24px 16px", background: "rgba(30,120,80,0.12)", borderRadius: "12px", border: "1.5px solid rgba(30,120,80,0.35)" }}>
+                        <div style={{ fontSize: "36px", marginBottom: "8px" }}>✓</div>
+                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a3a5c", marginBottom: "4px" }}>Inscription réussie !</div>
+                        <div style={{ fontSize: "12px", color: "#4a6a8c" }}>E-mail de confirmation envoyé.</div>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        {/* Type */}
+                        <div style={cField}>
+                            <label style={cLabel}>Type</label>
+                            <div style={{ display: "flex", gap: "8px" }}>
+                                {[["amateur", "Amateur"], ["pro", "Professionnel"]].map(([val, lbl]) => (
+                                    <label key={val} style={{ flex: 1, cursor: "pointer" }}>
+                                        <input type="radio" name="type" value={val} checked={formData.type === val} onChange={handleChange} style={{ display: "none" }} />
+                                        <div style={{
+                                            padding: "6px 4px",
+                                            borderRadius: "7px",
+                                            border: `1.5px solid ${formData.type === val ? "rgba(24,72,140,0.65)" : "rgba(255,255,255,0.55)"}`,
+                                            background: formData.type === val ? "rgba(24,72,140,0.12)" : "rgba(255,255,255,0.18)",
+                                            color: formData.type === val ? "#1a3a5c" : "#4a6a8c",
+                                            fontSize: "12px", fontWeight: 600, textAlign: "center", transition: "all 0.15s",
+                                        }}>
+                                            {lbl}
+                                        </div>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Editions */}
+                        <div style={cField}>
+                            <label style={cLabel}>Édition(s) *</label>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                                {EDITIONS.map(ed => {
+                                    const sel = formData.editions.includes(ed.value);
+                                    const done = registeredEditions.includes(ed.value);
+                                    return (
+                                        <button
+                                            key={ed.value}
+                                            type="button"
+                                            disabled={done}
+                                            onClick={() => !done && toggleEdition(ed.value)}
+                                            style={{
+                                                padding: "6px 10px", borderRadius: "7px",
+                                                border: `1.5px solid ${done ? "rgba(0,0,0,0.1)" : sel ? "rgba(24,72,140,0.65)" : "rgba(255,255,255,0.55)"}`,
+                                                background: done ? "rgba(0,0,0,0.04)" : sel ? "rgba(24,72,140,0.12)" : "rgba(255,255,255,0.18)",
+                                                color: done ? "#9ab0c4" : sel ? "#1a3a5c" : "#4a6a8c",
+                                                fontSize: "12px", fontWeight: 600, cursor: done ? "not-allowed" : "pointer",
+                                                display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "left",
+                                            }}
+                                        >
+                                            <span>{ed.label}</span>
+                                            <span style={{ fontSize: "11px", opacity: 0.7 }}>{done ? "Inscrit(e)" : ed.date}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {errors.editions && <p style={cErr}>{errors.editions}</p>}
+                        </div>
+
+                        {/* Names */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "10px" }}>
+                            <div>
+                                <label style={cLabel}>Prénom *</label>
+                                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Marie" style={ci(errors.firstName)} />
+                                {errors.firstName && <p style={cErr}>{errors.firstName}</p>}
+                            </div>
+                            <div>
+                                <label style={cLabel}>Nom *</label>
+                                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Dupont" style={ci(errors.lastName)} />
+                                {errors.lastName && <p style={cErr}>{errors.lastName}</p>}
+                            </div>
+                        </div>
+
+                        {/* Email */}
+                        <div style={cField}>
+                            <label style={cLabel}>E-mail *</label>
+                            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="marie@exemple.com" style={ci(errors.email)} />
+                            {errors.email && <p style={cErr}>{errors.email}</p>}
+                        </div>
+
+                        {/* Phone */}
+                        <div style={cField}>
+                            <label style={cLabel}>Téléphone *</label>
+                            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+32 470 00 00 00" style={ci(errors.phone)} />
+                            {errors.phone && <p style={cErr}>{errors.phone}</p>}
+                        </div>
+
+                        {/* Pro fields */}
+                        {formData.type === "pro" && (
+                            <>
+                                <div style={cField}>
+                                    <label style={cLabel}>Organisation *</label>
+                                    <input type="text" name="organization" value={formData.organization} onChange={handleChange} placeholder="Nom de l'organisation" style={ci(errors.organization)} />
+                                    {errors.organization && <p style={cErr}>{errors.organization}</p>}
+                                </div>
+                                <div style={cField}>
+                                    <label style={cLabel}>Expérience *</label>
+                                    <textarea name="experience" value={formData.experience} onChange={handleChange} rows={3} placeholder="Décrivez votre expérience..." style={{ ...ci(errors.experience), resize: "vertical" }} />
+                                    {errors.experience && <p style={cErr}>{errors.experience}</p>}
+                                </div>
+                            </>
+                        )}
+
+                        {/* Terms */}
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "4px" }}>
+                            <input type="checkbox" name="terms" checked={formData.terms} onChange={handleChange} style={{ marginTop: "2px", accentColor: "#18488c", flexShrink: 0 }} />
+                            <label style={{ fontSize: "11px", color: "#4a6a8c", cursor: "pointer", lineHeight: 1.4 }}>
+                                J'accepte les conditions générales *
+                            </label>
+                        </div>
+                        {errors.terms && <p style={cErr}>{errors.terms}</p>}
+
+                        {errors.submit && (
+                            <p style={{ ...cErr, padding: "8px", background: "rgba(239,68,68,0.08)", borderRadius: "6px", marginTop: "6px" }}>
+                                {errors.submit}
+                            </p>
+                        )}
+
+                        {/* Buttons */}
+                        <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+                            <button
+                                type="button"
+                                onClick={handleReset}
+                                style={{ padding: "8px 14px", borderRadius: "8px", border: "1.5px solid rgba(100,140,180,0.4)", background: "rgba(255,255,255,0.3)", color: "#1a3a5c", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}
+                            >
+                                Réinitialiser
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                style={{ flex: 1, padding: "8px 0", borderRadius: "8px", border: "none", background: isSubmitting ? "rgba(24,72,140,0.5)" : "rgba(24,72,140,0.85)", color: "#fff", fontSize: "12px", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", cursor: isSubmitting ? "not-allowed" : "pointer", fontFamily: "inherit" }}
+                            >
+                                {isSubmitting ? "Envoi..." : "S'inscrire"}
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
+        );
+    }
+
     return (
-        <div className="p-8 md:p-12 text-white h-full">
+        <div id="registration" className="flex-1 bg-deep-navy/40 p-8 md:p-12 text-white rounded-3xl shadow-2xl border border-white/10">
                 <div className="mb-10">
                     <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Inscription Artiste</h2>
                     <p className="text-ice-blue/80 text-lg">Participez au festival en tant qu'artiste amateur ou professionnel</p>

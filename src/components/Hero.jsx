@@ -59,7 +59,7 @@ function Countdown() {
       <p className="text-xs uppercase tracking-[0.3em] text-ice-blue/60 mb-3">
         {next.label} commence dans
       </p>
-      <div className="inline-flex items-center gap-3 bg-deep-navy/50 backdrop-blur-xl border border-white/10 rounded-2xl px-8 py-4 shadow-xl">
+      <div className="inline-flex items-center gap-3 bg-deep-navy/50 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-4 shadow-xl">
         <CountdownUnit value={days} label="Jours" />
         <span className="text-2xl font-black text-white/30 mb-3">:</span>
         <CountdownUnit value={hours} label="Heures" />
