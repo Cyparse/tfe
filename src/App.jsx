@@ -132,13 +132,13 @@ function App() {
 
       <main className="relative z-10 pt-20">
         <Hero />
-        <ContentSection />
+        {/* <ContentSection /> */}
         <ScheduleSection />
         <Registration />
         <Tickets />
         <MarketSection />
         <MapSection />
-        <WinnersSection />
+        {/* <WinnersSection /> */}
       </main>
 
       <Footer />

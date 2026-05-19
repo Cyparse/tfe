@@ -1,4 +1,5 @@
 import React from 'react';
+import './ScheduleSection.css';
 
 const EDITIONS = [
     {
@@ -45,92 +46,53 @@ const EDITIONS = [
     },
 ];
 
-const styles = `
-  .schedule-card {
-    background: var(--clr);
-  }
-  .schedule-icon::before {
-    content: '';
-    position: absolute;
-    bottom: -30px;
-    left: 0;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-    border-top-left-radius: 30px;
-    box-shadow: -5px -5px 0 5px var(--clr);
-  }
-  .schedule-icon::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: -30px;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-    border-top-left-radius: 30px;
-    box-shadow: -5px -5px 0 5px var(--clr);
-  }
-`;
-
 export default function ScheduleSection() {
     return (
-        <section id="schedule" className="relative z-20 px-6 py-20 md:py-28">
-            <style>{styles}</style>
-
-            <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-14 md:mb-16 text-white">
-                    <div className="flex items-center justify-center gap-3 text-white/75 font-bold uppercase tracking-[0.3em] text-[11px] mb-5">
-                        <span className="h-px w-14 bg-white/60"></span>
+        <section id="schedule" className="schedule-section">
+            <div className="schedule-container">
+                <div className="schedule-header">
+                    <div className="schedule-eyebrow">
+                        <span className="schedule-eyebrow-line"></span>
                         Trois éditions
-                        <span className="h-px w-14 bg-white/60"></span>
+                        <span className="schedule-eyebrow-line"></span>
                     </div>
-                    <h2 className="font-display text-5xl md:text-6xl text-festival-yellow mb-4">Programme du Festival</h2>
-                    <p className="text-ice-blue/80 text-lg max-w-2xl mx-auto">
+                    <h2 className="schedule-title">Programme du Festival</h2>
+                    <p className="schedule-subtitle">
                         Trois cartes, trois ambiances, une même identité hivernale. Chaque édition garde le même langage visuel.
                     </p>
                 </div>
 
-                <div className="flex justify-center flex-wrap gap-10 md:gap-14">
+                <div className="schedule-grid">
                     {EDITIONS.map((ed) => (
                         <article
                             key={ed.month}
-                            className="schedule-card relative w-75 h-122.5 rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
+                            className="schedule-card"
                             style={{ '--clr': ed.accent }}
                         >
-                            {/* Inner dark panel */}
-                            <div className="absolute inset-2.5 rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
+                            <div className="schedule-card-inner">
 
-                                {/* Icon blob */}
-                                <div
-                                    className="schedule-icon absolute top-0 left-0 w-35 h-35 rounded-br-full transition-all duration-500"
-                                    style={{ background: 'var(--clr)' }}
-                                >
-                                    <div className="absolute inset-2.5 rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
+                                <div className="schedule-icon">
+                                    <div className="schedule-icon-box">
                                         <span
-                                            className="material-symbols-outlined text-[4rem]"
-                                            style={{
-                                                color: ed.accent === '#ffffff' ? '#1a1a1a' : ed.accent,
-                                                fontVariationSettings: '"FILL" 0, "wght" 300, "GRAD" 0, "opsz" 48',
-                                            }}
+                                            className="material-symbols-outlined"
+                                            style={{ color: ed.accent === '#ffffff' ? '#1a1a1a' : ed.accent }}
                                         >
                                             {ed.icon}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Content */}
-                                <div className="absolute top-40 left-5 right-5 text-center text-white">
-                                    <h3 className="text-[1.35em] font-bold uppercase tracking-[0.12em]">{ed.theme}</h3>
-                                    <p className="text-[0.95em] text-white/75 mb-1">{ed.month}</p>
-                                    <p className="text-[0.95em] text-white/75 leading-relaxed mb-3">{ed.description}</p>
-                                    <p className="text-[0.78em] text-white/55 uppercase tracking-[0.35em] mb-4">{ed.date}</p>
+                                <div className="schedule-content">
+                                    <h3>{ed.theme}</h3>
+                                    <p className="schedule-month">{ed.month}</p>
+                                    <p className="schedule-description">{ed.description}</p>
+                                    <p className="schedule-date">{ed.date}</p>
 
-                                    <ul className="text-left flex flex-col gap-2.5">
+                                    <ul className="schedule-events">
                                         {ed.events.map(({ icon, label }) => (
-                                            <li key={label} className="flex items-start gap-3 text-xs text-white/75 leading-relaxed">
+                                            <li key={label} className="schedule-event">
                                                 <span
-                                                    className="material-symbols-outlined text-base shrink-0 mt-0.5"
+                                                    className="material-symbols-outlined"
                                                     style={{ color: ed.accent }}
                                                 >
                                                     {icon}
@@ -142,11 +104,8 @@ export default function ScheduleSection() {
 
                                     <a
                                         href="#tickets"
-                                        className="mt-5 inline-block px-6 py-2.5 no-underline font-semibold uppercase rounded-full transition-all duration-500 hover:tracking-[0.2em]"
-                                        style={{
-                                            background: ed.accent,
-                                            color: '#1a1a1a',
-                                        }}
+                                        className="schedule-btn"
+                                        style={{ background: ed.accent, color: '#1a1a1a' }}
                                     >
                                         Voir l'édition
                                     </a>
