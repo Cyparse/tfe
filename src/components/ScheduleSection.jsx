@@ -5,9 +5,9 @@ const EDITIONS = [
         month: 'Décembre',
         date: '6 décembre 2026',
         theme: 'Édition Ouverture',
-        color: 'from-festival-yellow/20 to-festival-yellow/5',
-        border: 'border-festival-yellow/40',
-        badge: 'bg-festival-yellow text-deep-navy',
+        accent: '#249eff',
+        icon: 'calendar_month',
+        description: 'Lancement du festival, illuminations et premières sculptures de neige.',
         events: [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
             { icon: 'star', label: 'Concours de bonhommes de neige pro' },
@@ -19,9 +19,9 @@ const EDITIONS = [
         month: 'Janvier',
         date: '10 janvier 2027',
         theme: 'Édition Mi-Hiver',
-        color: 'from-ice-blue/20 to-ice-blue/5',
-        border: 'border-ice-blue/40',
-        badge: 'bg-ice-blue text-deep-navy',
+        accent: '#7dd3fc',
+        icon: 'ac_unit',
+        description: 'Ambiance glacée, animations nocturnes et énergie hivernale maximale.',
         events: [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
             { icon: 'star', label: 'Concours de bonhommes de neige pro' },
@@ -33,9 +33,9 @@ const EDITIONS = [
         month: 'Février',
         date: '7 février 2027',
         theme: 'Grande Finale',
-        color: 'from-white/15 to-white/5',
-        border: 'border-white/30',
-        badge: 'bg-white text-deep-navy',
+        accent: '#ffffff',
+        icon: 'trophy',
+        description: 'Dernière édition, remise des prix et final spectaculaire du festival.',
         events: [
             { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
             { icon: 'star', label: 'Concours de bonhommes de neige pro' },
@@ -44,61 +44,71 @@ const EDITIONS = [
         ],
     },
 ];
-
+ 
 export default function ScheduleSection() {
     return (
-        <section id="schedule" className="max-w-7xl mx-auto px-6 relative z-20 pb-20">
-            <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl border border-white/10">
-                {/* Header */}
-                <div className="text-center mb-14">
-                    <div className="flex items-center justify-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs mb-6">
-                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
-                        Trois Éditions
-                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
+        <section id="schedule" className="relative z-20 px-6 py-20 md:py-28">
+            <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-14 md:mb-16 text-white">
+                    <div className="flex items-center justify-center gap-3 text-white/75 font-bold uppercase tracking-[0.3em] text-[11px] mb-5">
+                        <span className="h-px w-14 bg-white/60"></span>
+                        Trois éditions
+                        <span className="h-px w-14 bg-white/60"></span>
                     </div>
-                    <h2 className="font-display text-5xl md:text-6xl mb-4 text-festival-yellow">Programme du Festival</h2>
+                    <h2 className="font-display text-5xl md:text-6xl text-festival-yellow mb-4">Programme du Festival</h2>
                     <p className="text-ice-blue/80 text-lg max-w-2xl mx-auto">
-                        Chaque édition hivernale apporte sa propre magie. Venez une fois, ou vivez les trois.
+                        Trois cartes, trois ambiances, une même identité hivernale. Chaque édition garde le même langage visuel.
                     </p>
                 </div>
 
-                {/* Edition Cards */}
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="flex justify-center flex-wrap gap-10 md:gap-14">
                     {EDITIONS.map((ed) => (
-                        <div
+                        <article
                             key={ed.month}
-                            className={`bg-linear-to-b ${ed.color} border ${ed.border} rounded-2xl p-8 flex flex-col gap-6`}
+                            className="schedule-card relative w-75 h-112.5 rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
+                            style={{ '--clr': ed.accent }}
                         >
-                            {/* Badge */}
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${ed.badge}`}>
-                                        {ed.theme}
-                                    </span>
-                                    <h3 className="text-3xl font-bold text-white">{ed.month}</h3>
-                                    <p className="text-ice-blue/70 text-sm mt-1">{ed.date}</p>
+                            <div className="absolute inset-2.5 rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
+                                <div className="schedule-icon absolute top-0 left-0 w-35 h-35 rounded-br-full bg-(--clr) transition-all duration-500">
+                                    <div className="absolute inset-2.5 rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
+                                        <span
+                                            className="material-symbols-outlined text-[4rem]"
+                                            style={{ color: ed.accent === '#ffffff' ? '#1a1a1a' : 'var(--clr)', fontVariationSettings: '"FILL" 0, "wght" 300, "GRAD" 0, "opsz" 48' }}
+                                        >
+                                            {ed.icon}
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="material-symbols-outlined text-4xl text-white/20">ac_unit</span>
+
+                                <div className="absolute top-40 left-5 right-5 text-center text-white">
+                                    <h3 className="text-[1.35em] font-bold uppercase tracking-[0.12em]">{ed.theme}</h3>
+                                    <p className="text-[0.95em] text-white/75 mb-1">{ed.month}</p>
+                                    <p className="text-[0.95em] text-white/75 leading-relaxed mb-4">{ed.description}</p>
+                                    <p className="text-[0.78em] text-white/55 uppercase tracking-[0.35em] mb-5">{ed.date}</p>
+
+                                    <ul className="text-left flex flex-col gap-3">
+                                        {ed.events.map(({ icon, label }) => (
+                                            <li key={label} className="flex items-start gap-3 text-xs text-white/75 leading-relaxed">
+                                                <span
+                                                    className="material-symbols-outlined text-base shrink-0 mt-0.5"
+                                                    style={{ color: 'var(--clr)' }}
+                                                >
+                                                    {icon}
+                                                </span>
+                                                <span>{label}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <a
+                                        href="#tickets"
+                                        className="mt-6 inline-block bg-(--clr) px-6 py-2.5 no-underline text-[#1a1a1a] font-semibold uppercase rounded-full transition-all duration-500 hover:tracking-[0.2em]"
+                                    >
+                                        Voir l'édition
+                                    </a>
+                                </div>
                             </div>
-
-                            {/* Events list */}
-                            <ul className="flex flex-col gap-3">
-                                {ed.events.map(({ icon, label }) => (
-                                    <li key={label} className="flex items-center gap-3 text-sm text-ice-blue/80">
-                                        <span className="material-symbols-outlined text-base text-festival-yellow">{icon}</span>
-                                        {label}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            {/* CTA */}
-                            <a
-                                href="#tickets"
-                                className="mt-auto block text-center py-3 px-6 rounded-xl border-2 border-white/20 text-white text-sm font-bold hover:bg-white/10 transition-all uppercase tracking-wider"
-                            >
-                                Obtenir des Billets
-                            </a>
-                        </div>
+                        </article>
                     ))}
                 </div>
             </div>

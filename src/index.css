@@ -28,6 +28,29 @@
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+.schedule-card .schedule-icon::before,
+.schedule-card .schedule-icon::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+}
+
+.schedule-card .schedule-icon::before {
+  left: 0;
+  bottom: -30px;
+  border-top-left-radius: 30px;
+  box-shadow: -5px -5px 0 5px var(--clr);
+}
+
+.schedule-card .schedule-icon::after {
+  top: 0;
+  right: -30px;
+  border-top-left-radius: 30px;
+  box-shadow: -5px -5px 0 5px var(--clr);
+}
+
 body {
   font-family: var(--font-family-body);
 }
