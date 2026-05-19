@@ -95,18 +95,18 @@ export default function ScheduleSection() {
                     {EDITIONS.map((ed) => (
                         <article
                             key={ed.month}
-                            className="schedule-card relative w-[300px] h-[490px] rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
-                            style={{ '--clr': ed.accent } as React.CSSProperties}
+                            className="schedule-card relative w-75 h-122.5 rounded-[20px] rounded-tl-[70px] overflow-hidden shadow-2xl"
+                            style={{ '--clr': ed.accent }}
                         >
                             {/* Inner dark panel */}
-                            <div className="absolute inset-[10px] rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
+                            <div className="absolute inset-2.5 rounded-[10px] bg-[#1a1a1a] border border-white/5 overflow-hidden">
 
                                 {/* Icon blob */}
                                 <div
-                                    className="schedule-icon absolute top-0 left-0 w-[140px] h-[140px] rounded-br-full transition-all duration-500"
+                                    className="schedule-icon absolute top-0 left-0 w-35 h-35 rounded-br-full transition-all duration-500"
                                     style={{ background: 'var(--clr)' }}
                                 >
-                                    <div className="absolute inset-[10px] rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
+                                    <div className="absolute inset-2.5 rounded-full rounded-tr-[10px] rounded-bl-[10px] bg-[#1a1a1a] flex items-center justify-center">
                                         <span
                                             className="material-symbols-outlined text-[4rem]"
                                             style={{
@@ -120,7 +120,7 @@ export default function ScheduleSection() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="absolute top-[160px] left-[20px] right-[20px] text-center text-white">
+                                <div className="absolute top-40 left-5 right-5 text-center text-white">
                                     <h3 className="text-[1.35em] font-bold uppercase tracking-[0.12em]">{ed.theme}</h3>
                                     <p className="text-[0.95em] text-white/75 mb-1">{ed.month}</p>
                                     <p className="text-[0.95em] text-white/75 leading-relaxed mb-3">{ed.description}</p>
