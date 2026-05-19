@@ -8,8 +8,7 @@ import MapSection from "./components/MapSection";
 import Footer from "./components/Footer";
 import ScheduleSection from "./components/ScheduleSection";
 import WinnersSection from "./components/WinnersSection";
-import Registration from "./components/Registration";
-import Tickets from "./components/Tickets";
+import FormsSection from "./components/FormsSection";
 import AdminLogin from "./admin/AdminLogin";
 import AdminPanel from "./admin/AdminPanel";
 import UpdatePassword from "./admin/UpdatePassword";
@@ -134,8 +133,7 @@ function App() {
         <Hero />
         {/* <ContentSection /> */}
         <ScheduleSection />
-        <Registration />
-        <Tickets />
+        <FormsSection />
         <MarketSection />
         <MapSection />
         {/* <WinnersSection /> */}
