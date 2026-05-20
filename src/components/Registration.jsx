@@ -158,8 +158,7 @@ const EDITIONS = [
             setTimeout(() => {
                 setSubmitSuccess(false);
                 handleReset();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 3000);
+            }, 8000);
 
         } catch (error) {
             logError('registration:submit', error, { email: formData.email, editions: formData.editions });
@@ -259,7 +258,7 @@ const EDITIONS = [
                             {emailStatus === 'failed' ? "Votre inscription est bien enregistrée." : "E-mail de confirmation envoyé."}
                         </div>
                         {emailStatus === 'failed' && (
-                            <div style={{ fontSize: "11px", color: "#d97706", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
+                            <div style={{ fontSize: "11px", color: "#E8A94E", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
                                 L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
                             </div>
                         )}
@@ -291,7 +290,7 @@ const EDITIONS = [
                         {/* Editions */}
                         <div style={cField}>
                             <label style={cLabel}>Édition(s) *</label>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                            <div style={{ display: "flex", flexDirection: "row", justifyContent:"flex-start", gap: "5px", width: "100%" }}>
                                 {EDITIONS.map(ed => {
                                     const sel = formData.editions.includes(ed.value);
                                     const done = registeredEditions.includes(ed.value);
@@ -304,10 +303,11 @@ const EDITIONS = [
                                             style={{
                                                 padding: "6px 10px", borderRadius: "7px",
                                                 border: `1.5px solid ${done ? "rgba(0,0,0,0.1)" : sel ? "rgba(24,72,140,0.65)" : "rgba(255,255,255,0.55)"}`,
-                                                background: done ? "rgba(0,0,0,0.04)" : sel ? "rgba(24,72,140,0.12)" : "rgba(255,255,255,0.18)",
+                                                background: done ? "rgba(0,0,0,0.04)" : sel ? "rgba(232, 169, 78,0.8)" : "rgba(255,255,255,0.18)",
                                                 color: done ? "#9ab0c4" : sel ? "#1a3a5c" : "#4a6a8c",
                                                 fontSize: "12px", fontWeight: 600, cursor: done ? "not-allowed" : "pointer",
-                                                display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "left",
+                                                display: "flex", justifyContent: "space-between", alignItems: "center",
+                                                flexDirection: "column", gap: "2px", flex: 1
                                             }}
                                         >
                                             <span>{ed.label}</span>
@@ -408,7 +408,7 @@ const EDITIONS = [
                     <p className="text-ice-blue/80 text-lg">Participez au festival en tant qu'artiste amateur ou professionnel</p>
                 </div>
 
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-md md:max-w-4xl mx-auto">
                     {submitSuccess ? (
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">✓</div>

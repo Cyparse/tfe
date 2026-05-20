@@ -3,9 +3,9 @@ import { supabase } from '../supabaseClient';
 import { logError, friendlyError } from '../utils/errorLogger';
 
 const EDITIONS = [
-    { value: 'december', label: 'December Edition', date: 'Dec 6, 2026' },
-    { value: 'january',  label: 'January Edition',  date: 'Jan 10, 2027' },
-    { value: 'february', label: 'February Edition', date: 'Feb 7, 2027' },
+   { value: 'december', label: 'Édition Décembre', date: '6 déc. 2026' },
+    { value: 'january',  label: 'Édition Janvier',  date: '10 jan. 2027' },
+    { value: 'february', label: 'Édition Février',  date: '7 fév. 2027' },
 ];
 
 export default function Tickets({ inCircle = false }) {
@@ -163,8 +163,7 @@ export default function Tickets({ inCircle = false }) {
             setTimeout(() => {
                 setSubmitSuccess(false);
                 handleReset();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 4000);
+            }, 8000);
 
         } catch (error) {
             logError('tickets:submit', error, { email: formData.email, edition: formData.edition });
@@ -246,7 +245,7 @@ export default function Tickets({ inCircle = false }) {
 
     if (inCircle) {
         return (
-            <div>
+            <div className="flex flex-col text-right mr-0 ml-auto">
                 <p style={{ fontSize: "19px", fontWeight: 700, color: "#1a3a5c", fontFamily: "'DM Serif Display', serif", marginBottom: "2px", letterSpacing: "-0.01em" }}>
                     Vos Billets
                 </p>
@@ -264,7 +263,7 @@ export default function Tickets({ inCircle = false }) {
                                 : `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} envoyés à ${formData.email}`}
                         </div>
                         {emailStatus === 'failed' && (
-                            <div style={{ fontSize: "11px", color: "#d97706", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
+                            <div style={{ fontSize: "11px", color: "#E8A94E", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
                                 L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
                             </div>
                         )}
@@ -274,18 +273,18 @@ export default function Tickets({ inCircle = false }) {
                         {/* Edition */}
                         <div style={cField}>
                             <label style={cLabel}>Édition *</label>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                            <div style={{ display: "flex", flexDirection: "row", justifyContent:"flex-end", gap: "5px", width: "100%"}}>
                                 {EDITIONS.map(ed => (
-                                    <label key={ed.value} style={{ cursor: "pointer" }}>
+                                    <label key={ed.value} style={{ cursor: "pointer", flex: 1 }}>
                                         <input type="radio" name="edition" value={ed.value} checked={formData.edition === ed.value} onChange={handleChange} style={{ display: "none" }} />
                                         <div style={{
                                             padding: "6px 10px", borderRadius: "7px",
                                             border: `1.5px solid ${formData.edition === ed.value ? "rgba(24,72,140,0.65)" : "rgba(255,255,255,0.55)"}`,
-                                            background: formData.edition === ed.value ? "rgba(24,72,140,0.12)" : "rgba(255,255,255,0.18)",
+                                            background: formData.edition === ed.value ? "rgba(232, 169, 78,0.8)" : "rgba(255,255,255,0.18)",
                                             color: formData.edition === ed.value ? "#1a3a5c" : "#4a6a8c",
                                             fontSize: "12px", fontWeight: 600,
                                             display: "flex", justifyContent: "space-between", alignItems: "center",
-                                            transition: "all 0.15s",
+                                            transition: "all 0.15s", flexDirection: "column", gap: "2px", width: "100%"
                                         }}>
                                             <span>{ed.label}</span>
                                             <span style={{ fontSize: "11px", opacity: 0.7 }}>{ed.date}</span>
@@ -428,7 +427,7 @@ export default function Tickets({ inCircle = false }) {
                     <p className="text-ice-blue/80 text-lg">Entrée gratuite ! Limité à {MAX_TICKETS} billets par personne</p>
                 </div>
 
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-md md:max-w-4xl mx-auto">
                     {submitSuccess ? (
                         <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
                             <div className="text-6xl mb-4">🎫</div>

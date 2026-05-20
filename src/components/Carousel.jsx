@@ -58,36 +58,44 @@ function Carousel({ cards = [] }) {
               <div style={{
                 width: '100%',
                 height: '100%',
-                padding: '1.75rem',
                 borderRadius: '12px',
                 transition: 'all .3s ease-out',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '.75rem',
                 boxSizing: 'border-box',
+                overflow: 'hidden',
                 background: isActive ? ICE : lerpColor(ICE, NAVY, absOffset * 0.8),
                 border: isActive ? `2px solid ${GOLD}` : `0.5px solid ${MID}44`,
+                ...(card.url ? {} : { padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '.75rem' }),
               }}>
-                <h3 style={{
-                  margin: 0,
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  textAlign: 'center',
-                  color: isActive ? NAVY : lerpColor(NAVY, ICE, absOffset),
-                  opacity: textOpacity,
-                  ...(isActive && { borderBottom: `1.5px solid ${GOLD}44`, paddingBottom: '.5rem', marginBottom: '.25rem' }),
-                }}>
-                  {card.title}
-                </h3>
-                <p style={{
-                  margin: 0,
-                  fontSize: '14px',
-                  lineHeight: 1.7,
-                  color: isActive ? MID : lerpColor(MID, ICE, absOffset * 0.7),
-                  opacity: textOpacity,
-                }}>
-                  {card.content}
-                </p>
+                {card.url ? (
+                  <img
+                    src={card.url}
+                    alt={card.alt || ''}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                ) : (
+                  <>
+                    <h3 style={{
+                      margin: 0,
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      textAlign: 'center',
+                      color: isActive ? NAVY : lerpColor(NAVY, ICE, absOffset),
+                      opacity: textOpacity,
+                      ...(isActive && { borderBottom: `1.5px solid ${GOLD}44`, paddingBottom: '.5rem', marginBottom: '.25rem' }),
+                    }}>
+                      {card.title}
+                    </h3>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '14px',
+                      lineHeight: 1.7,
+                      color: isActive ? MID : lerpColor(MID, ICE, absOffset * 0.7),
+                      opacity: textOpacity,
+                    }}>
+                      {card.content}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           );

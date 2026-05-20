@@ -4,6 +4,7 @@ import RegistrationManager from './RegistrationManager';
 import TicketManager from './TicketManager';
 import ContentManager from './ContentManager';
 import Dashboard from './Dashboard';
+import CarouselManager from './CarouselManager';
 
 export default function AdminPanel({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -13,6 +14,7 @@ export default function AdminPanel({ user, onLogout }) {
         { id: 'registrations',  label: 'Registrations',  icon: 'edit_note' },
         { id: 'tickets',        label: 'Ticketing',      icon: 'confirmation_number' },
         { id: 'content',        label: 'Content',        icon: 'article' },
+        { id: 'carousel',       label: 'Galerie',        icon: 'photo_library' },
     ];
 
     const handleLogout = async () => {
@@ -100,6 +102,7 @@ export default function AdminPanel({ user, onLogout }) {
                 {activeTab === 'registrations' && <RegistrationManager />}
                 {activeTab === 'tickets'       && <TicketManager />}
                 {activeTab === 'content'       && <ContentManager />}
+                {activeTab === 'carousel'      && <CarouselManager />}
             </main>
         </div>
     );

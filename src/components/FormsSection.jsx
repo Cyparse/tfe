@@ -49,7 +49,9 @@ function MobileFormsSection() {
           position: "relative",
         }}
       >
-        <Registration inCircle />
+        <div className="max-w-md">
+          <Registration inCircle />
+        </div>
       </div>
 
       {/* Tickets */}
@@ -63,7 +65,9 @@ function MobileFormsSection() {
           textAlign: "right",
         }}
       >
-        <Tickets inCircle />
+        <div className="max-w-md ml-auto">
+          <Tickets inCircle />
+        </div>
       </div>
     </section>
   );
@@ -142,6 +146,12 @@ export default function FormsSection() {
             fontFamily: "'Nunito', sans-serif",
           }}
         >
+          {/* Decorative rings — echo the desktop circles */}
+      <div style={{ position: "absolute", width: "500px", height: "500px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.18)", top: "-180px", right: "-140px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "380px", height: "380px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.12)", top: "-80px", right: "-60px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "500px", height: "500px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.18)", bottom: "-180px", left: "-140px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "380px", height: "380px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.12)", bottom: "-80px", left: "-60px", pointerEvents: "none" }} />
+
           <div
             style={{
               position: "absolute",
@@ -155,9 +165,9 @@ export default function FormsSection() {
             <div
               style={{
                 position: "absolute",
-                left: "180px",
+                left: "200px",
                 right: "150px",
-                top: "170px",
+                top: "190px",
                 bottom: "70px",
                 overflowY: "auto",
                 scrollbarWidth: "none",
@@ -173,10 +183,10 @@ export default function FormsSection() {
             <div
               style={{
                 position: "absolute",
-                left: "160px",
-                right: "160px",
-                top: "150px",
-                bottom: "155px",
+                left: "170px",
+                right: "190px",
+                top: "160px",
+                bottom: "160px",
                 overflowY: "auto",
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",

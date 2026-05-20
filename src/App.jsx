@@ -136,7 +136,7 @@ function App() {
         <FormsSection />
         <MarketSection />
         <MapSection />
-        {/* <WinnersSection /> */}
+        <WinnersSection />
       </main>
 
       <Footer />
