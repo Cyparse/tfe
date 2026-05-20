@@ -16,7 +16,7 @@ function lerpColor(hexA, hexB, t) {
   return `#${((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1)}`;
 }
 
-export default function Carousel({ cards = [] }) {
+function Carousel({ cards = [] }) {
   const [active, setActive] = useState(Math.floor(cards.length / 2));
 
   useEffect(() => {
@@ -118,3 +118,5 @@ export default function Carousel({ cards = [] }) {
     </div>
   );
 }
+
+export default Carousel;
