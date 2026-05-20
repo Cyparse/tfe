@@ -10,11 +10,11 @@ export default function AdminPanel({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('dashboard');
 
     const tabs = [
-        { id: 'dashboard',      label: 'Dashboard',      icon: 'dashboard' },
-        { id: 'registrations',  label: 'Registrations',  icon: 'edit_note' },
-        { id: 'tickets',        label: 'Ticketing',      icon: 'confirmation_number' },
-        { id: 'content',        label: 'Content',        icon: 'article' },
-        { id: 'carousel',       label: 'Galerie',        icon: 'photo_library' },
+        { id: 'dashboard',      label: 'Tableau de bord', icon: 'dashboard' },
+        { id: 'registrations',  label: 'Inscriptions',    icon: 'edit_note' },
+        { id: 'tickets',        label: 'Billetterie',     icon: 'confirmation_number' },
+        { id: 'content',        label: 'Contenu',         icon: 'article' },
+        { id: 'carousel',       label: 'Galerie',         icon: 'photo_library' },
     ];
 
     const handleLogout = async () => {
@@ -46,7 +46,7 @@ export default function AdminPanel({ user, onLogout }) {
                             <input
                                 className="bg-transparent border-none outline-none text-sm w-full"
                                 style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
-                                placeholder="Search…"
+                                placeholder="Rechercher…"
                             />
                         </div>
                     </div>
@@ -68,7 +68,7 @@ export default function AdminPanel({ user, onLogout }) {
                             className="text-xs font-bold uppercase tracking-wider transition-colors"
                             style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                         >
-                            Log Out
+                            Déconnexion
                         </button>
                     </div>
                 </div>

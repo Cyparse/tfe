@@ -27,7 +27,7 @@ export default function ContentManager() {
             } else {
                 setSchema(await getTableSchema(tableName));
             }
-        } catch (e) { alert('Error loading table: ' + e.message); }
+        } catch (e) { alert('Erreur lors du chargement de la table : ' + e.message); }
         finally { setIsLoading(false); }
     };
 
@@ -35,18 +35,18 @@ export default function ContentManager() {
 
     const handleCreate = async () => {
         try { await createItem(tableName, formData); setCreatingNew(false); setFormData({}); loadTableData(); }
-        catch (e) { alert('Error creating item: ' + e.message); }
+        catch (e) { alert('Erreur lors de la création : ' + e.message); }
     };
 
     const handleUpdate = async () => {
         try { await updateItem(tableName, editingItem.id, formData); setEditingItem(null); setFormData({}); loadTableData(); }
-        catch (e) { alert('Error updating item: ' + e.message); }
+        catch (e) { alert('Erreur lors de la mise à jour : ' + e.message); }
     };
 
     const handleDelete = async (id) => {
-        if (!confirm('Delete this item?')) return;
+        if (!confirm('Supprimer cet élément ?')) return;
         try { await deleteItem(tableName, id); loadTableData(); }
-        catch (e) { alert('Error deleting item: ' + e.message); }
+        catch (e) { alert('Erreur lors de la suppression : ' + e.message); }
     };
 
     const startEdit = (item) => { setEditingItem(item); setFormData({ ...item }); };
@@ -64,7 +64,7 @@ export default function ContentManager() {
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
-                            {isEdit ? 'Edit Item' : 'Create New Item'}
+                            {isEdit ? 'Modifier l\'élément' : 'Créer un nouvel élément'}
                         </h3>
                         <button onClick={onClose} className="material-symbols-outlined" style={{ color: 'var(--color-festival-yellow)' }}>close</button>
                     </div>
@@ -102,12 +102,12 @@ export default function ContentManager() {
                         <button onClick={onClose}
                             className="px-4 py-2 rounded-lg text-sm font-bold border"
                             style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                            Cancel
+                            Annuler
                         </button>
                         <button onClick={onSubmit}
                             className="px-4 py-2 rounded-lg text-sm font-bold"
                             style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)' }}>
-                            {isEdit ? 'Update' : 'Create'}
+                            {isEdit ? 'Mettre à jour' : 'Créer'}
                         </button>
                     </div>
                 </div>
@@ -119,14 +119,14 @@ export default function ContentManager() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
-                    Content
+                    Contenu
                 </h2>
                 {tableName && (
                     <button onClick={startCreate}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
                         style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">add</span>
-                        Create New
+                        Créer
                     </button>
                 )}
             </div>
@@ -135,17 +135,17 @@ export default function ContentManager() {
             <div className="rounded-xl border p-4" style={card}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block mb-1.5" style={labelStyle}>Select Table</label>
+                        <label className="block mb-1.5" style={labelStyle}>Sélectionner une table</label>
                         <select value={tableName} onChange={e => setTableName(e.target.value)}
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
                             onFocus={e => e.target.style.borderColor = '#acc9ef'}
                             onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}>
-                            <option value="">— Choose a table —</option>
+                            <option value="">— Choisir une table —</option>
                             {commonTables.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="block mb-1.5" style={labelStyle}>Or enter custom table name</label>
+                        <label className="block mb-1.5" style={labelStyle}>Ou saisir un nom de table personnalisé</label>
                         <input type="text" value={tableName} onChange={e => setTableName(e.target.value)}
                             placeholder="custom_table_name"
                             className="w-full px-3 py-2 rounded-lg text-sm" style={inputStyle}
@@ -159,7 +159,7 @@ export default function ContentManager() {
             {!tableName ? (
                 <div className="rounded-xl border p-12 text-center" style={card}>
                     <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: 'var(--color-midblue)' }}>table_view</span>
-                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Select a table to manage content</p>
+                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Sélectionnez une table pour gérer le contenu</p>
                 </div>
             ) : isLoading ? (
                 <div className="rounded-xl border p-12 text-center flex items-center justify-center gap-2" style={card}>
@@ -168,7 +168,7 @@ export default function ContentManager() {
                 </div>
             ) : items.length === 0 ? (
                 <div className="rounded-xl border p-12 text-center" style={card}>
-                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>No items found in this table</p>
+                    <p style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Aucun élément trouvé dans cette table</p>
                 </div>
             ) : (
                 <div className="rounded-xl border overflow-hidden" style={card}>
@@ -202,9 +202,9 @@ export default function ContentManager() {
                                         ))}
                                         <td className="px-6 py-4 text-right space-x-3">
                                             <button onClick={() => startEdit(item)}
-                                                className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Edit</button>
+                                                className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Modifier</button>
                                             <button onClick={() => handleDelete(item.id)}
-                                                className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Delete</button>
+                                                className="text-xs font-bold" style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
                                         </td>
                                     </tr>
                                 ))}

@@ -15,9 +15,9 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
         try {
             const redirectTo = `${window.location.origin}${window.location.pathname}?mode=update-password`;
             await requestPasswordReset(email, redirectTo);
-            setSuccessMessage('Password reset email sent. Check your inbox for the secure link.');
+            setSuccessMessage('E-mail de réinitialisation envoyé. Vérifiez votre boîte de réception pour le lien sécurisé.');
         } catch (err) {
-            setError(err.message || 'Unable to send the password reset email.');
+            setError(err.message || 'Impossible d\'envoyer l\'e-mail de réinitialisation.');
         } finally {
             setIsLoading(false);
         }
@@ -49,15 +49,15 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
                         style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}
                     >
                         <span className="material-symbols-outlined text-sm">arrow_back</span>
-                        Back to login
+                        Retour à la connexion
                     </button>
 
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
-                            Forgot password?
+                            Mot de passe oublié ?
                         </h1>
                         <p className="text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                            Enter your admin email and we'll send you a reset link.
+                            Entrez votre e-mail admin et nous vous enverrons un lien de réinitialisation.
                         </p>
                     </div>
 
@@ -78,7 +78,7 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider mb-2"
                                 style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
-                                Email Address
+                                Adresse e-mail
                             </label>
                             <input
                                 type="email"
@@ -110,12 +110,12 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
                                 letterSpacing: '0.05em',
                             }}
                         >
-                            {isLoading ? 'Sending reset email…' : 'Reset Password'}
+                            {isLoading ? 'Envoi en cours…' : 'Réinitialiser le mot de passe'}
                         </button>
                     </form>
 
                     <p className="mt-6 text-center text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        The reset link opens a secure password update screen in this app.
+                        Le lien de réinitialisation ouvre un écran de mise à jour sécurisé dans cette application.
                     </p>
                 </div>
             </div>

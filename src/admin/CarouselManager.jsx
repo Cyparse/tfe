@@ -86,7 +86,7 @@ export default function CarouselManager() {
                 <label className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm cursor-pointer transition-colors"
                     style={{ background: 'var(--color-festival-yellow)', color: 'var(--color-dark-brown)' }}>
                     <span className="material-symbols-outlined text-base">upload</span>
-                    {uploading ? 'Upload...' : 'Ajouter des images'}
+                    {uploading ? 'Envoi en cours...' : 'Ajouter des images'}
                     <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
                 </label>
             </div>

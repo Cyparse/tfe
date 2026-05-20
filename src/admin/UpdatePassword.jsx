@@ -25,8 +25,8 @@ export default function UpdatePassword({ onReturnToAdmin }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        if (password.length < 8) { setError('Password must contain at least 8 characters.'); return; }
-        if (password !== confirmPassword) { setError('Passwords do not match.'); return; }
+        if (password.length < 8) { setError('Le mot de passe doit contenir au moins 8 caractères.'); return; }
+        if (password !== confirmPassword) { setError('Les mots de passe ne correspondent pas.'); return; }
         setIsLoading(true);
         try {
             await updatePassword(password);
@@ -35,7 +35,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
             setPassword('');
             setConfirmPassword('');
         } catch (err) {
-            setError(err.message || 'Unable to update the password.');
+            setError(err.message || 'Impossible de mettre à jour le mot de passe.');
         } finally {
             setIsLoading(false);
         }
@@ -65,12 +65,12 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                 <div className="rounded-2xl p-8 border" style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
-                            Set a new password
+                            Définir un nouveau mot de passe
                         </h1>
                         <p className="text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                             {isRecoveryReady
-                                ? 'Choose a new password for your admin account.'
-                                : 'Open the password reset link from your email to continue.'}
+                                ? 'Choisissez un nouveau mot de passe pour votre compte admin.'
+                                : 'Ouvrez le lien de réinitialisation depuis votre e-mail pour continuer.'}
                         </p>
                     </div>
 
@@ -85,7 +85,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                         <div className="space-y-4">
                             <div className="rounded-lg p-3 text-sm border"
                                 style={{ background: 'rgba(3,38,54,0.6)', borderColor: '#accbe0', color: '#accbe0', fontFamily: 'var(--font-family-body)' }}>
-                                Password updated successfully.
+                                Mot de passe mis à jour avec succès.
                             </div>
                             <button
                                 type="button"
@@ -93,12 +93,12 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                                 className="w-full py-3 px-6 rounded-lg font-bold text-sm transition-all"
                                 style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                             >
-                                Return to admin login
+                                Retour à la connexion admin
                             </button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-5">
-                            {['New Password', 'Confirm Password'].map((label, i) => (
+                            {['Nouveau mot de passe', 'Confirmer le mot de passe'].map((label, i) => (
                                 <div key={label}>
                                     <label className="block text-xs font-bold uppercase tracking-wider mb-2"
                                         style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
@@ -124,7 +124,7 @@ export default function UpdatePassword({ onReturnToAdmin }) {
                                 className="w-full py-3 px-6 rounded-lg font-bold text-sm transition-all disabled:opacity-50"
                                 style={{ background: '#acc9ef', color: '#123250', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}
                             >
-                                {isLoading ? 'Updating password…' : 'Save New Password'}
+                                {isLoading ? 'Mise à jour en cours…' : 'Enregistrer le nouveau mot de passe'}
                             </button>
                         </form>
                     )}

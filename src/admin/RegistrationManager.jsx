@@ -26,7 +26,7 @@ export default function RegistrationManager() {
     };
 
     const handleDelete = async (id) => {
-        if (!confirm('Delete this registration?')) return;
+        if (!confirm('Supprimer cette inscription ?')) return;
         try { await deleteRegistration(id); loadRegistrations(); }
         catch (e) { alert(e.message); }
     };
@@ -54,7 +54,7 @@ export default function RegistrationManager() {
                     <div className="p-6">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
-                                Registration Details
+                                Détails de l'inscription
                             </h3>
                             <button onClick={onClose} className="material-symbols-outlined transition-colors"
                                 style={{ color: 'var(--color-festival-yellow)', fontSize: '1.25rem' }}>close</button>
@@ -62,24 +62,24 @@ export default function RegistrationManager() {
                         <div className="grid grid-cols-2 gap-5">
                             <Field label="Type" value={registration.type} />
                             <Field label="ID" value={registration.id} />
-                            <Field label="First Name" value={registration.first_name} />
-                            <Field label="Last Name" value={registration.last_name} />
-                            <Field label="Email" value={registration.email} />
-                            <Field label="Phone" value={registration.phone} />
-                            {registration.organization && <Field label="Organization" value={registration.organization} />}
+                            <Field label="Prénom" value={registration.first_name} />
+                            <Field label="Nom" value={registration.last_name} />
+                            <Field label="E-mail" value={registration.email} />
+                            <Field label="Téléphone" value={registration.phone} />
+                            {registration.organization && <Field label="Organisation" value={registration.organization} />}
                             {registration.experience && (
                                 <div className="col-span-2">
-                                    <p style={labelStyle} className="mb-1">Experience</p>
+                                    <p style={labelStyle} className="mb-1">Expérience</p>
                                     <p className="text-sm whitespace-pre-wrap" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>{registration.experience}</p>
                                 </div>
                             )}
-                            <Field label="Created At" value={new Date(registration.created_at).toLocaleString()} />
+                            <Field label="Créé le" value={new Date(registration.created_at).toLocaleString()} />
                         </div>
                         <div className="mt-6 flex justify-end">
                             <button onClick={onClose}
                                 className="px-4 py-2 rounded-lg text-sm font-bold border transition-all"
                                 style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                Close
+                                Fermer
                             </button>
                         </div>
                     </div>
@@ -93,20 +93,20 @@ export default function RegistrationManager() {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
-                    Registrations
+                    Inscriptions
                 </h2>
                 <div className="flex gap-3">
                     <button onClick={handleExport}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">download</span>
-                        Export CSV
+                        Exporter CSV
                     </button>
                     <button onClick={loadRegistrations}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">refresh</span>
-                        Refresh
+                        Actualiser
                     </button>
                 </div>
             </div>
@@ -115,10 +115,10 @@ export default function RegistrationManager() {
             <div className="rounded-xl border p-4" style={card}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                        { label: 'Search', element: (
+                        { label: 'Rechercher', element: (
                             <input type="text" value={filters.search}
                                 onChange={e => setFilters({ ...filters, search: e.target.value, page: 1 })}
-                                placeholder="Name or email…"
+                                placeholder="Nom ou e-mail…"
                                 className="w-full px-3 py-2 rounded-lg text-sm"
                                 style={input}
                                 onFocus={e => e.target.style.borderColor = '#acc9ef'}
@@ -129,19 +129,19 @@ export default function RegistrationManager() {
                                 onChange={e => setFilters({ ...filters, type: e.target.value, page: 1 })}
                                 className="w-full px-3 py-2 rounded-lg text-sm"
                                 style={input}>
-                                <option value="">All Types</option>
+                                <option value="">Tous les types</option>
                                 <option value="amateur">Amateur</option>
-                                <option value="pro">Professional</option>
+                                <option value="pro">Professionnel</option>
                             </select>
                         )},
-                        { label: 'Sort By', element: (
+                        { label: 'Trier par', element: (
                             <select value={filters.sortBy}
                                 onChange={e => setFilters({ ...filters, sortBy: e.target.value })}
                                 className="w-full px-3 py-2 rounded-lg text-sm"
                                 style={input}>
                                 <option value="created_at">Date</option>
-                                <option value="last_name">Last Name</option>
-                                <option value="email">Email</option>
+                                <option value="last_name">Nom</option>
+                                <option value="email">E-mail</option>
                             </select>
                         )},
                     ].map(f => (
@@ -158,11 +158,11 @@ export default function RegistrationManager() {
                 {isLoading ? (
                     <div className="p-12 text-center flex items-center justify-center gap-2"
                         style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Loading…
+                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Chargement…
                     </div>
                 ) : registrations.length === 0 ? (
                     <div className="p-12 text-center" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        No registrations found
+                        Aucune inscription trouvée
                     </div>
                 ) : (
                     <>
@@ -170,7 +170,7 @@ export default function RegistrationManager() {
                             <table className="min-w-full">
                                 <thead>
                                     <tr style={{ borderBottom: '1px solid var(--color-midblue)' }}>
-                                        {['Type', 'Name', 'Email', 'Phone', 'Date', ''].map(h => (
+                                        {['Type', 'Nom', 'E-mail', 'Téléphone', 'Date', ''].map(h => (
                                             <th key={h} className={`px-6 py-3 text-left ${h === '' ? 'text-right' : ''}`}
                                                 style={{ ...labelStyle, background: '#004075' }}>
                                                 {h}
@@ -203,10 +203,10 @@ export default function RegistrationManager() {
                                             <td className="px-6 py-4 text-right space-x-3">
                                                 <button onClick={() => setSelectedReg(reg)}
                                                     className="text-xs font-bold transition-colors"
-                                                    style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>View</button>
+                                                    style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Voir</button>
                                                 <button onClick={() => handleDelete(reg.id)}
                                                     className="text-xs font-bold transition-colors"
-                                                    style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Delete</button>
+                                                    style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -218,14 +218,14 @@ export default function RegistrationManager() {
                         <div className="px-6 py-4 flex items-center justify-between border-t"
                             style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
                             <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                                {registrations.length} of {pagination.count} registrations
+                                {registrations.length} sur {pagination.count} inscriptions
                             </span>
                             <div className="flex items-center gap-2">
                                 <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
                                     disabled={filters.page === 1}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
                                     style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Previous
+                                    Précédent
                                 </button>
                                 <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                     {filters.page} / {pagination.totalPages}
@@ -234,7 +234,7 @@ export default function RegistrationManager() {
                                     disabled={filters.page >= pagination.totalPages}
                                     className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
                                     style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Next
+                                    Suivant
                                 </button>
                             </div>
                         </div>

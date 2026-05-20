@@ -25,7 +25,7 @@ export default function AdminLogin({ onLoginSuccess }) {
             const result = await signInAdmin(credentials.email, credentials.password);
             onLoginSuccess(result);
         } catch (err) {
-            setError(err.message || 'Login failed. Please check your credentials.');
+            setError(err.message || 'Connexion échouée. Veuillez vérifier vos identifiants.');
         } finally {
             setIsLoading(false);
         }
@@ -53,10 +53,10 @@ export default function AdminLogin({ onLoginSuccess }) {
                 <div className="rounded-2xl p-8 border" style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
                     <div className="mb-8">
                         <h1 className="text-2xl font-semibold mb-1" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
-                            Admin Portal
+                            Portail Admin
                         </h1>
                         <p className="text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                            Sign in to access the dashboard
+                            Connectez-vous pour accéder au tableau de bord
                         </p>
                     </div>
 
@@ -71,7 +71,7 @@ export default function AdminLogin({ onLoginSuccess }) {
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider mb-2"
                                 style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
-                                Email Address
+                                Adresse e-mail
                             </label>
                             <input
                                 type="email"
@@ -95,7 +95,7 @@ export default function AdminLogin({ onLoginSuccess }) {
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider mb-2"
                                 style={{ color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
-                                Password
+                                Mot de passe
                             </label>
                             <input
                                 type="password"
@@ -122,7 +122,7 @@ export default function AdminLogin({ onLoginSuccess }) {
                                     className="text-xs transition-colors disabled:opacity-50"
                                     style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}
                                 >
-                                    Forgot password?
+                                    Mot de passe oublié ?
                                 </button>
                             </div>
                         </div>
@@ -138,18 +138,18 @@ export default function AdminLogin({ onLoginSuccess }) {
                                 letterSpacing: '0.05em',
                             }}
                         >
-                            {isLoading ? 'Signing in…' : 'Sign In'}
+                            {isLoading ? 'Connexion en cours…' : 'Se connecter'}
                         </button>
                     </form>
 
                     <p className="mt-6 text-center text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        Protected access only
+                        Accès protégé uniquement
                     </p>
                 </div>
 
                 <div className="mt-6 text-center">
                     <a href="#" className="text-xs transition-colors" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        ← Back to Home
+                        ← Retour à l'accueil
                     </a>
                 </div>
             </div>
