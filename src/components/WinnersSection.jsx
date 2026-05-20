@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
-import {Carousel} from './Carousel';
+import Carousel from './Carousel';
 
 const EDITION_LABELS = {
     december: 'Décembre 2026',
