@@ -10,7 +10,7 @@ export default function Footer() {
 
     return (
         <footer id="contact" className="relative text-white py-24 z-20 ">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="relative z-10 max-w-7xl mx-auto px-6">
                 <div className="grid md:grid-cols-4 gap-16">
                     {/* Brand Section */}
                     <div className="md:col-span-2">
@@ -19,23 +19,9 @@ export default function Footer() {
                             <span className="font-display text-4xl">Snow Wonder</span>
                         </div>
                         <p className="text-ice-blue/60 max-w-sm mb-8 leading-relaxed">
-                            Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1994.
+                            Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1996.
                         </p>
-                        <div className="flex gap-4">
-                            {socialIcons.map((icon) => (
-                                <a 
-                                    key={icon.name}
-                                    href="#" 
-                                    className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-festival-yellow transition-all border border-white/10"
-                                >
-                                    <img 
-                                        alt={icon.name} 
-                                        src={icon.src}
-                                        className="w-6 h-6 invert opacity-80" 
-                                    />
-                                </a>
-                            ))}
-                        </div>
+                        
                     </div>
                     
                     {/* Quick Links */}
@@ -82,8 +68,7 @@ export default function Footer() {
             </div>
             
             {/* Footer Trees Background */}
-            <div className="absolute bottom-0 left-0 w-full h-32 md:h-48 lg:h-110 bg-cover bg-bottom bg-no-repeat pointer-events-none z-0"
-                 style={{backgroundImage: `url(${FooterImage})`}}></div>
+            <img src={FooterImage} alt="" className="absolute bottom-0 left-0 w-full pointer-events-none z-0" />
         </footer>
     );
 }

@@ -23,7 +23,7 @@ export default function WinnersSection() {
 
     return (
         <section id="winners" className="max-w-7xl mx-auto px-6 relative z-20 pb-20">
-            <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl border border-white/10">
+            <div className="bg-deep-navy/40 p-10 md:p-20 text-white rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
                 <div className="text-center mb-12">
                     <div className="flex items-center justify-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs mb-6">
                         <span className="h-0.5 w-16 bg-festival-yellow"></span>

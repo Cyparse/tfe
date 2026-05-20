@@ -30,14 +30,15 @@ function Carousel({ cards = [] }) {
 
   return (
     <div style={{ width: '100%', padding: '2rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
-      <div style={{ position: 'relative', width: '22rem', height: '22rem', perspective: '500px', transformStyle: 'preserve-3d' }}>
+      <div style={{ position: 'relative', width: '22rem', height: '22rem', perspective: '500px', transformStyle: 'preserve-3d', overflow: 'visible' }}>
         {cards.map((card, i) => {
-          const dist      = Math.abs(active - i);
+          const dist        = Math.abs(active - i);
           if (dist > MAX_VIS) return null;
-          const offset    = (active - i) / 3;
-          const absOffset = dist / 3;
-          const direction = Math.sign(active - i);
-          const isActive  = i === active;
+          const offset      = (active - i) / 3;
+          const absOffset   = dist / 3;
+          const direction   = Math.sign(active - i);
+          const isActive    = i === active;
+          const isActiveImg = isActive && card.url;
           const textOpacity = isActive ? 1 : Math.max(0, 1 - absOffset * 1.4);
 
           return (
@@ -45,10 +46,13 @@ function Carousel({ cards = [] }) {
               key={i}
               style={{
                 position: 'absolute',
-                width: '100%',
+                width: isActiveImg ? 'max-content' : '100%',
                 height: '100%',
+                left: isActiveImg ? '50%' : 0,
                 transition: 'all .3s ease-out',
-                transform: `rotateY(${offset * 50}deg) scaleY(${1 + absOffset * -0.4}) translateZ(${absOffset * -30}rem) translateX(${direction * -5}rem)`,
+                transform: isActiveImg
+                  ? 'translateX(-50%)'
+                  : `rotateY(${offset * 50}deg) scaleY(${1 + absOffset * -0.4}) translateZ(${absOffset * -30}rem) translateX(${direction * -5}rem)`,
                 filter: `blur(${absOffset}rem)`,
                 opacity: dist >= MAX_VIS ? 0 : 1,
                 pointerEvents: isActive ? 'auto' : 'none',
@@ -56,7 +60,7 @@ function Carousel({ cards = [] }) {
               }}
             >
               <div style={{
-                width: '100%',
+                width: isActiveImg ? 'max-content' : '100%',
                 height: '100%',
                 borderRadius: '12px',
                 transition: 'all .3s ease-out',
@@ -70,7 +74,10 @@ function Carousel({ cards = [] }) {
                   <img
                     src={card.url}
                     alt={card.alt || ''}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    style={isActiveImg
+                      ? { height: '100%', width: 'auto', display: 'block' }
+                      : { width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
+                    }
                   />
                 ) : (
                   <>
@@ -109,7 +116,7 @@ function Carousel({ cards = [] }) {
           aria-label="Previous card"
           style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', background: NAVY, border: 'none', color: ICE, cursor: active <= 0 ? 'default' : 'pointer', opacity: active <= 0 ? 0.3 : 1, transition: 'opacity .2s' }}
         >
-          <i className="ti ti-chevron-left" aria-hidden="true" />
+          <span className="material-symbols-outlined" aria-hidden="true">chevron_left</span>
         </button>
         <span style={{ fontSize: '13px', color: MID, minWidth: '4rem', textAlign: 'center', fontWeight: 500 }}>
           {active + 1} / {cards.length}
@@ -120,7 +127,7 @@ function Carousel({ cards = [] }) {
           aria-label="Next card"
           style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', background: NAVY, border: 'none', color: ICE, cursor: active >= cards.length - 1 ? 'default' : 'pointer', opacity: active >= cards.length - 1 ? 0.3 : 1, transition: 'opacity .2s' }}
         >
-          <i className="ti ti-chevron-right" aria-hidden="true" />
+          <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
         </button>
       </div>
     </div>

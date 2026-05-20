@@ -156,42 +156,42 @@ export default function MapSection() {
                     />
 
                     {/* Map Overlay Info */}
-                    <div className={`absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-1000 transition-transform duration-300 ${showInfo ? 'translate-y-0' : 'translate-y-[calc(100%+24px)]'}`}>
-                        <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl max-w-md">
-                            <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-2xl font-bold text-deep-navy">Comment venir</h3>
-                                <button 
-                                    onClick={() => setShowInfo(!showInfo)}
-                                    className="md:hidden text-deep-navy hover:text-festival-yellow transition-colors"
-                                    aria-label="Toggle info"
-                                >
-                                    <span className="material-symbols-outlined">
-                                        {showInfo ? 'expand_more' : 'expand_less'}
-                                    </span>
-                                </button>
-                            </div>
-                            <div className="space-y-2 text-deep-navy/80">
-                                <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_car</span>
-                                    <p className="text-sm">En voiture : suivre les panneaux vers le centre-ville, stationnement gratuit à proximité</p>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
-                                    <p className="text-sm">10 minutes à pied depuis la gare principale</p>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <span className="material-symbols-outlined text-festival-yellow mt-0.5">pin_drop</span>
-                                    <p className="text-sm">GPS: 50.6029° N, 3.3810° E</p>
-                                </div>
-                            </div>
-                            <a
-                                href="https://www.google.com/maps/dir/?api=1&destination=50.602860262325706,3.3809785070446057"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-4 block w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider text-center"
+                    <div className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-auto z-1000">
+                        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl max-w-md overflow-hidden">
+                            <button
+                                onClick={() => setShowInfo(!showInfo)}
+                                className="w-full flex items-center justify-between px-6 py-4 text-deep-navy hover:text-festival-yellow transition-colors"
+                                aria-label="Toggle info"
                             >
-                                Itinéraire
-                            </a>
+                                <h3 className="text-2xl font-bold">Comment venir</h3>
+                                <span className={`material-symbols-outlined transition-transform duration-300 ${showInfo ? 'rotate-0' : 'rotate-180'}`}>
+                                    expand_more
+                                </span>
+                            </button>
+                            <div className={`transition-all duration-300 overflow-hidden ${showInfo ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="px-6 pb-6 space-y-2 text-deep-navy/80">
+                                    <div className="flex items-start gap-3">
+                                        <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_car</span>
+                                        <p className="text-sm">En voiture : suivre les panneaux vers le centre-ville, stationnement gratuit à proximité</p>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
+                                        <p className="text-sm">10 minutes à pied depuis la gare principale</p>
+                                    </div>
+                                    <div className="flex items-start gap-3">
+                                        <span className="material-symbols-outlined text-festival-yellow mt-0.5">pin_drop</span>
+                                        <p className="text-sm">GPS: 50.6029° N, 3.3810° E</p>
+                                    </div>
+                                    <a
+                                        href="https://www.google.com/maps/dir/?api=1&destination=50.602860262325706,3.3809785070446057"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-4 block w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider text-center"
+                                    >
+                                        Itinéraire
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
