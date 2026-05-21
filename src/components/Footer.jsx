@@ -2,6 +2,12 @@ import React from 'react';
 import { snowflake, FooterImage } from "../assets/images";
 
 export default function Footer({ onContactOpen }) {
+    const handleScroll = (e, href) => {
+        e.preventDefault();
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     const socialIcons = [
         { name: 'FB', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCqlJC9NBqoX1DUmiZp5e5YsjaLd38gxnQcfl3x2cPneGj88qn5mfHnmhY0-iVCD6XKS4gtZ4grDHoQL9-skkc1RujaRBtAqoKtREzsYJnlPmlljVRFUgG8E1NggTeHiH7-kagyCq5SD50WHjRqjjudnKfGt_vW2Jiae2tFm9lrs3tuUUep2dOQa7C5RysG91U69a5R7B1xcEEELdXaP1AXukCKxpZviJJAmVl0zl0izEvSi-x3LPzAKM6dAB-a2HOe6yT2Gf8-CPs' },
         { name: 'TW', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB97cxLnYzx8iQdh00jFdwhG8cX2_60oIq4V5LViWcKt98r8AuWrdcDFTe96T0hf4PDD2al_vjaqkfLCyeWvG97ZIoMIxh_birOAPZlwPKWotDKjwpx3wKEXLhKtyY1Q7RcbRD7Lymv5PdBKLYtKPbEr2unsPNQ1WLktO2QTlttD_Bz7NJTng1Bdm16BTeUhpXDIcdO8AH6DSYMZrHyGcZd1a-6vFfJteKVxZzMCCPz1aTjAQiL9_mxcGDxhlSnICxNSpGU5p5FTPA' },
@@ -35,11 +41,11 @@ export default function Footer({ onContactOpen }) {
                                 { label: 'Programme', href: '#schedule' },
                                 { label: 'Inscription', href: '#registration' },
                                 { label: 'Billets', href: '#tickets' },
-                                { label: 'Marché d\'hiver', href: '#market' },
+                                { label: "Marché d'hiver", href: '#market' },
                                 { label: 'Nous Trouver', href: '#map' },
                             ].map(({ label, href }) => (
                                 <li key={label}>
-                                    <a href={href} className="hover:text-white transition-colors">{label}</a>
+                                    <a href={href} onClick={(e) => handleScroll(e, href)} className="hover:text-white transition-colors">{label}</a>
                                 </li>
                             ))}
                         </ul>
