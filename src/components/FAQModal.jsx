@@ -58,24 +58,42 @@ export default function FAQModal({ isOpen, onClose }) {
 
     return (
         <div
-            className="fixed inset-0 z-[2000] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[2000] flex items-end sm:items-center justify-center sm:p-4"
             style={{ background: 'rgba(0,18,36,0.85)', backdropFilter: 'blur(8px)' }}
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl overflow-hidden"
-                style={{ background: 'rgba(0,36,66,0.96)', border: '1px solid rgba(202,233,255,0.15)', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+                className="relative w-full sm:max-w-2xl flex flex-col overflow-hidden"
+                style={{
+                    background: 'rgba(0,36,66,0.98)',
+                    border: '1px solid rgba(202,233,255,0.15)',
+                    boxShadow: '0 32px 80px rgba(0,0,0,0.6)',
+                    borderRadius: '1.5rem 1.5rem 0 0',
+                    maxHeight: '92dvh',
+                }}
+                // on sm+ override to full rounded
                 onClick={e => e.stopPropagation()}
             >
+                <style>{`
+                    @media (min-width: 640px) {
+                        .faq-panel { border-radius: 1.5rem !important; max-height: 85vh !important; }
+                    }
+                `}</style>
+
+                {/* Drag handle (mobile only) */}
+                <div className="flex justify-center pt-3 pb-1 sm:hidden">
+                    <div className="w-10 h-1 rounded-full" style={{ background: 'rgba(202,233,255,0.2)' }} />
+                </div>
+
                 {/* Header */}
-                <div className="flex items-center justify-between px-8 py-6 shrink-0" style={{ borderBottom: '1px solid rgba(202,233,255,0.1)' }}>
+                <div className="flex items-center justify-between px-5 sm:px-8 py-4 sm:py-6 shrink-0" style={{ borderBottom: '1px solid rgba(202,233,255,0.1)' }}>
                     <div>
                         <p className="text-festival-yellow text-xs font-bold uppercase tracking-[0.3em] mb-1">Assistance</p>
-                        <h2 className="font-display text-3xl text-white">Questions fréquentes</h2>
+                        <h2 className="font-display text-2xl sm:text-3xl text-white">Questions fréquentes</h2>
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-9 h-9 flex items-center justify-center rounded-full transition-colors"
+                        className="w-9 h-9 flex items-center justify-center rounded-full transition-colors shrink-0"
                         style={{ background: 'rgba(202,233,255,0.08)', color: 'rgba(202,233,255,0.6)' }}
                         aria-label="Fermer"
                     >
@@ -86,15 +104,18 @@ export default function FAQModal({ isOpen, onClose }) {
                 </div>
 
                 {/* FAQ list */}
-                <div className="overflow-y-auto px-8 py-6 flex flex-col gap-3">
+                <div className="overflow-y-auto px-4 sm:px-8 py-4 sm:py-6 flex flex-col gap-2 sm:gap-3">
                     {FAQS.map((faq, i) => (
                         <div
                             key={i}
-                            className="rounded-2xl overflow-hidden transition-colors"
-                            style={{ background: openIndex === i ? 'rgba(202,233,255,0.07)' : 'rgba(202,233,255,0.03)', border: `1px solid ${openIndex === i ? 'rgba(202,233,255,0.18)' : 'rgba(202,233,255,0.08)'}` }}
+                            className="rounded-xl sm:rounded-2xl overflow-hidden transition-colors"
+                            style={{
+                                background: openIndex === i ? 'rgba(202,233,255,0.07)' : 'rgba(202,233,255,0.03)',
+                                border: `1px solid ${openIndex === i ? 'rgba(202,233,255,0.18)' : 'rgba(202,233,255,0.08)'}`,
+                            }}
                         >
                             <button
-                                className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left transition-colors"
+                                className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left"
                                 onClick={() => toggle(i)}
                             >
                                 <span className="text-sm font-semibold text-white leading-snug">{faq.q}</span>
@@ -113,7 +134,7 @@ export default function FAQModal({ isOpen, onClose }) {
                             </button>
 
                             {openIndex === i && (
-                                <div className="px-5 pb-5">
+                                <div className="px-4 pb-4">
                                     <p className="text-sm leading-relaxed" style={{ color: 'rgba(202,233,255,0.65)' }}>{faq.a}</p>
                                 </div>
                             )}
@@ -122,10 +143,14 @@ export default function FAQModal({ isOpen, onClose }) {
                 </div>
 
                 {/* Footer CTA */}
-                <div className="px-8 py-5 shrink-0 text-center" style={{ borderTop: '1px solid rgba(202,233,255,0.1)' }}>
+                <div className="px-5 sm:px-8 py-4 shrink-0 text-center" style={{ borderTop: '1px solid rgba(202,233,255,0.1)' }}>
                     <p className="text-xs" style={{ color: 'rgba(202,233,255,0.4)' }}>
                         Vous ne trouvez pas votre réponse ?{' '}
-                        <button onClick={onClose} className="underline transition-colors hover:text-white" style={{ color: 'rgba(202,233,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        <button
+                            onClick={onClose}
+                            className="underline transition-colors hover:text-white"
+                            style={{ color: 'rgba(202,233,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                        >
                             Contactez-nous
                         </button>
                     </p>

@@ -28,49 +28,38 @@ export default function WinnersSection() {
     }, []);
 
     return (
-        <section id="winners" className="max-w-7xl mx-auto px-6 relative z-20 pb-20">
-            <div className="bg-deep-navy/40 p-10 md:p-16 text-white rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+        <section id="winners" className="max-w-7xl mx-auto px-4 sm:px-6 relative z-20 pb-20">
+            <div className="bg-deep-navy/40 p-6 sm:p-10 md:p-16 text-white rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
 
                 {/* Section header */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-8 sm:mb-12">
                     <p className="text-festival-yellow text-xs font-bold uppercase tracking-[0.3em] mb-3">Palmarès</p>
-                    <h2 className="font-display text-5xl md:text-6xl text-white">Gagnants de l'édition pro précédente</h2>
+                    <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-white leading-tight">
+                        Gagnants de l'édition<br className="sm:hidden" /> pro précédente
+                    </h2>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 
-                    {/* Left — Carousel */}
-                    <div className="flex flex-col items-center">
-                        {loading ? (
-                            <div className="text-ice-blue/40 py-20">Chargement…</div>
-                        ) : images.length === 0 ? (
-                            <div className="text-center py-20 border-2 border-dashed border-white/20 rounded-2xl w-full">
-                                <p className="text-ice-blue/40">Photos à venir.</p>
-                            </div>
-                        ) : (
-                            <Carousel cards={images} />
-                        )}
-                    </div>
-
-                    {/* Right — Winner cards */}
-                    <div className="flex flex-col gap-5">
+                    {/* Winner cards — first on mobile */}
+                    <div className="flex flex-col gap-3 sm:gap-5 w-full md:order-2">
                         {loading ? (
                             <div className="text-ice-blue/40 py-10 text-center">Chargement…</div>
                         ) : winners.map((winner) => (
                             <div
                                 key={winner.id}
-                                className="flex items-center gap-5 rounded-2xl px-5 py-4"
+                                className="flex items-center gap-3 sm:gap-5 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4"
                                 style={{ background: winner.edition_bg, border: `1px solid ${winner.edition_color}33` }}
                             >
                                 {/* Snowflake badge */}
                                 <div
-                                    className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                                    className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
                                     style={{ background: winner.edition_color }}
                                 >
                                     <img
                                         src={snowflake}
                                         alt=""
-                                        className="w-7 h-7"
+                                        className="w-6 h-6 sm:w-7 sm:h-7"
                                         style={{ filter: 'brightness(0) saturate(100%) invert(12%) sepia(30%) saturate(800%) hue-rotate(185deg)' }}
                                     />
                                 </div>
@@ -80,15 +69,15 @@ export default function WinnersSection() {
                                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-0.5" style={{ color: winner.edition_color }}>
                                         1ère place — Pro
                                     </p>
-                                    <p className="font-semibold text-white text-base leading-tight">{winner.edition_label}</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base leading-tight">{winner.edition_label}</p>
                                     {winner.winner_name && (
-                                        <p className="text-sm mt-0.5" style={{ color: winner.edition_color }}>{winner.winner_name}</p>
+                                        <p className="text-xs sm:text-sm mt-0.5" style={{ color: winner.edition_color }}>{winner.winner_name}</p>
                                     )}
                                 </div>
 
-                                {/* Winner avatar circle */}
+                                {/* Winner avatar */}
                                 <div
-                                    className="shrink-0 w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
+                                    className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center overflow-hidden"
                                     style={{ border: `2px solid ${winner.edition_color}66`, background: `${winner.edition_color}15` }}
                                 >
                                     {winner.photo_url ? (
@@ -97,13 +86,26 @@ export default function WinnersSection() {
                                         <img
                                             src={snowflake}
                                             alt=""
-                                            className="w-7 h-7 opacity-40"
+                                            className="w-6 h-6 sm:w-7 sm:h-7 opacity-40"
                                             style={{ filter: `drop-shadow(0 0 4px ${winner.edition_color})` }}
                                         />
                                     )}
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Carousel — second on mobile */}
+                    <div className="flex flex-col items-center w-full md:order-1">
+                        {loading ? (
+                            <div className="text-ice-blue/40 py-20">Chargement…</div>
+                        ) : images.length === 0 ? (
+                            <div className="text-center py-12 sm:py-20 border-2 border-dashed border-white/20 rounded-2xl w-full">
+                                <p className="text-ice-blue/40">Photos à venir.</p>
+                            </div>
+                        ) : (
+                            <Carousel cards={images} />
+                        )}
                     </div>
 
                 </div>
