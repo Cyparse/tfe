@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { snowflake, FooterImage } from "../assets/images";
+import FAQModal from './FAQModal';
 
 export default function Footer({ onContactOpen }) {
+    const [faqOpen, setFaqOpen] = useState(false);
+
     const handleScroll = (e, href) => {
         e.preventDefault();
         const el = document.querySelector(href);
@@ -37,10 +40,10 @@ export default function Footer({ onContactOpen }) {
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
                             {[
-                                { label: 'Le Festival', href: '#festival' },
                                 { label: 'Programme', href: '#schedule' },
-                                { label: 'Inscription', href: '#registration' },
-                                { label: 'Billets', href: '#tickets' },
+                                { label: 'Inscription', href: '#forms' },
+                                { label: 'Billets', href: '#forms' },
+                                { label: 'Galerie', href: '#gallery' },
                                 { label: "Marché d'hiver", href: '#market' },
                                 { label: 'Nous Trouver', href: '#map' },
                             ].map(({ label, href }) => (
@@ -57,6 +60,9 @@ export default function Footer({ onContactOpen }) {
                             Assistance
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
+                            <li>
+                                <button onClick={() => setFaqOpen(true)} className="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 text-ice-blue/60 text-sm font-medium">Questions fréquentes</button>
+                            </li>
                             <li>
                                 <button onClick={onContactOpen} className="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 text-ice-blue/60 text-sm font-medium">Nous contacter</button>
                             </li>
@@ -75,6 +81,8 @@ export default function Footer({ onContactOpen }) {
             
             {/* Footer Trees Background */}
             <img src={FooterImage} alt="" className="absolute bottom-0 left-0 w-full pointer-events-none z-0" />
+
+            <FAQModal isOpen={faqOpen} onClose={() => setFaqOpen(false)} />
         </footer>
     );
 }

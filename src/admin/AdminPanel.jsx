@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { signOut } from '../services/authService';
+import { snowflake } from '../assets/images';
 import RegistrationManager from './RegistrationManager';
 import TicketManager from './TicketManager';
 import ContentManager from './ContentManager';
 import Dashboard from './Dashboard';
 import CarouselManager from './CarouselManager';
+import WinnersManager from './WinnersManager';
 
 export default function AdminPanel({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -15,6 +17,7 @@ export default function AdminPanel({ user, onLogout }) {
         { id: 'tickets',        label: 'Billetterie',     icon: 'confirmation_number' },
         { id: 'content',        label: 'Contenu',         icon: 'article' },
         { id: 'carousel',       label: 'Galerie',         icon: 'photo_library' },
+        { id: 'winners',        label: 'Gagnants',        icon: 'emoji_events' },
     ];
 
     const handleLogout = async () => {
@@ -31,8 +34,7 @@ export default function AdminPanel({ user, onLogout }) {
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-festival-yellow)' }}>
-                                <span className="material-symbols-outlined text-xl"
-                                    style={{ fontVariationSettings: "'FILL' 1", color: 'var(--color-dark-brown)' }}>ac_unit</span>
+                                <img src={snowflake} alt="Snow Wonder" className="w-6 h-6" />
                             </div>
                             <span className="font-semibold tracking-tight hidden sm:block"
                                 style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', fontSize: '1.1rem' }}>
@@ -103,6 +105,7 @@ export default function AdminPanel({ user, onLogout }) {
                 {activeTab === 'tickets'       && <TicketManager />}
                 {activeTab === 'content'       && <ContentManager />}
                 {activeTab === 'carousel'      && <CarouselManager />}
+                {activeTab === 'winners'       && <WinnersManager />}
             </main>
         </div>
     );

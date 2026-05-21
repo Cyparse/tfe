@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import ContentSection from "./components/ContentSection";
 import MarketSection from "./components/MarketSection";
 import MapSection from "./components/MapSection";
+import GallerySection from "./components/GallerySection";
 import Footer from "./components/Footer";
 import ScheduleSection from "./components/ScheduleSection";
 import WinnersSection from "./components/WinnersSection";
@@ -137,6 +138,7 @@ function App() {
         {/* <ContentSection /> */}
         <ScheduleSection />
         <FormsSection />
+        <GallerySection />
         <MarketSection />
         <MapSection />
         <WinnersSection />

@@ -5,10 +5,10 @@ export default function Navigation({ onMenuClick }) {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const menuItems = [
-        { label: 'Le Festival', href: '#festival' },
         { label: 'Programme', href: '#schedule' },
-        { label: 'Inscription', href: '#registration' },
-        { label: 'Billets', href: '#tickets' },
+        { label: 'Inscription', href: '#forms' },
+        { label: 'Billets', href: '#forms' },
+        { label: 'Galerie', href: '#gallery' },
         { label: 'Marché', href: '#market' },
         { label: 'Nous Trouver', href: '#map' },
     ];

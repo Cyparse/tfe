@@ -124,7 +124,7 @@ function TabletFormsSection() {
 
 export default function FormsSection() {
   return (
-    <>
+    <div id="forms">
       <link
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=DM+Serif+Display&display=swap"
         rel="stylesheet"
@@ -197,6 +197,6 @@ export default function FormsSection() {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }

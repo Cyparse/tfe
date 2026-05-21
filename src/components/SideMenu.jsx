@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function SideMenu({ isOpen, onClose, onContactOpen }) {
     const menuItems = [
-        { label: 'Le Festival', href: '#festival' },
         { label: 'Programme', href: '#schedule' },
-        { label: 'Inscription', href: '#registration' },
-        { label: 'Billets', href: '#tickets' },
+        { label: 'Inscription', href: '#forms' },
+        { label: 'Billets', href: '#forms' },
+        { label: 'Galerie', href: '#gallery' },
         { label: 'Marché', href: '#market' },
         { label: 'Nous Trouver', href: '#map' },
     ];
