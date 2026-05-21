@@ -3,23 +3,19 @@ import React, { useState, useEffect } from 'react';
 const FAQS = [
     {
         q: "Quand et où se déroule le Snow Wonder Festival ?",
-        a: "Le festival se tient chaque hiver à Bruxelles. Les dates exactes de chaque édition sont annoncées sur le site et sur nos réseaux sociaux. Consultez la section Programme pour les horaires détaillés."
+        a: "Le festival se tient chaque hiver à Tournai. Les dates exactes de chaque édition sont annoncées sur le site. Consultez la section Programme pour les horaires détaillés."
     },
     {
         q: "Comment acheter des billets ?",
-        a: "Les billets sont disponibles directement sur ce site via la section Billetterie. Vous recevrez votre billet par e-mail après confirmation du paiement."
+        a: "Les billets sont gratuits, vous pouvez les réserver via la section Billetterie. Vous recevrez votre billet par e-mail après confirmation."
     },
     {
         q: "Comment s'inscrire à la compétition de sculptures sur neige ?",
-        a: "Remplissez le formulaire d'inscription dans la section Inscription. Les places sont limitées ; les inscriptions se ferment dès que le quota est atteint."
+        a: "Remplissez le formulaire d'inscription dans la section Inscription."
     },
     {
         q: "Quelles sont les catégories de compétition ?",
-        a: "Le festival propose plusieurs catégories : Amateur, Semi-pro et Pro. Choisissez la catégorie correspondant à votre niveau lors de l'inscription."
-    },
-    {
-        q: "Les billets sont-ils remboursables ?",
-        a: "Les billets ne sont pas remboursables, mais ils sont échangeables contre une autre date de la même édition dans la limite des places disponibles. Contactez-nous pour toute demande."
+        a: "Le festival propose deux catégories : Amateur et Pro. Choisissez la catégorie correspondant à votre niveau lors de l'inscription."
     },
     {
         q: "Y a-t-il un parking sur place ?",

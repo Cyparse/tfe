@@ -130,16 +130,26 @@ function App() {
   return (
     <div className="bg-linear-to-b from-ice-blue via-midblue to-deep-navy min-h-screen relative overflow-x-hidden">
       <Navigation onMenuClick={() => setMenuOpen(true)} />
-      <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} onContactOpen={() => { setMenuOpen(false); setContactOpen(true); }} />
-      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
+      <SideMenu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onContactOpen={() => {
+          setMenuOpen(false);
+          setContactOpen(true);
+        }}
+      />
+      <ContactModal
+        isOpen={contactOpen}
+        onClose={() => setContactOpen(false)}
+      />
 
       <main className="relative z-10 pt-20">
         <Hero />
         {/* <ContentSection /> */}
         <ScheduleSection />
-        <FormsSection />
         <GallerySection />
         <MarketSection />
+        <FormsSection />
         <MapSection />
         <WinnersSection />
       </main>

@@ -47,7 +47,8 @@ function Carousel({ cards = [] }) {
               style={{
                 position: 'absolute',
                 width: isActiveImg ? 'max-content' : '100%',
-                height: '100%',
+                maxWidth: isActiveImg ? 'calc(100vw - 2rem)' : undefined,
+                height: isActiveImg ? 'auto' : '100%',
                 left: isActiveImg ? '50%' : 0,
                 transition: 'all .3s ease-out',
                 transform: isActiveImg
@@ -61,7 +62,8 @@ function Carousel({ cards = [] }) {
             >
               <div style={{
                 width: isActiveImg ? 'max-content' : '100%',
-                height: '100%',
+                maxWidth: isActiveImg ? '100%' : undefined,
+                height: isActiveImg ? 'auto' : '100%',
                 borderRadius: '12px',
                 transition: 'all .3s ease-out',
                 boxSizing: 'border-box',
@@ -75,7 +77,7 @@ function Carousel({ cards = [] }) {
                     src={card.url}
                     alt={card.alt || ''}
                     style={isActiveImg
-                      ? { height: '100%', width: 'auto', display: 'block' }
+                      ? { maxHeight: '22rem', width: 'auto', height: 'auto', maxWidth: '100%', display: 'block' }
                       : { width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
                     }
                   />
