@@ -29,7 +29,7 @@ export default function WinnersSection() {
 
     return (
         <section id="winners" className="max-w-7xl mx-auto px-4 sm:px-6 relative z-20 pb-20">
-            <div className="bg-deep-navy/40 p-6 sm:p-10 md:p-16 text-white rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+            <div className="bg-deep-navy/40 p-6 sm:p-10 md:p-16 text-white rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10">
 
                 {/* Section header */}
                 <div className="text-center mb-8 sm:mb-12">

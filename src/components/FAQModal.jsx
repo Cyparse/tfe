@@ -108,7 +108,7 @@ export default function FAQModal({ isOpen, onClose }) {
                     {FAQS.map((faq, i) => (
                         <div
                             key={i}
-                            className="rounded-xl sm:rounded-2xl overflow-hidden transition-colors"
+                            className="rounded-xl sm:rounded-2xl transition-colors"
                             style={{
                                 background: openIndex === i ? 'rgba(202,233,255,0.07)' : 'rgba(202,233,255,0.03)',
                                 border: `1px solid ${openIndex === i ? 'rgba(202,233,255,0.18)' : 'rgba(202,233,255,0.08)'}`,
