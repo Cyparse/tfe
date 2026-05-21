@@ -11,6 +11,7 @@ export default function GallerySection() {
             .from('carousel_images')
             .select('*')
             .eq('active', true)
+            .eq('section', 'gallery')
             .order('position', { ascending: true })
             .then(({ data }) => setImages(data || []));
     }, []);

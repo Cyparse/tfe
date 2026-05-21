@@ -17,6 +17,7 @@ export default function CarouselManager() {
         const { data, error } = await supabase
             .from('carousel_images')
             .select('*')
+            .eq('section', 'gallery')
             .order('position', { ascending: true });
         if (!error) setImages(data || []);
         setLoading(false);
@@ -36,7 +37,7 @@ export default function CarouselManager() {
             if (uploadErr) { setError(uploadErr.message); setUploading(false); return; }
             const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(path);
             const alt = file.name.replace(/\.[^.]+$/, '');
-            await supabase.from('carousel_images').insert({ url: publicUrl, alt, position: maxPos + idx, active: true });
+            await supabase.from('carousel_images').insert({ url: publicUrl, alt, position: maxPos + idx, active: true, section: 'gallery' });
         }
         await loadImages();
         setUploading(false);

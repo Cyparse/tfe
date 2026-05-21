@@ -14,6 +14,7 @@ export default function WinnersSection() {
                 .from('carousel_images')
                 .select('id, url, alt')
                 .eq('active', true)
+                .eq('section', 'winners')
                 .order('position', { ascending: true }),
             supabase
                 .from('winners')
