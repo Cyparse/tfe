@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import ScheduleSection from "./components/ScheduleSection";
 import WinnersSection from "./components/WinnersSection";
 import FormsSection from "./components/FormsSection";
+import ContactModal from "./components/ContactModal";
 import AdminLogin from "./admin/AdminLogin";
 import AdminPanel from "./admin/AdminPanel";
 import UpdatePassword from "./admin/UpdatePassword";
@@ -34,6 +35,7 @@ const getViewFromLocation = () => {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const [currentView, setCurrentView] = useState("home");
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminUser, setAdminUser] = useState(null);
@@ -127,7 +129,8 @@ function App() {
   return (
     <div className="bg-linear-to-b from-ice-blue via-midblue to-deep-navy min-h-screen relative overflow-x-hidden">
       <Navigation onMenuClick={() => setMenuOpen(true)} />
-      <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <SideMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} onContactOpen={() => { setMenuOpen(false); setContactOpen(true); }} />
+      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
 
       <main className="relative z-10 pt-20">
         <Hero />
@@ -139,7 +142,7 @@ function App() {
         <WinnersSection />
       </main>
 
-      <Footer />
+      <Footer onContactOpen={() => setContactOpen(true)} />
 
       <Analytics />
     </div>

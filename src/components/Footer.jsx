@@ -1,7 +1,7 @@
 import React from 'react';
 import { snowflake, FooterImage } from "../assets/images";
 
-export default function Footer() {
+export default function Footer({ onContactOpen }) {
     const socialIcons = [
         { name: 'FB', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCqlJC9NBqoX1DUmiZp5e5YsjaLd38gxnQcfl3x2cPneGj88qn5mfHnmhY0-iVCD6XKS4gtZ4grDHoQL9-skkc1RujaRBtAqoKtREzsYJnlPmlljVRFUgG8E1NggTeHiH7-kagyCq5SD50WHjRqjjudnKfGt_vW2Jiae2tFm9lrs3tuUUep2dOQa7C5RysG91U69a5R7B1xcEEELdXaP1AXukCKxpZviJJAmVl0zl0izEvSi-x3LPzAKM6dAB-a2HOe6yT2Gf8-CPs' },
         { name: 'TW', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB97cxLnYzx8iQdh00jFdwhG8cX2_60oIq4V5LViWcKt98r8AuWrdcDFTe96T0hf4PDD2al_vjaqkfLCyeWvG97ZIoMIxh_birOAPZlwPKWotDKjwpx3wKEXLhKtyY1Q7RcbRD7Lymv5PdBKLYtKPbEr2unsPNQ1WLktO2QTlttD_Bz7NJTng1Bdm16BTeUhpXDIcdO8AH6DSYMZrHyGcZd1a-6vFfJteKVxZzMCCPz1aTjAQiL9_mxcGDxhlSnICxNSpGU5p5FTPA' },
@@ -52,7 +52,7 @@ export default function Footer() {
                         </h4>
                         <ul className="flex flex-col gap-5 text-ice-blue/60 text-sm font-medium">
                             <li>
-                                <a href="#contact" className="hover:text-white transition-colors">Nous contacter</a>
+                                <button onClick={onContactOpen} className="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 text-ice-blue/60 text-sm font-medium">Nous contacter</button>
                             </li>
                             <li>
                                 <a href="#admin" className="hover:text-white transition-colors">Accès administrateur</a>

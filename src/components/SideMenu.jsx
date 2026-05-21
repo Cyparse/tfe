@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function SideMenu({ isOpen, onClose }) {
+export default function SideMenu({ isOpen, onClose, onContactOpen }) {
     const menuItems = [
         { label: 'Le Festival', href: '#festival' },
         { label: 'Programme', href: '#schedule' },
@@ -8,7 +8,6 @@ export default function SideMenu({ isOpen, onClose }) {
         { label: 'Billets', href: '#tickets' },
         { label: 'Marché', href: '#market' },
         { label: 'Nous Trouver', href: '#map' },
-        { label: 'Contact', href: '#contact' },
     ];
 
     const handleClick = (e, href) => {
@@ -42,7 +41,7 @@ export default function SideMenu({ isOpen, onClose }) {
                 <ul className="space-y-4">
                     {menuItems.map((item) => (
                         <li key={item.label}>
-                            <a 
+                            <a
                                 href={item.href}
                                 onClick={(e) => handleClick(e, item.href)}
                                 className="block py-4 px-4 text-deep-navy text-lg font-semibold rounded-lg hover:bg-ice-blue hover:pl-6 transition-all"
@@ -51,6 +50,14 @@ export default function SideMenu({ isOpen, onClose }) {
                             </a>
                         </li>
                     ))}
+                    <li>
+                        <button
+                            onClick={onContactOpen}
+                            className="w-full text-left block py-4 px-4 text-deep-navy text-lg font-semibold rounded-lg hover:bg-ice-blue hover:pl-6 transition-all"
+                        >
+                            Nous contacter
+                        </button>
+                    </li>
                 </ul>
             </aside>
         </>
