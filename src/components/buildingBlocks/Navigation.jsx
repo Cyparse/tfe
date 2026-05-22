@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { snowflake } from "../../assets/images";
 
 export default function Navigation({ onMenuClick }) {
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const [flakes, setFlakes] = useState([]);
 
     const menuItems = [
         { label: 'Programme', href: '#schedule' },
@@ -35,8 +36,48 @@ export default function Navigation({ onMenuClick }) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const spawnSnowflakes = useCallback(() => {
+        const newFlakes = Array.from({ length: 22 }, (_, i) => ({
+            id: Date.now() + i,
+            x: 5 + Math.random() * 90,
+            size: 5 + Math.random() * 9,
+            duration: 1.4 + Math.random() * 1.2,
+            delay: Math.random() * 0.5,
+        }));
+        setFlakes(f => [...f, ...newFlakes]);
+        setTimeout(() => {
+            setFlakes(f => f.filter(fl => !newFlakes.some(n => n.id === fl.id)));
+        }, 2500);
+    }, []);
+
     return (
         <>
+        <style>{`
+            @keyframes snowfall {
+                0%   { transform: translateY(-10px); opacity: 1; }
+                100% { transform: translateY(70vh);  opacity: 0; }
+            }
+        `}</style>
+
+        {flakes.map(fl => (
+            <div
+                key={fl.id}
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: `${fl.x}vw`,
+                    width: fl.size,
+                    height: fl.size,
+                    borderRadius: '50%',
+                    background: 'white',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    zIndex: 9999,
+                    animation: `snowfall ${fl.duration}s ease-in ${fl.delay}s forwards`,
+                }}
+            />
+        ))}
+
         <nav className="w-full z-50 text-deep-navy py-4 px-6 mt-4 flex items-center">
             <div className="max-w-7xl mx-auto w-full">
                 
@@ -57,7 +98,10 @@ export default function Navigation({ onMenuClick }) {
 
                 {/* Mobile Navigation - Snowflake Logo & Burger Menu */}
                 <div className="md:hidden flex items-center justify-between w-full">
-                    <div className="bg-deep-navy/30 rounded-full p-2 border shadow-lg">
+                    <div
+                        className="bg-deep-navy/30 rounded-full p-2 border shadow-lg cursor-pointer"
+                        onClick={spawnSnowflakes}
+                    >
                         <img src={snowflake} alt="Snowflake" className="w-10 h-10" />
                     </div>
                     <button 
