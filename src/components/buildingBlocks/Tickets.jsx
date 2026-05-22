@@ -254,16 +254,18 @@ export default function Tickets({ inCircle = false }) {
                 </p>
 
                 {submitSuccess ? (
-                    <div style={{ textAlign: "center", padding: "24px 16px", background: "rgba(30,120,80,0.12)", borderRadius: "12px", border: "1.5px solid rgba(30,120,80,0.35)" }}>
-                        <div style={{ fontSize: "36px", marginBottom: "8px" }}>🎫</div>
-                        <div style={{ fontSize: "15px", fontWeight: 700, color: "#1a3a5c", marginBottom: "4px" }}>Billets confirmés !</div>
-                        <div style={{ fontSize: "12px", color: "#4a6a8c" }}>
+                    <div className="text-center py-10 px-6 bg-white/5 rounded-2xl border border-festival-yellow/30">
+                        <div className="w-12 h-12 rounded-full bg-festival-yellow/15 border border-festival-yellow/40 flex items-center justify-center mx-auto mb-4">
+                            <span className="material-symbols-outlined text-festival-yellow" style={{ fontSize: '22px' }}>check</span>
+                        </div>
+                        <div className="font-display text-2xl text-festival-yellow mb-2">Billets confirmés</div>
+                        <div className="text-sm text-ice-blue/70">
                             {emailStatus === 'failed'
                                 ? `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} réservé${formData.ticketCount > 1 ? "s" : ""}.`
                                 : `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} envoyés à ${formData.email}`}
                         </div>
                         {emailStatus === 'failed' && (
-                            <div style={{ fontSize: "11px", color: "#E8A94E", marginTop: "8px", padding: "5px 10px", background: "rgba(217,119,6,0.1)", borderRadius: "6px", border: "1px solid rgba(217,119,6,0.3)" }}>
+                            <div className="text-xs text-amber-400 mt-3">
                                 L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
                             </div>
                         )}
@@ -429,16 +431,18 @@ export default function Tickets({ inCircle = false }) {
 
                 <div className="max-w-md md:max-w-4xl mx-auto">
                     {submitSuccess ? (
-                        <div className="text-center py-12 bg-emerald-900/20 rounded-xl border-2 border-emerald-900">
-                            <div className="text-6xl mb-4">🎫</div>
-                            <h3 className="text-2xl font-bold text-festival-yellow mb-2">Billets confirmés !</h3>
-                            <p className="text-ice-blue/80 mb-2">Vos {formData.ticketCount} billet{formData.ticketCount > 1 ? 's' : ''} gratuit{formData.ticketCount > 1 ? 's' : ''} ont été confirmés.</p>
+                        <div className="text-center py-16 px-8 bg-white/5 rounded-2xl border border-festival-yellow/30">
+                            <div className="w-16 h-16 rounded-full bg-festival-yellow/15 border border-festival-yellow/40 flex items-center justify-center mx-auto mb-6">
+                                <span className="material-symbols-outlined text-festival-yellow" style={{ fontSize: '28px' }}>check</span>
+                            </div>
+                            <h3 className="font-display text-3xl text-festival-yellow mb-3">Billets confirmés</h3>
+                            <p className="text-ice-blue/80 mb-2">Vos {formData.ticketCount} billet{formData.ticketCount > 1 ? 's' : ''} gratuit{formData.ticketCount > 1 ? 's' : ''} ont été réservés.</p>
                             {emailStatus === 'failed' ? (
-                                <p className="text-sm text-amber-400 mt-2">
+                                <p className="text-sm text-amber-400 mt-3">
                                     L'e-mail de confirmation n'a pas pu être envoyé. Contactez l'organisateur si besoin.
                                 </p>
                             ) : (
-                                <p className="text-sm text-ice-blue/60">E-mail de confirmation envoyé à {formData.email}</p>
+                                <p className="text-sm text-ice-blue/50 mt-1">E-mail de confirmation envoyé à {formData.email}</p>
                             )}
                         </div>                    ) : (                        <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Festival Edition */}
