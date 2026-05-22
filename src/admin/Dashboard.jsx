@@ -1,23 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import { getRegistrationStats } from '../services/registrationService';
-import { getTicketStats } from '../services/ticketService';
+import { supabase } from '../supabaseClient';
+import { getRegistrationStats, exportRegistrationsToCSV } from '../services/registrationService';
+import { getTicketStats, exportTicketOrdersToCSV } from '../services/ticketService';
 
-export default function Dashboard() {
+export default function Dashboard({ onNavigate }) {
     const [stats, setStats] = useState({
         registrations: { total: 0, amateur: 0, pro: 0, today: 0 },
         tickets: { totalOrders: 0, totalTickets: 0, today: 0, averageTicketsPerOrder: 0 }
     });
+    const [activity, setActivity] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [exportingReg, setExportingReg] = useState(false);
+    const [exportingTickets, setExportingTickets] = useState(false);
 
-    useEffect(() => { loadStats(); }, []);
+    useEffect(() => { loadAll(); }, []);
 
-    const loadStats = async () => {
+    const loadRecentActivity = async () => {
+        const [{ data: regs }, { data: tickets }] = await Promise.all([
+            supabase.from('registrations').select('id, first_name, last_name, type, created_at').order('created_at', { ascending: false }).limit(5),
+            supabase.from('ticket_orders').select('id, first_name, last_name, ticket_count, created_at').order('created_at', { ascending: false }).limit(5),
+        ]);
+        const items = [
+            ...(regs || []).map(r => ({
+                text: `Inscription ${r.type === 'pro' ? 'professionnelle' : 'amateur'} — ${r.first_name} ${r.last_name}`,
+                date: new Date(r.created_at),
+                dot: '#acc9ef',
+            })),
+            ...(tickets || []).map(t => ({
+                text: `Commande de ${t.ticket_count} billet${t.ticket_count > 1 ? 's' : ''} — ${t.first_name} ${t.last_name}`,
+                date: new Date(t.created_at),
+                dot: 'var(--color-festival-yellow)',
+            })),
+        ];
+        return items.sort((a, b) => b.date - a.date).slice(0, 5);
+    };
+
+    const loadAll = async () => {
         try {
             setIsLoading(true);
-            const [regStats, ticketStats] = await Promise.all([getRegistrationStats(), getTicketStats()]);
+            const [regStats, ticketStats, recentActivity] = await Promise.all([
+                getRegistrationStats(),
+                getTicketStats(),
+                loadRecentActivity(),
+            ]);
             setStats({ registrations: regStats, tickets: ticketStats });
+            setActivity(recentActivity);
         } catch (e) { console.error(e); }
         finally { setIsLoading(false); }
+    };
+
+    const formatRelativeTime = (date) => {
+        const diffMs = Date.now() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return "À l'instant";
+        if (diffMins < 60) return `Il y a ${diffMins} min`;
+        if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours > 1 ? 's' : ''}`;
+        if (diffDays === 1) return 'Hier';
+        if (diffDays < 7) return `Il y a ${diffDays} jours`;
+        return date.toLocaleDateString('fr-BE');
+    };
+
+    const downloadCSV = (content, filename) => {
+        const blob = new Blob([content], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename; a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    const handleExportRegistrations = async () => {
+        setExportingReg(true);
+        try {
+            const { data } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
+            if (data) downloadCSV(exportRegistrationsToCSV(data), `inscriptions_${new Date().toISOString().split('T')[0]}.csv`);
+        } catch (e) { console.error(e); }
+        finally { setExportingReg(false); }
+    };
+
+    const handleExportTickets = async () => {
+        setExportingTickets(true);
+        try {
+            const { data } = await supabase.from('ticket_orders').select('*').order('created_at', { ascending: false });
+            if (data) downloadCSV(exportTicketOrdersToCSV(data), `tickets_${new Date().toISOString().split('T')[0]}.csv`);
+        } catch (e) { console.error(e); }
+        finally { setExportingTickets(false); }
     };
 
     const StatCard = ({ title, value, subtitle, accent, highlight }) => (
@@ -52,6 +120,30 @@ export default function Dashboard() {
         );
     }
 
+    const quickActions = [
+        {
+            icon: 'add_photo_alternate',
+            title: 'Ajouter une image',
+            desc: 'Ajouter à la galerie',
+            onClick: () => onNavigate?.('carousel'),
+            loading: false,
+        },
+        {
+            icon: 'person_add',
+            title: 'Exporter les inscriptions',
+            desc: 'Télécharger le CSV',
+            onClick: handleExportRegistrations,
+            loading: exportingReg,
+        },
+        {
+            icon: 'confirmation_number',
+            title: 'Exporter les tickets',
+            desc: 'Télécharger le CSV',
+            onClick: handleExportTickets,
+            loading: exportingTickets,
+        },
+    ];
+
     return (
         <div className="space-y-10">
             {/* Welcome Header */}
@@ -66,7 +158,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex gap-3">
                     <button
-                        onClick={loadStats}
+                        onClick={loadAll}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
                     >
@@ -116,21 +208,20 @@ export default function Dashboard() {
                 <section className="lg:col-span-2">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', fontSize: '1.1rem' }}>Actions rapides</h3>
-                        <button className="text-xs font-bold" style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Tout gérer</button>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {[
-                            { icon: 'download', title: 'Exporter les données', desc: 'Télécharger les rapports CSV' },
-                            { icon: 'send', title: 'Envoyer des notifications', desc: 'Envoyer un e-mail aux participants' },
-                            { icon: 'bar_chart', title: 'Voir les rapports', desc: 'Analyses détaillées' },
-                        ].map(a => (
+                        {quickActions.map(a => (
                             <button key={a.title}
+                                onClick={a.onClick}
+                                disabled={a.loading}
                                 className="rounded-xl p-5 border text-left transition-all"
-                                style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}
-                                onMouseEnter={e => e.currentTarget.style.background = '#004075'}
+                                style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)', opacity: a.loading ? 0.7 : 1 }}
+                                onMouseEnter={e => { if (!a.loading) e.currentTarget.style.background = '#004075'; }}
                                 onMouseLeave={e => e.currentTarget.style.background = 'var(--color-deep-navy)'}
                             >
-                                <span className="material-symbols-outlined mb-2 block" style={{ color: '#acc9ef' }}>{a.icon}</span>
+                                <span className={`material-symbols-outlined mb-2 block${a.loading ? ' animate-spin' : ''}`} style={{ color: '#acc9ef' }}>
+                                    {a.loading ? 'progress_activity' : a.icon}
+                                </span>
                                 <h4 className="text-xs font-bold uppercase tracking-wider mb-1"
                                     style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>{a.title}</h4>
                                 <p className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{a.desc}</p>
@@ -145,16 +236,18 @@ export default function Dashboard() {
                         Activité récente
                     </h3>
                     <div className="rounded-xl p-6 border space-y-4" style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
-                        {[
-                            { dot: '#acc9ef', text: 'Nouvelle inscription professionnelle', time: 'Il y a 2 heures' },
-                            { dot: 'var(--color-festival-yellow)', text: 'Lot de billets #104 émis', time: 'Il y a 5 heures' },
-                            { dot: 'var(--color-festival-yellow)', text: 'Sauvegarde système terminée', time: 'Hier' },
-                        ].map((item, i) => (
+                        {activity.length === 0 ? (
+                            <p className="text-sm" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                                Aucune activité récente.
+                            </p>
+                        ) : activity.map((item, i) => (
                             <div key={i} className="flex items-start gap-3">
                                 <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ background: item.dot }} />
                                 <div>
                                     <p className="text-sm" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>{item.text}</p>
-                                    <p className="text-xs mt-0.5" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{item.time}</p>
+                                    <p className="text-xs mt-0.5" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                                        {formatRelativeTime(item.date)}
+                                    </p>
                                 </div>
                             </div>
                         ))}
