@@ -1,6 +1,6 @@
 import React from 'react';
-import Registration from './Registration';
-import Tickets from './Tickets';
+import Registration from '../buildingBlocks/Registration';
+import Tickets from '../buildingBlocks/Tickets';
 
 const circleStyle = {
   position: "absolute",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { LogoSvg, Twinkle } from "../assets/images";
+import { LogoSvg, Twinkle } from "../../assets/images";
 
 const scrollTo = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });

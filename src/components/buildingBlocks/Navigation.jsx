@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { snowflake } from "../assets/images";
+import { snowflake } from "../../assets/images";
 
 export default function Navigation({ onMenuClick }) {
     const [showScrollTop, setShowScrollTop] = useState(false);

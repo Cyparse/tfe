@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
-import { snowflake } from '../assets/images';
-import Carousel from './Carousel';
+import { supabase } from '../../supabaseClient';
+import { snowflake } from '../../assets/images';
+import Carousel from '../buildingBlocks/Carousel';
 
 export default function WinnersSection() {
     const [images, setImages] = useState([]);
@@ -35,7 +35,7 @@ export default function WinnersSection() {
                 <div className="text-center mb-8 sm:mb-12">
                     <p className="text-festival-yellow text-xs font-bold uppercase tracking-[0.3em] mb-3">Palmarès</p>
                     <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-white leading-tight">
-                        Gagnants de l'édition<br className="sm:hidden" /> pro précédente
+                        Gagnants de l'édition<br className="sm:hidden" /> précédente
                     </h2>
                 </div>
 

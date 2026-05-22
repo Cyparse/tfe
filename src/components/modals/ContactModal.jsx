@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { snowflake } from '../assets/images';
-import { supabase } from '../supabaseClient';
+import { snowflake } from '../../assets/images';
+import { supabase } from '../../supabaseClient';
 
 export default function ContactModal({ isOpen, onClose }) {
     const [form, setForm] = useState({ nom: '', email: '', sujet: '', message: '' });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { snowflake, FooterImage } from "../assets/images";
-import FAQModal from './FAQModal';
+import { snowflake, FooterImage } from "../../assets/images";
+import FAQModal from '../modals/FAQModal';
 
 export default function Footer({ onContactOpen }) {
     const [faqOpen, setFaqOpen] = useState(false);

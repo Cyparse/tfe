@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapBackground } from "../assets/images";
+import { MapBackground } from "../../assets/images";
 
 export default function MarketSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);

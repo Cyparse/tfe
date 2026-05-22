@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '../supabaseClient';
-import { logError, friendlyError } from '../utils/errorLogger';
+import { supabase } from '../../supabaseClient';
+import { logError, friendlyError } from '../../utils/errorLogger';
 
 export default function Registration({ inCircle = false }) {
 const EDITIONS = [

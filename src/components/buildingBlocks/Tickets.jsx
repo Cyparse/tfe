@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { supabase } from '../supabaseClient';
-import { logError, friendlyError } from '../utils/errorLogger';
+import { supabase } from '../../supabaseClient';
+import { logError, friendlyError } from '../../utils/errorLogger';
 
 const EDITIONS = [
    { value: 'december', label: 'Édition Décembre', date: '6 déc. 2026' },
@@ -250,7 +250,7 @@ export default function Tickets({ inCircle = false }) {
                     Vos Billets
                 </p>
                 <p style={{ fontSize: "12px", color: "#4a6a8c", marginBottom: "14px" }}>
-                    Gratuit · max {MAX_TICKETS} billets
+                    Gratuit · max {MAX_TICKETS} billets par personne <br /> Pour plus de 10 billets, contactez-nous à <a href="mailto:info@snow-wonder.be" style={{ color: "#1a3a5c", textDecoration: "underline" }}>info@snow-wonder.be</a>
                 </p>
 
                 {submitSuccess ? (

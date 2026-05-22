@@ -1,5 +1,5 @@
 import React from 'react';
-import { HeroImage } from '../assets/images';
+import { HeroImage } from '../../assets/images';
 
 export default function ContentSection() {
     return (
