@@ -1,230 +1,165 @@
 # Snow Wonder Festival
 
-A modern, responsive website for the Snow Wonder Festival built with React, Vite, Tailwind CSS, integrated Leaflet maps, and Supabase backend.
+A modern, responsive website for the Snow Wonder Festival — built with React, Vite, Tailwind CSS, Leaflet maps, and Supabase.
 
-## 🚀 Tech Stack
+## Tech Stack
 
-- **React 19** - UI library
-- **Vite** - Fast build tool and dev server
-- **Tailwind CSS 4** - Utility-first CSS framework
-- **PostCSS & Autoprefixer** - CSS processing
-- **Leaflet** - Interactive maps
-- **Supabase** - Database and backend services
-- **TypeScript** - Type declarations for assets
+- **React 19** — UI library
+- **Vite 7** — build tool and dev server
+- **Tailwind CSS 4** — utility-first CSS
+- **Leaflet** — interactive maps (Mapbox tiles)
+- **Supabase** — PostgreSQL database, auth, edge functions
+- **html5-qrcode** — QR code scanning in the browser
+- **pdf-lib** (Deno edge function) — server-side PDF generation
+- **Nodemailer** (Deno edge function) — transactional email via SMTP
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 tfe/
 ├── src/
-│   ├── components/          # React components
-│   │   ├── Navigation.jsx   # Navigation bar with scroll-to-top
-│   │   ├── SideMenu.jsx     # Mobile menu
-│   │   ├── Hero.jsx         # Hero section with twinkle animations
-│   │   ├── ContentSection.jsx
-│   │   ├── MarketSection.jsx # Market section with map modal
-│   │   ├── MapSection.jsx   # Interactive Leaflet map
-│   │   ├── Registration.jsx # Participant registration (amateur/pro)
-│   │   ├── Tickets.jsx      # Ticket purchase form
-│   │   └── Footer.jsx
-│   ├── assets/
-│   │   └── images/          # Image assets and TypeScript index
-│   │       ├── index.ts     # Centralized image exports
-│   │       ├── food.svg     # Hot food icon
-│   │       ├── food copy.svg # Hot drink icon
-│   │       └── *.png, *.jpg # Image files
-│   ├── App.jsx              # Main app component
-│   ├── index.css            # Global styles & Tailwind imports
-│   ├── main.jsx             # App entry point
-│   └── vite-env.d.ts        # TypeScript declarations for assets
-├── public/                   # Static assets
-├── .env                      # Environment variables (Supabase keys)
-├── index.html               # HTML template with Leaflet CDN
-├── tsconfig.json            # TypeScript configuration
-├── tsconfig.node.json       # Node TypeScript configuration
-├── tailwind.config.js       # Tailwind configuration
-├── vite.config.js           # Vite configuration
-├── postcss.config.js        # PostCSS configuration
-└── package.json             # Dependencies & scripts
+│   ├── components/
+│   │   ├── buildingBlocks/      # Reusable UI components
+│   │   │   ├── Navigation.jsx
+│   │   │   ├── SideMenu.jsx
+│   │   │   ├── Hero.jsx
+│   │   │   ├── Carousel.jsx
+│   │   │   ├── Registration.jsx # Contest registration form
+│   │   │   ├── Tickets.jsx      # Ticket reservation form
+│   │   │   └── Footer.jsx
+│   │   ├── sections/            # Page sections
+│   │   │   ├── ContentSection.jsx
+│   │   │   ├── FormsSection.jsx
+│   │   │   ├── GallerySection.jsx
+│   │   │   ├── MapSection.jsx   # "Comment venir" map (single marker)
+│   │   │   ├── MarketSection.jsx # Market map modal (9 vendor markers)
+│   │   │   ├── ScheduleSection.jsx
+│   │   │   └── WinnersSection.jsx
+│   │   └── modals/
+│   │       ├── ContactModal.jsx
+│   │       └── FAQModal.jsx
+│   ├── admin/                   # Admin panel (auth-gated)
+│   │   ├── AdminLogin.jsx
+│   │   ├── ForgotPassword.jsx
+│   │   ├── UpdatePassword.jsx
+│   │   ├── AdminPanel.jsx       # Tab router + role-based access
+│   │   ├── Dashboard.jsx
+│   │   ├── RegistrationManager.jsx
+│   │   ├── TicketManager.jsx
+│   │   ├── TicketScanner.jsx    # QR scanner (tickets + registrations)
+│   │   ├── CarouselManager.jsx
+│   │   ├── EditionsManager.jsx
+│   │   ├── WinnersManager.jsx
+│   │   └── ContentManager.jsx
+│   ├── services/
+│   │   ├── authService.js
+│   │   ├── contentService.js
+│   │   ├── editionsService.js
+│   │   ├── registrationService.js
+│   │   └── ticketService.js
+│   ├── assets/images/           # Centralized image exports (index.ts)
+│   ├── supabaseClient.js
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── supabase/
+│   └── functions/
+│       ├── _shared/
+│       │   ├── cors.ts
+│       │   └── templates.ts     # HTML email templates
+│       ├── send-ticket/         # Generates ticket PDF + sends email
+│       ├── send-confirmation/   # Generates registration card PDF + sends email
+│       └── send-contact/        # Forwards contact form messages
+├── public/
+│   └── snowflake-blue.png       # Favicon
+├── index.html
+├── vite.config.js
+├── tailwind.config.js
+├── postcss.config.js
+└── package.json
 ```
 
-## 🛠️ Installation
-
-Make sure you have Node.js and npm installed, then run:
+## Installation
 
 ```bash
 npm install
 ```
 
-## ⚙️ Configuration
-
-Create a `.env` file in the root directory with your Supabase credentials:
-
-```env
-VITE_SUPABASE_URL=your-project-url
-VITE_SUPABASE_ANON_KEY=your-anon-key
-```
-
-To get your Supabase credentials:
-1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
-2. Select your project
-3. Navigate to **Settings** → **API**
-4. Copy the **Project URL** and **anon public** key
-
-## 💾 Database Setup
-
-The project uses Supabase (PostgreSQL) with the following tables:
-- **registrations** - Participant registrations (amateur/pro)
-- **ticket_orders** - Ticket purchases with customer details
-- **events** - Festival events and scheduling
-- **market_locations** - Map markers for market locations
-- **newsletter_subscribers** - Newsletter subscriptions
-
-Run the SQL schema in your Supabase SQL Editor (see database setup guide in project docs).
-
-## 💻 Development
-
-Start the development server with hot module replacement:
+## Development
 
 ```bash
-npm run dev
+npm run dev      # dev server with HMR → http://localhost:5173
+npm run build    # production build → dist/
+npm run preview  # preview production build
 ```
 
-The site will be available at `http://localhost:5173/`
-
-## 🏗️ Build
-
-Create an optimized production build:
-
-```bash
-npm run build
-```
-
-The build output will be in the `dist/` folder.
-
-## 👀 Preview
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## 🎨 Features
-
-- ✅ Fully responsive design
-- ✅ Mobile-friendly side menu with logo
-- ✅ Smooth scroll navigation
-- ✅ Scroll-to-top button
-- ✅ Interactive Leaflet maps with custom markers
-- ✅ Modal overlays with maps
-- ✅ Participant registration (amateur/professional)
-- ✅ Ticket purchase system with validation
-- ✅ Form validation and error handling
-- ✅ Twinkle/sparkle animations
-- ✅ Custom SVG icons (food & drink)
-- ✅ Fast development with HMR
-- ✅ Optimized production builds
-- ✅ Custom Tailwind theme
-- ✅ Modern React with hooks
-- ✅ Component-based architecture
-- ✅ TypeScript asset declarations
-- ✅ Supabase backend integration
-
-## 🗺️ Map Integration
-
-The project uses **Leaflet** for interactive maps with:
-- Custom marker styling with teardrop shapes
-- Multiple location markers (Main Festival, Food Village, Amateur Location, Winter Market)
-- Popup information with directions links
-- Smooth zoom and pan controls
-- CartoDB Voyager tile layer for clean aesthetics
-
-## 📝 Custom Colors
-
-The project uses a custom color palette defined in `tailwind.config.js`:
-
-- `ice-blue`: #cae9ff
-- `deep-navy`: #002442
-- `midblue`: #3a7ca5
-- `festival-yellow`: #e8a94e
-- `dark-brown`: #3a2416
-
-## 🎭 Fonts & Icons
-
-- **Display**: DM Serif Display (serif)
-- **Body**: Nunito (sans-serif)
-- **Icons**: Material Symbols Outlined
-- **Custom Icons**: SVG food and drink icons
-
-## 🖼️ Assets
-
-Images are centrally managed in `src/assets/images/index.ts` for easy imports:
-```javascript
-import { snowflake, Logo, HeroImage, FooterImage } from '../assets/images';
-```
-
-## 📱 Responsive Design
-
-- Desktop: Full navigation menu
-- Mobile: Hamburger menu with snowflake logo
-- Optimized layouts for all screen sizes
-- Touch-friendly interface
-
-## 🗄️ Database Schema
+## Database (Supabase)
 
 ### Tables
 
-**registrations**
-- Participant registrations (amateur/professional)
-- Fields: type, first_name, last_name, email, phone, organization, experience
-- Email uniqueness constraint
-- Timestamps for tracking
+| Table | Purpose |
+|---|---|
+| `registrations` | Contest entries (amateur / pro), with `checked_in` + `checked_in_at` |
+| `tickets` | Entrance ticket reservations, with `used` + `used_at` |
+| `festival_editions` | Festival editions (date, label, active flag) |
+| `admin_users` | Admin accounts with role (`admin`, `super_admin`, `scanner`) |
+| `carousel_images` | Gallery/carousel image records |
+| `winners` | Contest winners per edition |
+| `error_logs` | Server-side error tracking |
 
-**ticket_orders**
-- Free ticket reservations with customer details
-- Fields: customer info, address, ticket_count (1-10), special_requests, newsletter_opt_in
-- No payment required - tickets are free
+### Edge Functions 
 
-**events**
-- Festival events and scheduling
-- Fields: title, description, event_type, start_time, end_time, location
-- Capacity management
+| Function | Trigger | Description |
+|---|---|---|
+| `send-ticket` | Ticket reservation | Generates per-ticket PDFs with QR code, sends via SMTP |
+| `send-confirmation` | Contest registration | Generates registration card PDF with QR code, sends via SMTP |
+| `send-contact` | Contact form | Forwards message to festival email |
 
-**market_locations**
-- Map markers for interactive map
-- Fields: name, type, description, latitude, longitude, icon
-- Used for Leaflet map integration
-
-**newsletter_subscribers**
-- Newsletter subscription management
-- Email uniqueness constraint
-
-### Security
-
-- Row Level Security (RLS) enabled on all tables
-- Public read access for events and locations
-- Public insert for registrations, orders, and subscriptions
-- User-specific access policies (ready for authentication)
-
-## 🔧 Environment Variables
-
-```env
-VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Deploy:
+```bash
+supabase functions deploy send-ticket
+supabase functions deploy send-confirmation
+supabase functions deploy send-contact
 ```
 
-⚠️ Never commit the `.env` file to version control!
+Required Supabase secrets: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
 
-## 📦 Dependencies
+## Admin Panel
 
-Key packages:
-- `react` & `react-dom` - UI framework
-- `@supabase/supabase-js` - Backend client
-- `leaflet` - Map integration
-- `tailwindcss` - Styling framework
-- `vite` - Build tool
+Accessible at `/#admin`. Role-based access:
+
+- **`admin` / `super_admin`** — full panel (dashboard, registrations, tickets, scanner, editions, gallery, winners)
+- **`scanner`** — scanner-only view, no tab navigation
+
+The QR scanner handles two code formats:
+- `SWF-XXX-XXXXXX` — entrance ticket (marks `tickets.used = true`)
+- UUID — registration card (marks `registrations.checked_in = true`)
+
+## Maps
+
+Both maps use a custom Mapbox tile style.
+
+- **MapSection** — single marker at the festival location (Parc Georges Brassens, Tournai). "Comment venir" panel open by default on desktop, collapsed on mobile.
+- **MarketSection** — modal map with 9 vendor markers using Material Symbols icons (festival-yellow circles, deep navy icons). Gazebo marker is larger with inverted colors.
+
+## Fonts & Colors
+
+**Fonts** (Google Fonts):
+- Display: DM Serif Display
+- Body: Nunito / Nunito Sans
+- UI: Rubik
+- Decorative: Lavishly Yours
+- Icons: Material Symbols Outlined
+
+**Custom CSS variables:**
+
+| Variable | Value |
+|---|---|
+| `--color-festival-yellow` | #e8a94e |
+| `--color-deep-navy` | #002442 |
+| `--color-midblue` | #3a7ca5 |
+| `--color-ice-blue` | #cae9ff |
+| `--color-dark-brown` | #3a2416 |
 
 ---
 
-Built with ❄️ for Snow Wonder Festival 2026
