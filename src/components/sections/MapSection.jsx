@@ -5,27 +5,21 @@ import 'leaflet/dist/leaflet.css';
 export default function MapSection() {
     const mapRef = useRef(null);
     const leafletMapRef = useRef(null);
-    const [showInfo, setShowInfo] = useState(true);
+    const [showInfo, setShowInfo] = useState(() => window.innerWidth < 1024);
 
     useEffect(() => {
         // Initialize Leaflet map
         if (mapRef.current && !leafletMapRef.current && L) {
-            // Festival locations
-            const mainFestivalLocation = [50.602860262325706, 3.3809785070446057];
             const foodVillageLocation = [50.602511757616966, 3.388043095146282];
-            const amateurLocation = [50.599967067972884, 3.3919939590763226];
-            const gazeboLocation = [50.60274997307288, 3.387951859916449];
 
             // Set zoom level based on screen width
             const isMobile = screen.width < 768;
-            const zoomLevel = isMobile ? 15 : 16;
+            const zoomLevel = isMobile ? 15 : 17;
 
-            // Create map centered between all locations
             leafletMapRef.current = L.map(mapRef.current, {
                 scrollWheelZoom: false
-            }).setView([50.6022, 3.3870], zoomLevel);
+            }).setView(foodVillageLocation, zoomLevel);
 
-            // Add tile layer with Mapbox style (matching MarketSection)
             L.tileLayer(
                 'https://api.mapbox.com/styles/v1/cyparse/cmmj8gl6z00cc01qu9pm3a08y/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY3lwYXJzZSIsImEiOiJjbW1qN2c2czAxNjJ3MnBzOGQzdWs5Njk1In0.yIAmgxiT-MXxxf9WtJhR2g',
                 {
@@ -36,7 +30,6 @@ export default function MapSection() {
                 }
             ).addTo(leafletMapRef.current);
 
-            // Custom marker icon for main festival (yellow)
             const mainIcon = L.divIcon({
                 html: '<div style="background-color: var(--color-festival-yellow); width: 35px; height: 35px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
                 className: 'custom-marker',
@@ -44,79 +37,15 @@ export default function MapSection() {
                 iconAnchor: [17.5, 35]
             });
 
-            // Custom marker icon for food village (orange-red)
-            const foodIcon = L.divIcon({
-                html: '<div style="background-color: #ff6b6b; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
-                className: 'custom-marker',
-                iconSize: [30, 30],
-                iconAnchor: [15, 30]
-            });
-
-            // Custom marker icon for amateur location (light blue)
-            const amateurIcon = L.divIcon({
-                html: '<div style="background-color: #4ecdc4; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"><div style="width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div></div>',
-                className: 'custom-marker',
-                iconSize: [30, 30],
-                iconAnchor: [15, 30]
-            });
-
-            // Custom marker icon for gazebo (with image inside)
-            const gazeboIcon = L.divIcon({
-                html: '<div style="background-color: white; width: 35px; height: 35px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid #8b4789; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; overflow: hidden;"><img src="/gazebo.png" style="width: 20px; height: 20px; object-fit: contain; transform: rotate(45deg);" /></div>',
-                className: 'custom-marker',
-                iconSize: [35, 35],
-                iconAnchor: [17.5, 35]
-            });
-
-            // Add main festival marker
-            const mainMarker = L.marker(mainFestivalLocation, {
+            const mainMarker = L.marker(foodVillageLocation, {
                 icon: mainIcon
             }).addTo(leafletMapRef.current);
 
             mainMarker.bindPopup(`
                 <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: var(--color-deep-navy); font-size: 16px; font-weight: bold;">Main Festival</h3>
-                    <p style="margin: 0 0 8px 0; color: var(--color-midblue); font-size: 14px;">Primary Event Grounds</p>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.602860262325706,3.3809785070446057" target="_blank" style="display: inline-block; background-color: var(--color-festival-yellow); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
-                </div>
-            `);
-
-            // Add food village marker
-            const foodMarker = L.marker(foodVillageLocation, {
-                icon: foodIcon
-            }).addTo(leafletMapRef.current);
-
-            foodMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: var(--color-deep-navy); font-size: 16px; font-weight: bold;">Food Village</h3>
-                    <p style="margin: 0 0 8px 0; color: var(--color-midblue); font-size: 14px;">Dining & Refreshments</p>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.602511757616966,3.388043095146282" target="_blank" style="display: inline-block; background-color: #ff6b6b; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
-                </div>
-            `);
-
-            // Add amateur location marker
-            const amateurMarker = L.marker(amateurLocation, {
-                icon: amateurIcon
-            }).addTo(leafletMapRef.current);
-
-            amateurMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: var(--color-deep-navy); font-size: 16px; font-weight: bold;">Amateur Location</h3>
-                    <p style="margin: 0 0 8px 0; color: var(--color-midblue); font-size: 14px;">Community Performances</p>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.601703501440326,3.4015264883903047" target="_blank" style="display: inline-block; background-color: #4ecdc4; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
-                </div>
-            `);
-
-            // Add gazebo marker
-            const gazeboMarker = L.marker(gazeboLocation, {
-                icon: gazeboIcon
-            }).addTo(leafletMapRef.current);
-
-            gazeboMarker.bindPopup(`
-                <div style="font-family: 'Nunito', sans-serif; padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; color: var(--color-deep-navy); font-size: 16px; font-weight: bold;">Gazebo Area</h3>
-                    <p style="margin: 0 0 8px 0; color: var(--color-midblue); font-size: 14px;">Outdoor Pavilion</p>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.60274997307288,3.387951859916449" target="_blank" style="display: inline-block; background-color: #8b4789; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Get Directions</a>
+                    <h3 style="margin: 0 0 8px 0; color: var(--color-deep-navy); font-size: 16px; font-weight: bold;">Festival & Marché d'hiver</h3>
+                    <p style="margin: 0 0 8px 0; color: var(--color-midblue); font-size: 14px;">Parc Georges Brassens, Tournai</p>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=50.602511757616966,3.388043095146282" target="_blank" style="display: inline-block; background-color: var(--color-festival-yellow); color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; margin-top: 4px;">Itinéraire</a>
                 </div>
             `);
         }
