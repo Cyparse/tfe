@@ -13,7 +13,13 @@ https://docs.google.com/document/d/18TUijJmgLuDZTtCEuzbB3RCfaMJxzaDHLiwmL7JWnF0/
 User Stories
 https://docs.google.com/document/d/11IUJmYKbRK9aRPFRxdyY05nIMR4HWzLNnldi3RoCs84/edit?usp=sharing
 
+## Accès jury
 
+Un compte administrateur de démonstration est disponible :
+
+- **URL back-office** : https://snow-wonder.be/#admin
+- **Email** : info@snow-wonder.be
+- **Mot de passe** : ABC123test!
 
 ## Tech Stack
 
