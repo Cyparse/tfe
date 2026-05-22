@@ -46,6 +46,7 @@ export default function Footer({ onContactOpen }) {
                                 { label: 'Galerie', href: '#gallery' },
                                 { label: "Marché d'hiver", href: '#market' },
                                 { label: 'Nous Trouver', href: '#map' },
+                                { label: 'Palmarès', href: '#winners' },
                             ].map(({ label, href }) => (
                                 <li key={label}>
                                     <a href={href} onClick={(e) => handleScroll(e, href)} className="hover:text-white transition-colors">{label}</a>

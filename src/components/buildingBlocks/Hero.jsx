@@ -127,10 +127,10 @@ export default function Hero() {
           <Countdown />
 
           <div className="flex flex-col md:flex-row justify-center gap-6">
-            <button onClick={() => scrollTo('sculptures')} className="bg-deep-navy text-white py-4 px-10 rounded-full font-bold shadow-xl hover:bg-deep-navy/90 transition-all uppercase tracking-[0.2em] text-xs">
+            <button onClick={() => scrollTo('gallery')} className="bg-deep-navy text-white py-4 px-10 rounded-full font-bold shadow-xl hover:bg-deep-navy/90 transition-all uppercase tracking-[0.2em] text-xs">
               Découvrir les Œuvres
             </button>
-            <button onClick={() => scrollTo('tickets')} className="bg-white/80 backdrop-blur-xl text-deep-navy py-4 px-10 rounded-full font-bold border border-deep-navy/10 shadow-xl hover:bg-white transition-all uppercase tracking-[0.2em] text-xs">
+            <button onClick={() => scrollTo('forms')} className="bg-white/80 backdrop-blur-xl text-deep-navy py-4 px-10 rounded-full font-bold border border-deep-navy/10 shadow-xl hover:bg-white transition-all uppercase tracking-[0.2em] text-xs">
               Obtenir des Billets
             </button>
           </div>

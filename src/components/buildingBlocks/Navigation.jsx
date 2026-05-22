@@ -11,6 +11,7 @@ export default function Navigation({ onMenuClick }) {
         { label: 'Galerie', href: '#gallery' },
         { label: 'Marché', href: '#market' },
         { label: 'Nous Trouver', href: '#map' },
+        { label: 'Palmarès', href: '#winners' },
     ];
 
     useEffect(() => {
