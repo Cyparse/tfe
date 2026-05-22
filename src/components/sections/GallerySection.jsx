@@ -77,9 +77,11 @@ export default function GallerySection() {
 
             {/* Title */}
             <div className="text-center mb-12 sm:mb-16 px-6">
-                <p className="text-festival-yellow text-xs font-bold uppercase tracking-[0.3em] mb-4">Photos</p>
-                <h2 className="font-display text-5xl md:text-6xl text-white mb-6">Galerie</h2>
-                <div className="w-24 h-0.5 bg-festival-yellow/40 mx-auto" />
+<div className="flex items-center justify-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs mb-6 ">
+                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
+                        <div style={{ textShadow: '0 1px 1px rgba(0, 0, 0, 0.25)' }}>Photos</div>
+                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
+                    </div>                <h2 className="font-display text-5xl md:text-6xl text-white mb-6">Galerie</h2>
             </div>
 
             {/* Mosaic + scroll */}

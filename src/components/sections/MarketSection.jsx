@@ -110,7 +110,7 @@ export default function MarketSection() {
               <span className="h-0.5 w-16 bg-festival-yellow"></span>
               Magie de saison
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md">
+            <h2 className="font-display text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md">
               Soirées douillettes au marché d'hiver
             </h2>
             <p className="text-xl text-ice-blue font-medium">

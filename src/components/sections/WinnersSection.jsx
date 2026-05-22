@@ -33,8 +33,11 @@ export default function WinnersSection() {
 
                 {/* Section header */}
                 <div className="text-center mb-8 sm:mb-12">
-                    <p className="text-festival-yellow text-xs font-bold uppercase tracking-[0.3em] mb-3">Palmarès</p>
-                    <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-white leading-tight">
+<div className="flex items-center justify-center gap-3 text-festival-yellow font-bold uppercase tracking-[0.3em] text-xs mb-6">
+                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
+                        Palmarès
+                        <span className="h-0.5 w-16 bg-festival-yellow"></span>
+                    </div>                    <h2 className="font-display text-3xl sm:text-5xl md:text-6xl text-white leading-tight">
                         Gagnants de l'édition<br className="sm:hidden" /> précédente
                     </h2>
                 </div>

@@ -25,7 +25,7 @@ export default function Footer({ onContactOpen }) {
                     <div className="md:col-span-2">
                         <div className="flex items-center gap-3 mb-8">
                             <span className="w-12 h-12 rounded-full flex items-center justify-center"><img src={snowflake} alt="Snowflake Logo" className="w-12 h-12" /></span>
-                            <span className="font-display text-4xl">Snow Wonder</span>
+                            <span className="font-lavish text-4xl">Snow Wonder</span>
                         </div>
                         <p className="text-ice-blue/60 max-w-sm mb-8 leading-relaxed">
                             Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1996.

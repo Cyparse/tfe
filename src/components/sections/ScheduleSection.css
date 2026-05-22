@@ -58,7 +58,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgb(232, 169, 78);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3em;
@@ -69,13 +69,13 @@
 .schedule-eyebrow-line {
   height: 1px;
   width: 56px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgb(232, 169, 78);
 }
 
 .schedule-title {
   font-family: var(--font-family-display);
   font-size: 3rem;
-  color: rgb(232, 169, 78);
+  color: white;
   margin-bottom: 16px;
 }
 
@@ -253,6 +253,8 @@
   transition: letter-spacing 0.5s;
   color: #1a1a1a;
   background: var(--clr);
+  border: none;
+  cursor: pointer;
 }
 
 .schedule-btn:hover {

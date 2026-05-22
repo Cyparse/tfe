@@ -152,7 +152,7 @@ The project uses a custom color palette defined in `tailwind.config.js`:
 
 ## 🎭 Fonts & Icons
 
-- **Display**: Lavishly Yours (cursive)
+- **Display**: DM Serif Display (serif)
 - **Body**: Nunito (sans-serif)
 - **Icons**: Material Symbols Outlined
 - **Custom Icons**: SVG food and drink icons

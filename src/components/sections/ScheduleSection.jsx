@@ -111,13 +111,13 @@ export default function ScheduleSection() {
                                         ))}
                                     </ul>
 
-                                    <a
-                                        href="#tickets"
+                                    <button
                                         className="schedule-btn"
                                         style={{ background: ed.accent, color: '#1a1a1a' }}
+                                        onClick={() => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' })}
                                     >
                                         Réserver mes billets
-                                    </a>
+                                    </button>
                                 </div>
 
                             </div>

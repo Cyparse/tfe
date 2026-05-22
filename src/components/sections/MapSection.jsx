@@ -140,7 +140,7 @@ export default function MapSection() {
                         Nous Trouver
                         <span className="h-0.5 w-16 bg-festival-yellow"></span>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md mb-4">
+                    <h2 className="font-display text-4xl md:text-6xl font-bold leading-tight text-white drop-shadow-md mb-4">
                         Trouver le Festival
                     </h2>
                     <p className="text-xl text-ice-blue font-medium max-w-2xl mx-auto">
