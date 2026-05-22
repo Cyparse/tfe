@@ -108,6 +108,8 @@ export default function GallerySection() {
                             <img
                                 src={img.url}
                                 alt={img.alt || ''}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 style={{ border: '1.5px solid rgba(202,233,255,0.12)', borderRadius: '0.75rem', display: 'block' }}
                                 draggable={false}

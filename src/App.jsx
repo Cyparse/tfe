@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import Navigation from "./components/buildingBlocks/Navigation";
 import SideMenu from "./components/buildingBlocks/SideMenu";
 import Hero from "./components/buildingBlocks/Hero";
-import ContentSection from "./components/sections/ContentSection";
-import MarketSection from "./components/sections/MarketSection";
-import MapSection from "./components/sections/MapSection";
-import GallerySection from "./components/sections/GallerySection";
 import Footer from "./components/buildingBlocks/Footer";
-import ScheduleSection from "./components/sections/ScheduleSection";
-import WinnersSection from "./components/sections/WinnersSection";
-import FormsSection from "./components/sections/FormsSection";
 import ContactModal from "./components/modals/ContactModal";
-import AdminLogin from "./admin/AdminLogin";
-import AdminPanel from "./admin/AdminPanel";
-import UpdatePassword from "./admin/UpdatePassword";
+
+// Below-fold public sections — deferred until after initial paint
+const ScheduleSection = lazy(() => import("./components/sections/ScheduleSection"));
+const GallerySection  = lazy(() => import("./components/sections/GallerySection"));
+const MarketSection   = lazy(() => import("./components/sections/MarketSection"));
+const FormsSection    = lazy(() => import("./components/sections/FormsSection"));
+const MapSection      = lazy(() => import("./components/sections/MapSection"));
+const WinnersSection  = lazy(() => import("./components/sections/WinnersSection"));
+const ContentSection  = lazy(() => import("./components/sections/ContentSection"));
+
+// Admin routes — never loaded by public visitors
+const AdminLogin     = lazy(() => import("./admin/AdminLogin"));
+const AdminPanel     = lazy(() => import("./admin/AdminPanel"));
+const UpdatePassword = lazy(() => import("./admin/UpdatePassword"));
 import {
   getCurrentUser,
   isAdmin as checkAdminAccess,
@@ -106,8 +110,14 @@ function App() {
     checkAuth();
   };
 
+  const suspenseFallback = <div className="min-h-screen" />;
+
   if (currentView === "update-password") {
-    return <UpdatePassword onReturnToAdmin={handleReturnToAdmin} />;
+    return (
+      <Suspense fallback={suspenseFallback}>
+        <UpdatePassword onReturnToAdmin={handleReturnToAdmin} />
+      </Suspense>
+    );
   }
 
   // Admin view
@@ -121,10 +131,18 @@ function App() {
     }
 
     if (!isAdmin) {
-      return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+      return (
+        <Suspense fallback={suspenseFallback}>
+          <AdminLogin onLoginSuccess={handleLoginSuccess} />
+        </Suspense>
+      );
     }
 
-    return <AdminPanel user={adminUser} onLogout={handleLogout} />;
+    return (
+      <Suspense fallback={suspenseFallback}>
+        <AdminPanel user={adminUser} onLogout={handleLogout} />
+      </Suspense>
+    );
   }
 
   // Main public website
@@ -146,13 +164,15 @@ function App() {
 
       <main className="relative z-10 pt-20">
         <Hero />
-        {/* <ContentSection /> */}
-        <ScheduleSection />
-        <GallerySection />
-        <MarketSection />
-        <FormsSection />
-        <MapSection />
-        <WinnersSection />
+        <Suspense fallback={<div className="min-h-160" />}>
+          {/* <ContentSection /> */}
+          <ScheduleSection />
+          <GallerySection />
+          <MarketSection />
+          <FormsSection />
+          <MapSection />
+          <WinnersSection />
+        </Suspense>
       </main>
 
       <Footer onContactOpen={() => setContactOpen(true)} />

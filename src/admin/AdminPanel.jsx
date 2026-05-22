@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { signOut } from "../services/authService";
 import { snowflake } from "../assets/images";
-import RegistrationManager from "./RegistrationManager";
-import TicketManager from "./TicketManager";
-import ContentManager from "./ContentManager";
-import Dashboard from "./Dashboard";
-import CarouselManager from "./CarouselManager";
-import WinnersManager from "./WinnersManager";
-import EditionsManager from "./EditionsManager";
-import TicketScanner from "./TicketScanner";
+
+const Dashboard           = lazy(() => import("./Dashboard"));
+const RegistrationManager = lazy(() => import("./RegistrationManager"));
+const TicketManager       = lazy(() => import("./TicketManager"));
+const ContentManager      = lazy(() => import("./ContentManager"));
+const CarouselManager     = lazy(() => import("./CarouselManager"));
+const WinnersManager      = lazy(() => import("./WinnersManager"));
+const EditionsManager     = lazy(() => import("./EditionsManager"));
+const TicketScanner       = lazy(() => import("./TicketScanner"));
 
 export default function AdminPanel({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -81,7 +82,9 @@ export default function AdminPanel({ user, onLogout }) {
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-6 lg:px-10 py-8">
-          <TicketScanner />
+          <Suspense fallback={<div className="p-8 text-center opacity-50">Chargement…</div>}>
+            <TicketScanner />
+          </Suspense>
         </main>
       </div>
     );
@@ -224,14 +227,16 @@ export default function AdminPanel({ user, onLogout }) {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 lg:px-10 py-8">
-        {activeTab === "dashboard" && <Dashboard onNavigate={setActiveTab} />}
-        {activeTab === "registrations" && <RegistrationManager />}
-        {activeTab === "tickets" && <TicketManager />}
-        {activeTab === "scanner" && <TicketScanner />}
-        {/* {activeTab === 'content'       && <ContentManager />} */}
-        {activeTab === "editions" && <EditionsManager />}
-        {activeTab === "carousel" && <CarouselManager />}
-        {activeTab === "winners" && <WinnersManager />}
+        <Suspense fallback={<div className="p-8 text-center opacity-50">Chargement…</div>}>
+          {activeTab === "dashboard" && <Dashboard onNavigate={setActiveTab} />}
+          {activeTab === "registrations" && <RegistrationManager />}
+          {activeTab === "tickets" && <TicketManager />}
+          {activeTab === "scanner" && <TicketScanner />}
+          {/* {activeTab === 'content'       && <ContentManager />} */}
+          {activeTab === "editions" && <EditionsManager />}
+          {activeTab === "carousel" && <CarouselManager />}
+          {activeTab === "winners" && <WinnersManager />}
+        </Suspense>
       </main>
     </div>
   );

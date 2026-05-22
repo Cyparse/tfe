@@ -114,7 +114,7 @@ export default function Hero() {
         <div className="text-center px-4 max-w-4xl mx-auto">
           <div className="inline-block mb-6 mt-6">
             <div className="w-full">
-              <img src={LogoSvg} alt="Logo" className="w-2xl mx-auto" />
+              <img src={LogoSvg} alt="Logo" width="448" height="160" className="w-2xl mx-auto" />
             </div>
           </div>
 

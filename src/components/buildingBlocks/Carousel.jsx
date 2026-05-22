@@ -76,6 +76,8 @@ function Carousel({ cards = [] }) {
                   <img
                     src={card.url}
                     alt={card.alt || ''}
+                    loading="lazy"
+                    decoding="async"
                     style={isActiveImg
                       ? { maxHeight: '22rem', width: 'auto', height: 'auto', maxWidth: '100%', display: 'block' }
                       : { width: '100%', height: '100%', objectFit: 'cover', display: 'block' }

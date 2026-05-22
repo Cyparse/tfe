@@ -84,7 +84,7 @@ export default function WinnersSection() {
                                     style={{ border: `2px solid ${winner.edition_color}66`, background: `${winner.edition_color}15` }}
                                 >
                                     {winner.photo_url ? (
-                                        <img src={winner.photo_url} alt={winner.winner_name || ''} className="w-full h-full object-cover" />
+                                        <img src={winner.photo_url} alt={winner.winner_name || ''} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                     ) : (
                                         <img
                                             src={snowflake}

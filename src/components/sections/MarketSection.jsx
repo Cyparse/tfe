@@ -96,6 +96,10 @@ export default function MarketSection() {
             <img
               src={MapBackground}
               alt="Cozy Night Winter Market"
+              width="1200"
+              height="800"
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto rounded-2xl"
             />
           </div>
