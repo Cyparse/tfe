@@ -16,10 +16,9 @@ export default function AdminPanel({ user, onLogout }) {
     { id: "dashboard", label: "Tableau de bord", icon: "dashboard" },
     { id: "registrations", label: "Inscriptions", icon: "edit_note" },
     { id: "tickets", label: "Billetterie", icon: "confirmation_number" },
-    { id: "content", label: "Contenu", icon: "article" },
+    { id: "editions", label: "Éditions", icon: "event" },
     { id: "carousel", label: "Galerie", icon: "photo_library" },
     { id: "winners", label: "Gagnants", icon: "emoji_events" },
-    { id: "editions", label: "Éditions", icon: "event" },
   ];
 
   const handleLogout = async () => {
