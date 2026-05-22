@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 export default function MapSection() {
     const mapRef = useRef(null);
     const leafletMapRef = useRef(null);
-    const [showInfo, setShowInfo] = useState(() => window.innerWidth < 1024);
+    const [showInfo, setShowInfo] = useState(() => window.innerWidth >= 1024);
 
     useEffect(() => {
         // Initialize Leaflet map
@@ -107,12 +107,8 @@ export default function MapSection() {
                                         <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
                                         <p className="text-sm">10 minutes à pied depuis la gare principale</p>
                                     </div>
-                                    <div className="flex items-start gap-3">
-                                        <span className="material-symbols-outlined text-festival-yellow mt-0.5">pin_drop</span>
-                                        <p className="text-sm">GPS: 50.6029° N, 3.3810° E</p>
-                                    </div>
                                     <a
-                                        href="https://www.google.com/maps/dir/?api=1&destination=50.602860262325706,3.3809785070446057"
+                                        href="https://www.google.com/maps/dir/?api=1&destination=50.602511757616966,3.388043095146282"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="mt-4 block w-full bg-festival-yellow text-white py-3 px-6 rounded-xl font-bold hover:bg-festival-yellow/90 transition-all text-sm uppercase tracking-wider text-center"
