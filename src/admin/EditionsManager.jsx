@@ -1,6 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchEditions, saveEdition, deleteEdition, toggleEditionActive } from '../services/editionsService';
 
+const THEMES = [
+    { label: 'Édition Ouverture',  accent: '#4289b6', icon: 'ac_unit',      description: 'Lancement du festival, illuminations et premières sculptures de neige.' },
+    { label: 'Édition Mi-Hiver',   accent: '#CAE9FF', icon: 'ac_unit',      description: 'Ambiance glacée, animations nocturnes et énergie hivernale maximale.' },
+    { label: 'Grande Finale',      accent: '#ffffff', icon: 'ac_unit',      description: 'Dernière édition, remise des prix et final spectaculaire du festival.' },
+    { label: 'Édition Spéciale',   accent: '#e8a94e', icon: 'star',         description: '' },
+    { label: 'Édition Nocturne',   accent: '#7b5ea7', icon: 'nightlight',   description: '' },
+    { label: 'Édition Jeunesse',   accent: '#4caf8a', icon: 'child_care',   description: '' },
+];
+
+const EVENT_ICONS = [
+    { value: 'emoji_events', label: 'Trophée amateur' },
+    { value: 'star',         label: 'Trophée pro' },
+    { value: 'storefront',   label: 'Village gastronomique' },
+    { value: 'celebration',  label: 'Cérémonie / illuminations' },
+    { value: 'trophy',       label: 'Palmarès / remise des prix' },
+    { value: 'music_note',   label: 'Musique live' },
+    { value: 'restaurant',   label: 'Restauration' },
+    { value: 'palette',      label: 'Art / exposition' },
+    { value: 'ice_skating',  label: 'Patinage' },
+    { value: 'ac_unit',      label: 'Sculpture de neige' },
+    { value: 'nightlife',    label: 'Soirée nocturne' },
+    { value: 'groups',       label: 'Animation publique' },
+    { value: 'camera_alt',   label: 'Photographie' },
+    { value: 'sports',       label: 'Sport' },
+    { value: 'local_activity', label: 'Activité' },
+];
+
 const EMPTY_EDITION = {
     id: null,
     value: '',
@@ -60,12 +87,21 @@ export default function EditionsManager() {
 
     const handleField = (key, value) => setEditing(prev => ({ ...prev, [key]: value }));
 
+    const handleTheme = (label) => {
+        const preset = THEMES.find(t => t.label === label);
+        setEditing(prev => ({
+            ...prev,
+            theme: label,
+            ...(preset ? { accent: preset.accent, icon: preset.icon, description: prev.description || preset.description } : {}),
+        }));
+    };
+
     const handleEvent = (i, key, value) => setEditing(prev => {
         const events = prev.events.map((e, idx) => idx === i ? { ...e, [key]: value } : e);
         return { ...prev, events };
     });
 
-    const addEvent = () => setEditing(prev => ({ ...prev, events: [...prev.events, { icon: '', label: '' }] }));
+    const addEvent = () => setEditing(prev => ({ ...prev, events: [...prev.events, { icon: 'emoji_events', label: '' }] }));
 
     const removeEvent = (i) => setEditing(prev => ({
         ...prev,
@@ -227,7 +263,7 @@ export default function EditionsManager() {
                         </div>
                         <div style={s.field}>
                             <label style={s.label}>Date ISO *</label>
-                            <input style={s.input} type="datetime-local" value={editing.date_iso ? editing.date_iso.slice(0, 16) : ''}
+                            <input style={{ ...s.input, colorScheme: 'dark' }} type="datetime-local" value={editing.date_iso ? editing.date_iso.slice(0, 16) : ''}
                                 onChange={e => handleField('date_iso', e.target.value + ':00Z')} />
                         </div>
                         <div style={s.field}>
@@ -237,25 +273,23 @@ export default function EditionsManager() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                         <div style={s.field}>
-                            <label style={s.label}>Thème / sous-titre</label>
-                            <input style={s.input} placeholder="Édition Ouverture" value={editing.theme}
-                                onChange={e => handleField('theme', e.target.value)} />
+                            <label style={s.label}>Thème</label>
+                            <select style={s.input} value={editing.theme} onChange={e => handleTheme(e.target.value)}>
+                                <option value="">— Choisir un thème —</option>
+                                {THEMES.map(t => (
+                                    <option key={t.label} value={t.label}>{t.label}</option>
+                                ))}
+                            </select>
                         </div>
                         <div style={s.field}>
-                            <label style={s.label}>Couleur accent</label>
-                            <div className="flex gap-2 items-center">
-                                <input type="color" value={editing.accent} onChange={e => handleField('accent', e.target.value)}
-                                    style={{ width: '36px', height: '36px', padding: '2px', borderRadius: '6px', border: '1px solid rgba(58,124,165,0.5)', background: 'none', cursor: 'pointer' }} />
-                                <input style={{ ...s.input, flex: 1 }} value={editing.accent}
-                                    onChange={e => handleField('accent', e.target.value)} placeholder="#4289b6" />
+                            <label style={s.label}>Aperçu</label>
+                            <div className="flex items-center gap-3 h-9">
+                                <div className="w-6 h-6 rounded-full shrink-0" style={{ background: editing.accent, border: '1px solid rgba(255,255,255,0.2)' }} />
+                                <span className="material-symbols-outlined" style={{ color: editing.accent, fontSize: '20px' }}>{editing.icon}</span>
+                                <span style={{ fontSize: '12px', color: 'rgba(202,233,255,0.6)' }}>{editing.accent} · {editing.icon}</span>
                             </div>
-                        </div>
-                        <div style={s.field}>
-                            <label style={s.label}>Icône (Material Symbol)</label>
-                            <input style={s.input} placeholder="ac_unit" value={editing.icon}
-                                onChange={e => handleField('icon', e.target.value)} />
                         </div>
                     </div>
 
@@ -271,8 +305,18 @@ export default function EditionsManager() {
                         <div className="flex flex-col gap-2">
                             {editing.events.map((ev, i) => (
                                 <div key={i} className="flex gap-2 items-center">
-                                    <input style={{ ...s.input, width: '130px', flexShrink: 0 }} placeholder="Icône (ex: star)"
-                                        value={ev.icon} onChange={e => handleEvent(i, 'icon', e.target.value)} />
+                                    <div className="flex items-center gap-1 shrink-0">
+                                        <span className="material-symbols-outlined" style={{ fontSize: '18px', color: editing.accent, width: '22px', textAlign: 'center' }}>
+                                            {ev.icon || 'help_outline'}
+                                        </span>
+                                        <select style={{ ...s.input, width: '180px' }}
+                                            value={ev.icon} onChange={e => handleEvent(i, 'icon', e.target.value)}>
+                                            <option value="">— Icône —</option>
+                                            {EVENT_ICONS.map(ic => (
+                                                <option key={ic.value} value={ic.value}>{ic.label}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                     <input style={{ ...s.input, flex: 1 }} placeholder="Description de l'événement"
                                         value={ev.label} onChange={e => handleEvent(i, 'label', e.target.value)} />
                                     <button onClick={() => removeEvent(i)} style={{ ...s.danger, padding: '6px 10px', flexShrink: 0 }}>
