@@ -18,6 +18,7 @@ async function genererCartePDF(
   categorie: string,
   editionLabel: string,
   editionDate: string,
+  editionTime: string,
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
@@ -80,9 +81,13 @@ async function genererCartePDF(
 
   page.drawLine({ start: { x: 40, y: 206 }, end: { x: width - 40, y: 206 }, thickness: 0.5, color: separateur })
 
-  // Lieu
-  page.drawText('LIEU', { x: 40, y: 184, font: regular, size: 8, color: discret })
-  page.drawText(LIEU, { x: 40, y: 167, font: regular, size: 10, color: clair })
+  // Lieu + Heure
+  page.drawText('LIEU', { x: 40, y: 184, font: regular, size: 8,  color: discret })
+  page.drawText(LIEU,   { x: 40, y: 167, font: regular, size: 10, color: clair   })
+  if (editionTime) {
+    page.drawText('HEURE',      { x: 240, y: 184, font: regular, size: 8,  color: discret })
+    page.drawText(editionTime,  { x: 240, y: 167, font: gras,    size: 13, color: marine  })
+  }
 
   // Pied de page
   page.drawRectangle({ x: 0, y: 0, width, height: 58, color: rgb(0.96, 0.97, 1.0) })
@@ -99,13 +104,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name: nom, email, edition, editionLabel = edition, editionDate = '', category, registrationId: idInscription } = await req.json()
+    const { name: nom, email, edition, editionLabel = edition, editionDate = '', editionTime = '', category, registrationId: idInscription } = await req.json()
     const categorie = category === 'pro' ? 'professionnel' : 'amateur'
     console.log(`send-confirmation-concours: ${email} edition=${edition}`)
 
     let piecesJointes: object[] = []
     try {
-      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie, editionLabel, editionDate)
+      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie, editionLabel, editionDate, editionTime)
       piecesJointes = [{
         filename: `inscription-${idInscription.slice(0, 8).toUpperCase()}.pdf`,
         content: Buffer.from(pdfBytes),
@@ -116,7 +121,7 @@ Deno.serve(async (req) => {
       console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = emailConfirmationConcours({ nom, email, edition, editionLabel, editionDate, categorie, idInscription })
+    const html = emailConfirmationConcours({ nom, email, edition, editionLabel, editionDate, editionTime, categorie, idInscription })
 
     const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,

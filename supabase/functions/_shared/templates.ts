@@ -19,6 +19,7 @@ export function emailConfirmationConcours(donnees: {
   edition: string;
   editionLabel?: string;
   editionDate?: string;
+  editionTime?: string;
   categorie: CategorieParticipant;
   idInscription: string;
 }) {
@@ -77,6 +78,16 @@ export function emailConfirmationConcours(donnees: {
                 <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionDate || donnees.editionLabel || donnees.edition}</td>
               </tr>
 
+              <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Lieu</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">Tournai Parc Georges Brassens</td>
+              </tr>
+
+              ${donnees.editionTime ? `<tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Heure d'ouverture</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionTime}</td>
+              </tr>` : ''}
+
               <tr>
                 <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Numéro d'inscription</td>
                 <td style="padding:11px 0;font-size:12px;text-align:right;font-family:'Courier New',Courier,monospace;color:#888888;letter-spacing:0.08em;">${donnees.idInscription.slice(0, 8).toUpperCase()}</td>
@@ -125,6 +136,7 @@ export function emailConfirmationBillets(donnees: {
   edition: string;
   editionLabel?: string;
   editionDate?: string;
+  editionTime?: string;
   quantite: number;
   idCommande: string;
 }) {
@@ -179,6 +191,16 @@ export function emailConfirmationBillets(donnees: {
                 <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Édition</td>
                 <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionDate || donnees.editionLabel || donnees.edition}</td>
               </tr>
+
+              <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Lieu</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">Tournai Parc Georges Brassens</td>
+              </tr>
+
+              ${donnees.editionTime ? `<tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Heure d'ouverture</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionTime}</td>
+              </tr>` : ''}
 
               <tr>
                 <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Référence commande</td>

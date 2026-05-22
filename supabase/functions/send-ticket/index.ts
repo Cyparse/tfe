@@ -27,6 +27,7 @@ async function genererBilletPDF(
   idCommande: string,
   editionLabel: string,
   editionDate: string,
+  editionTime: string,
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
@@ -92,10 +93,14 @@ async function genererBilletPDF(
   const sep2Y = refY - 38
   page.drawLine({ start: { x: 40, y: sep2Y }, end: { x: width - 40, y: sep2Y }, thickness: 0.5, color: separateur })
 
-  // ─── Lieu ────────────────────────────────────────────────────────────────
+  // ─── Lieu + Heure ────────────────────────────────────────────────────────
   const lieuY = sep2Y - 20
-  page.drawText('LIEU', { x: 40, y: lieuY,      font: regular, size: 8,  color: discret })
-  page.drawText(LIEU,   { x: 40, y: lieuY - 17, font: regular, size: 10, color: clair   })
+  page.drawText('LIEU',  { x: 40,  y: lieuY,      font: regular, size: 8,  color: discret })
+  page.drawText(LIEU,    { x: 40,  y: lieuY - 17, font: regular, size: 10, color: clair   })
+  if (editionTime) {
+    page.drawText('HEURE',       { x: 240, y: lieuY,      font: regular, size: 8,  color: discret })
+    page.drawText(editionTime,   { x: 240, y: lieuY - 17, font: gras,    size: 13, color: marine  })
+  }
 
   // ─── Pied de page (y: 0–58) ──────────────────────────────────────────────
   const footerH = 58
@@ -113,7 +118,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name: nom, email, edition, editionLabel = edition, editionDate = '', quantity: quantite, orderId: idCommande } = await req.json()
+    const { name: nom, email, edition, editionLabel = edition, editionDate = '', editionTime = '', quantity: quantite, orderId: idCommande } = await req.json()
     console.log(`send-confirmation-billets: ${email} edition=${edition} qte=${quantite}`)
 
     const billets = Array.from({ length: quantite }, () => ({
@@ -144,7 +149,7 @@ Deno.serve(async (req) => {
     try {
       piecesJointes = await Promise.all(
         billets.map(async (b) => {
-          const pdfBytes = await genererBilletPDF(b.ticket_number, nom, edition, idCommande, editionLabel, editionDate)
+          const pdfBytes = await genererBilletPDF(b.ticket_number, nom, edition, idCommande, editionLabel, editionDate, editionTime)
           return {
             filename: `billet-${b.ticket_number}.pdf`,
             content: Buffer.from(pdfBytes),
@@ -157,7 +162,7 @@ Deno.serve(async (req) => {
       console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = emailConfirmationBillets({ nom, email, edition, editionLabel, editionDate, quantite, idCommande })
+    const html = emailConfirmationBillets({ nom, email, edition, editionLabel, editionDate, editionTime, quantite, idCommande })
 
     const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,

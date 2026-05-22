@@ -135,6 +135,7 @@ export default function Registration({ inCircle = false }) {
             const emailResults = await Promise.allSettled(
                 data.map((reg) => {
                     const editionObj = EDITIONS.find((e) => e.value === reg.festival_edition);
+                    const editionTime = editionObj?.date_iso?.match(/T(\d{2}:\d{2})/)?.[1]?.replace(':', 'h') ?? '';
                     return supabase.functions.invoke('send-confirmation', {
                         body: {
                             name: `${formData.firstName} ${formData.lastName}`,
@@ -142,6 +143,7 @@ export default function Registration({ inCircle = false }) {
                             edition: reg.festival_edition,
                             editionLabel: editionObj?.label ?? reg.festival_edition,
                             editionDate: editionObj?.date_display ?? '',
+                            editionTime,
                             category: formData.type,
                             registrationId: reg.id,
                         },
