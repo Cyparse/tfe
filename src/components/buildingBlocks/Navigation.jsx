@@ -37,17 +37,17 @@ export default function Navigation({ onMenuClick }) {
     };
 
     const spawnSnowflakes = useCallback(() => {
-        const newFlakes = Array.from({ length: 22 }, (_, i) => ({
+        const newFlakes = Array.from({ length: 15 }, (_, i) => ({
             id: Date.now() + i,
             x: 5 + Math.random() * 90,
             size: 5 + Math.random() * 9,
-            duration: 1.4 + Math.random() * 1.2,
-            delay: Math.random() * 0.5,
+            duration: 2.4 + Math.random() * 1.6,
+            delay: Math.random() * 1.2,
         }));
         setFlakes(f => [...f, ...newFlakes]);
         setTimeout(() => {
             setFlakes(f => f.filter(fl => !newFlakes.some(n => n.id === fl.id)));
-        }, 2500);
+        }, 4500);
     }, []);
 
     return (
