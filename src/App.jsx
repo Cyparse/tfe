@@ -14,7 +14,6 @@ import ContactModal from "./components/modals/ContactModal";
 import AdminLogin from "./admin/AdminLogin";
 import AdminPanel from "./admin/AdminPanel";
 import UpdatePassword from "./admin/UpdatePassword";
-import { supabase } from "./supabaseClient";
 import {
   getCurrentUser,
   isAdmin as checkAdminAccess,
@@ -71,13 +70,9 @@ function App() {
     try {
       const user = await getCurrentUser();
 
-      if (user && (await checkAdminAccess())) {
-        const { data: profile } = await supabase
-          .from('admin_users')
-          .select('full_name, role')
-          .eq('email', user.email)
-          .single();
-        setAdminUser({ ...user, full_name: profile?.full_name, role: profile?.role });
+      const profile = user ? await checkAdminAccess() : null;
+      if (user && profile) {
+        setAdminUser({ ...user, full_name: profile.full_name, role: profile.role });
         setIsAdmin(true);
       } else {
         setAdminUser(null);
