@@ -79,18 +79,29 @@ tfe/
 └── package.json
 ```
 
-## Installation
+## Mise en route rapide
 
 ```bash
 npm install
+cp .env.example .env
+npm run dev      # http://localhost:5173
 ```
 
-## Development
+Le fichier `.env.example` contient les vraies clés Supabase du projet — il suffit de le copier.
+
+## Accès administrateur
+
+| URL | `/#admin` |
+|---|---|
+| Email | `info@snow-wonder.be` |
+| Mot de passe | `ABC123test!` |
+
+## Développement
 
 ```bash
-npm run dev      # dev server with HMR → http://localhost:5173
-npm run build    # production build → dist/
-npm run preview  # preview production build
+npm run dev      # dev server avec HMR → http://localhost:5173
+npm run build    # build de production → dist/
+npm run preview  # prévisualiser le build de production
 ```
 
 ## Database (Supabase)

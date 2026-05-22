@@ -48,6 +48,9 @@ export default function ContentSection() {
                                 alt="Sculpture de neige"
                                 className="rounded-2xl border border-white/20 shadow-xl w-full object-cover"
                                 src={HeroImage}
+                                width="600"
+                                height="400"
+                                fetchpriority="high"
                             />
                         </div>
                     </div>

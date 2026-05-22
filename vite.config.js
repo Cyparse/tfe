@@ -10,6 +10,7 @@ export default defineConfig({
           'vendor-react':    ['react', 'react-dom'],
           'vendor-supabase': ['@supabase/supabase-js'],
           'vendor-leaflet':  ['leaflet'],
+          'admin':           ['./src/admin/AdminPanel'],
         },
       },
     },
