@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../supabaseClient';
 import { logError, friendlyError } from '../../utils/errorLogger';
+import { useEditions } from '../../hooks/useEditions';
 
 export default function Registration({ inCircle = false }) {
-const EDITIONS = [
-    { value: 'december', label: 'Édition Décembre', date: '6 déc. 2026' },
-    { value: 'january',  label: 'Édition Janvier',  date: '10 jan. 2027' },
-    { value: 'february', label: 'Édition Février',  date: '7 fév. 2027' },
-];
+    const { editions: EDITIONS } = useEditions();
 
     const [formData, setFormData] = useState({
         type: 'amateur',
@@ -313,7 +310,7 @@ const EDITIONS = [
                                             }}
                                         >
                                             <span>{ed.label}</span>
-                                            <span style={{ fontSize: "11px", opacity: 0.7 }}>{done ? "Inscrit(e)" : ed.date}</span>
+                                            <span style={{ fontSize: "11px", opacity: 0.7 }}>{done ? "Inscrit(e)" : ed.date_display}</span>
                                         </button>
                                     );
                                 })}
@@ -490,7 +487,7 @@ const EDITIONS = [
                                                 }`}
                                             >
                                                 <div className="font-semibold text-sm">{ed.label}</div>
-                                                <div className="text-xs mt-0.5 opacity-70">{ed.date}</div>
+                                                <div className="text-xs mt-0.5 opacity-70">{ed.date_display}</div>
                                                 {alreadyDone && <div className="text-xs mt-1 text-white/40">Déjà inscrit(e)</div>}
                                             </button>
                                         );

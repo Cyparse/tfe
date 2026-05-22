@@ -1,14 +1,10 @@
 import React, { useState, useRef } from "react";
 import { supabase } from "../../supabaseClient";
 import { logError, friendlyError } from "../../utils/errorLogger";
-
-const EDITIONS = [
-  { value: "december", label: "Édition Décembre", date: "6 déc. 2026" },
-  { value: "january", label: "Édition Janvier", date: "10 jan. 2027" },
-  { value: "february", label: "Édition Février", date: "7 fév. 2027" },
-];
+import { useEditions } from "../../hooks/useEditions";
 
 export default function Tickets({ inCircle = false }) {
+  const { editions: EDITIONS } = useEditions();
   const [formData, setFormData] = useState({
     edition: "",
     firstName: "",
@@ -409,7 +405,7 @@ export default function Tickets({ inCircle = false }) {
                     >
                       <span>{ed.label}</span>
                       <span style={{ fontSize: "11px", opacity: 0.7 }}>
-                        {ed.date}
+                        {ed.date_display}
                       </span>
                     </div>
                   </label>
@@ -785,7 +781,7 @@ export default function Tickets({ inCircle = false }) {
                       }`}
                     >
                       <div className="font-semibold text-sm">{ed.label}</div>
-                      <div className="text-xs mt-0.5 opacity-70">{ed.date}</div>
+                      <div className="text-xs mt-0.5 opacity-70">{ed.date_display}</div>
                     </div>
                   </label>
                 ))}

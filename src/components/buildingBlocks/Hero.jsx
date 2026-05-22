@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { LogoSvg, Twinkle } from "../../assets/images";
+import { useEditions } from "../../hooks/useEditions";
 
 const scrollTo = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
-
-const EDITIONS = [
-  { label: 'Édition Décembre', date: new Date('2026-12-06T10:00:00') },
-  { label: 'Édition Janvier',  date: new Date('2027-01-10T10:00:00') },
-  { label: 'Édition Février',  date: new Date('2027-02-07T10:00:00') },
-];
-
-function getNextEdition() {
-  const now = new Date();
-  return EDITIONS.find((e) => e.date > now) ?? EDITIONS[EDITIONS.length - 1];
-}
 
 function useCountdown(targetDate) {
   const [timeLeft, setTimeLeft] = useState(() => {
@@ -49,16 +39,20 @@ function CountdownUnit({ value, label }) {
 }
 
 function Countdown() {
-  const next = getNextEdition();
-  const { days, hours, minutes, seconds, over } = useCountdown(next.date);
+  const { editions, loading } = useEditions();
+  const now = new Date();
+  const next = editions.find((e) => new Date(e.date_iso) > now) ?? editions[editions.length - 1];
 
-  if (over) return null;
+  const { days, hours, minutes, seconds, over } = useCountdown(next ? new Date(next.date_iso) : now);
+
+  if (loading || !next || over) return null;
 
   return (
     <div className="mb-8">
       <p className="text-xs uppercase tracking-[0.3em] text-midblue/60 mb-3">
         {next.label} commence dans
       </p>
+
       <div className="inline-flex items-center gap-3 bg-deep-navy/50 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-4 shadow-xl">
         <CountdownUnit value={days} label="Jours" />
         <span className="text-2xl font-black text-white/30 mb-3">:</span>

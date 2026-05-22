@@ -7,6 +7,7 @@ import ContentManager from './ContentManager';
 import Dashboard from './Dashboard';
 import CarouselManager from './CarouselManager';
 import WinnersManager from './WinnersManager';
+import EditionsManager from './EditionsManager';
 
 export default function AdminPanel({ user, onLogout }) {
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -18,6 +19,7 @@ export default function AdminPanel({ user, onLogout }) {
         { id: 'content',        label: 'Contenu',         icon: 'article' },
         { id: 'carousel',       label: 'Galerie',         icon: 'photo_library' },
         { id: 'winners',        label: 'Gagnants',        icon: 'emoji_events' },
+        { id: 'editions',       label: 'Éditions',        icon: 'event' },
     ];
 
     const handleLogout = async () => {
@@ -42,7 +44,7 @@ export default function AdminPanel({ user, onLogout }) {
                             </span>
                         </div>
                         {/* Search */}
-                        <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
+                        {/* <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
                             style={{ background: '#004075', borderColor: 'var(--color-midblue)', minWidth: '220px' }}>
                             <span className="material-symbols-outlined text-sm" style={{ color: 'var(--color-festival-yellow)' }}>search</span>
                             <input
@@ -50,16 +52,16 @@ export default function AdminPanel({ user, onLogout }) {
                                 style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
                                 placeholder="Rechercher…"
                             />
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Right side */}
                     <div className="flex items-center gap-4">
-                        <button className="material-symbols-outlined transition-colors"
-                            style={{ color: 'var(--color-festival-yellow)', fontSize: '1.25rem' }}>notifications</button>
+                        {/* <button className="material-symbols-outlined transition-colors"
+                            style={{ color: 'var(--color-festival-yellow)', fontSize: '1.25rem' }}>notifications</button> */}
                         <div className="hidden sm:flex flex-col items-end">
                             <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
-                                {user?.email?.split('@')[0]}
+                                {user?.full_name || 'Utilisateur'}
                             </span>
                             <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                                 Admin
@@ -106,6 +108,7 @@ export default function AdminPanel({ user, onLogout }) {
                 {activeTab === 'content'       && <ContentManager />}
                 {activeTab === 'carousel'      && <CarouselManager />}
                 {activeTab === 'winners'       && <WinnersManager />}
+                {activeTab === 'editions'      && <EditionsManager />}
             </main>
         </div>
     );

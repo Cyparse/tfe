@@ -1,52 +1,10 @@
 import React from 'react';
 import './ScheduleSection.css';
-
-const EDITIONS = [
-    {
-        month: 'Décembre',
-        date: '6 décembre 2026',
-        theme: 'Édition Ouverture',
-        accent: '#4289b6',
-        icon: 'ac_unit',
-        description: 'Lancement du festival, illuminations et premières sculptures de neige.',
-        events: [
-            { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
-            { icon: 'star', label: 'Concours de bonhommes de neige pro' },
-            { icon: 'storefront', label: 'Village gastronomique ouvert' },
-            { icon: 'celebration', label: "Cérémonie d'ouverture & illuminations" },
-        ],
-    },
-    {
-        month: 'Janvier',
-        date: '10 janvier 2027',
-        theme: 'Édition Mi-Hiver',
-        accent: '#CAE9FF',
-        icon: 'ac_unit',
-        description: 'Ambiance glacée, animations nocturnes et énergie hivernale maximale.',
-        events: [
-            { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
-            { icon: 'star', label: 'Concours de bonhommes de neige pro' },
-            { icon: 'storefront', label: 'Village gastronomique ouvert' },
-            { icon: 'music_note', label: 'Musique live & animations' },
-        ],
-    },
-    {
-        month: 'Février',
-        date: '7 février 2027',
-        theme: 'Grande Finale',
-        accent: '#ffffff',
-        icon: 'ac_unit',
-        description: 'Dernière édition, remise des prix et final spectaculaire du festival.',
-        events: [
-            { icon: 'emoji_events', label: 'Concours de bonhommes de neige amateur' },
-            { icon: 'star', label: 'Concours de bonhommes de neige pro' },
-            { icon: 'storefront', label: 'Village gastronomique ouvert' },
-            { icon: 'trophy', label: 'Cérémonie de remise des prix & palmarès' },
-        ],
-    },
-];
+import { useEditions } from '../../hooks/useEditions';
 
 export default function ScheduleSection() {
+    const { editions, loading } = useEditions();
+
     return (
         <section id="schedule" className="schedule-section">
             <div className="schedule-wave-top">
@@ -65,7 +23,7 @@ export default function ScheduleSection() {
                 <div className="schedule-header">
                     <div className="schedule-eyebrow">
                         <span className="schedule-eyebrow-line"></span>
-                        Trois éditions
+                        {editions.length} édition{editions.length !== 1 ? 's' : ''}
                         <span className="schedule-eyebrow-line"></span>
                     </div>
                     <h2 className="schedule-title">Programme du Festival</h2>
@@ -73,9 +31,11 @@ export default function ScheduleSection() {
                 </div>
 
                 <div className="schedule-grid">
-                    {EDITIONS.map((ed) => (
+                    {loading ? (
+                        <p className="schedule-date" style={{ opacity: 0.5 }}>Chargement…</p>
+                    ) : editions.map((ed) => (
                         <article
-                            key={ed.month}
+                            key={ed.id}
                             className="schedule-card"
                             style={{ '--clr': ed.accent }}
                         >
@@ -94,7 +54,7 @@ export default function ScheduleSection() {
 
                                 <div className="schedule-content">
                                     <h3>{ed.theme}</h3>
-                                    <p className="schedule-date">{ed.date}</p>
+                                    <p className="schedule-date">{ed.date_display}</p>
                                     <p className="schedule-description">{ed.description}</p>
 
                                     <ul className="schedule-events">
