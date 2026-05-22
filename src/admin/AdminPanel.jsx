@@ -8,18 +8,10 @@ import Dashboard from "./Dashboard";
 import CarouselManager from "./CarouselManager";
 import WinnersManager from "./WinnersManager";
 import EditionsManager from "./EditionsManager";
+import TicketScanner from "./TicketScanner";
 
 export default function AdminPanel({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  const tabs = [
-    { id: "dashboard", label: "Tableau de bord", icon: "dashboard" },
-    { id: "registrations", label: "Inscriptions", icon: "edit_note" },
-    { id: "tickets", label: "Billetterie", icon: "confirmation_number" },
-    { id: "editions", label: "Éditions", icon: "event" },
-    { id: "carousel", label: "Galerie", icon: "photo_library" },
-    { id: "winners", label: "Gagnants", icon: "emoji_events" },
-  ];
 
   const handleLogout = async () => {
     try {
@@ -29,6 +21,81 @@ export default function AdminPanel({ user, onLogout }) {
       console.error(e);
     }
   };
+
+  // Scanner-only role: minimal header + just the scanner
+  if (user?.role === "scanner") {
+    return (
+      <div
+        className="min-h-screen"
+        style={{
+          background:
+            "linear-gradient(180deg, var(--color-midblue) 0%, var(--color-deep-navy) 100%)",
+          color: "#ffffff",
+        }}
+      >
+        <header
+          className="sticky top-0 z-50 border-b"
+          style={{
+            background: "var(--color-deep-navy)",
+            borderColor: "var(--color-midblue)",
+          }}
+        >
+          <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: "var(--color-festival-yellow)" }}
+              >
+                <img src={snowflake} alt="Snow Wonder" className="w-6 h-6" />
+              </div>
+              <span
+                className="font-semibold tracking-tight hidden sm:block"
+                style={{ color: "#ffffff", fontFamily: "var(--font-family-rubik)", fontSize: "1.1rem" }}
+              >
+                Snow Wonder
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex flex-col items-end">
+                <span
+                  className="text-xs font-bold uppercase tracking-widest"
+                  style={{ color: "#ffffff", fontFamily: "var(--font-family-body)" }}
+                >
+                  {user?.full_name || "Utilisateur"}
+                </span>
+                <span
+                  className="text-[10px] uppercase tracking-widest"
+                  style={{ color: "var(--color-festival-yellow)", fontFamily: "var(--font-family-body)" }}
+                >
+                  Contrôleur
+                </span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="text-xs font-bold uppercase tracking-wider"
+                style={{ color: "#ffb4ab", fontFamily: "var(--font-family-body)", letterSpacing: "0.05em" }}
+              >
+                Déconnexion
+              </button>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+          <TicketScanner />
+        </main>
+      </div>
+    );
+  }
+
+  const tabs = [
+    { id: "dashboard", label: "Tableau de bord", icon: "dashboard" },
+    { id: "registrations", label: "Inscriptions", icon: "edit_note" },
+    { id: "tickets", label: "Billetterie", icon: "confirmation_number" },
+    { id: "scanner", label: "Scanner", icon: "qr_code_scanner" },
+    { id: "editions", label: "Éditions", icon: "event" },
+    { id: "carousel", label: "Galerie", icon: "photo_library" },
+    { id: "winners", label: "Gagnants", icon: "emoji_events" },
+  ];
 
   return (
     <div
@@ -160,6 +227,7 @@ export default function AdminPanel({ user, onLogout }) {
         {activeTab === "dashboard" && <Dashboard onNavigate={setActiveTab} />}
         {activeTab === "registrations" && <RegistrationManager />}
         {activeTab === "tickets" && <TicketManager />}
+        {activeTab === "scanner" && <TicketScanner />}
         {/* {activeTab === 'content'       && <ContentManager />} */}
         {activeTab === "editions" && <EditionsManager />}
         {activeTab === "carousel" && <CarouselManager />}
