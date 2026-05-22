@@ -211,8 +211,13 @@ export default function WinnersManager() {
                                             className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold shrink-0"
                                             style={{ background: winner.edition_color, color: '#002442', opacity: saving[winner.id] ? 0.6 : 1 }}
                                         >
-                                            <span className="material-symbols-outlined text-sm sm:hidden">save</span>
-                                            <span className="hidden sm:inline">{saving[winner.id] ? '…' : 'Sauvegarder'}</span>
+                                            {saving[winner.id]
+                                                ? <span className="tracking-widest">···</span>
+                                                : <>
+                                                    <span className="material-symbols-outlined text-sm sm:hidden">save</span>
+                                                    <span className="hidden sm:inline">Sauvegarder</span>
+                                                  </>
+                                            }
                                         </button>
                                         {(winner.winner_name || winner.photo_url) && (
                                             <button
