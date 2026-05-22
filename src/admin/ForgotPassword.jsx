@@ -11,6 +11,10 @@ export default function ForgotPassword({ initialEmail = '', onBack }) {
         e.preventDefault();
         setError('');
         setSuccessMessage('');
+        if (email.trim().toLowerCase() === 'public@snow-wonder.be') {
+            setError('Le mot de passe de ce compte ne peut pas être modifié.');
+            return;
+        }
         setIsLoading(true);
         try {
             const redirectTo = `${window.location.origin}${window.location.pathname}?mode=update-password`;
