@@ -19,8 +19,7 @@ export async function fetchEditions(includeInactive = false) {
         .order('sort_order', { ascending: true });
 
     if (!includeInactive) {
-        query.eq('active', true);
-        _promise = query.then(({ data, error }) => {
+        _promise = query.eq('active', true).then(({ data, error }) => {
             if (error) throw error;
             _cache = data ?? [];
             return _cache;

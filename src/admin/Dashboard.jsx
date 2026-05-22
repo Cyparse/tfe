@@ -165,12 +165,7 @@ export default function Dashboard({ onNavigate }) {
                         <span className="material-symbols-outlined text-sm">refresh</span>
                         Actualiser
                     </button>
-                    <button
-                        className="px-4 py-2 rounded-lg text-sm font-bold transition-all"
-                        style={{ background: 'var(--color-festival-yellow)', color: 'var(--color-dark-brown)', fontFamily: 'var(--font-family-body)' }}
-                    >
-                        Nouvel événement
-                    </button>
+                    
                 </div>
             </section>
 

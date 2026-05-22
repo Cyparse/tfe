@@ -6,6 +6,8 @@ const MAX_LOCAL_LOGS = 100;
 const SUPABASE_ERRORS = {
     '23505': "Cette adresse e-mail est déjà enregistrée pour cette édition.",
     '23503': "Référence invalide. Veuillez réessayer.",
+    '23514': "Cette édition n'est pas encore disponible pour les inscriptions. Veuillez contacter l'organisateur.",
+    '22P02': "Cette édition n'est pas encore disponible pour les inscriptions. Veuillez contacter l'organisateur.",
     '42501': "Permission refusée. Contactez l'organisateur.",
     '57014': "Le serveur a mis trop de temps à répondre. Veuillez réessayer.",
     'PGRST116': "Ressource introuvable.",

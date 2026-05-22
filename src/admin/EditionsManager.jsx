@@ -234,7 +234,11 @@ export default function EditionsManager() {
       load();
       setEditing(null);
     } catch (e) {
-      setError(e.message || "Erreur lors de la sauvegarde.");
+      if (e.code === '23505') {
+        setError("Cet identifiant est déjà utilisé par une autre édition. Veuillez en choisir un autre.");
+      } else {
+        setError(e.message || "Erreur lors de la sauvegarde.");
+      }
     } finally {
       setSaving(false);
     }
@@ -354,18 +358,18 @@ export default function EditionsManager() {
                   >
                     {ed.active ? "Actif" : "Inactif"}
                   </span>
-                  <button style={s.btn()} onClick={() => handleToggle(ed)}>
+                  <button style={s.btn()} onClick={() => handleToggle(ed)} className="flex items-center gap-1">
                     <span className="hidden sm:inline">{ed.active ? "Désactiver" : "Activer"}</span>
                     <span className="material-symbols-outlined text-sm sm:hidden">{ed.active ? "toggle_off" : "toggle_on"}</span>
                   </button>
                   <button
                     style={s.btn("var(--color-ice-blue)")}
                     onClick={() => startEdit(ed)}
-                  >
+                  className="flex items-center gap-1">
                     <span className="hidden sm:inline">Modifier</span>
                     <span className="material-symbols-outlined text-sm sm:hidden">edit</span>
                   </button>
-                  <button style={s.danger} onClick={() => setConfirmDelete(ed)}>
+                  <button style={s.danger} onClick={() => setConfirmDelete(ed)} className="flex items-center gap-1">
                     <span className="hidden sm:inline">Supprimer</span>
                     <span className="material-symbols-outlined text-sm sm:hidden">delete</span>
                   </button>

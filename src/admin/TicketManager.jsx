@@ -72,7 +72,7 @@ export default function TicketManager() {
                             <Field label="Ville" value={order.city} />
                             <Field label="Code postal" value={order.postal_code} />
                             <Field label="Pays" value={order.country} />
-                            <Field label="Newsletter" value={order.newsletter ? 'Oui' : 'Non'} />
+                            <Field label="Newsletter" value={order.newsletter_opt_in ? 'Oui' : 'Non'} />
                             {order.special_requests && (
                                 <div className="col-span-2">
                                     <p style={labelStyle} className="mb-1">Demandes spéciales</p>
