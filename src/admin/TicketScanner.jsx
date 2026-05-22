@@ -152,13 +152,13 @@ export default function TicketScanner() {
       </div>
 
       <div className="rounded-2xl overflow-hidden border"
-        style={{ borderColor: 'var(--color-midblue)', background: '#020f1e', minHeight: 360, position: 'relative' }}>
+        style={{ borderColor: 'var(--color-midblue)', background: '#020f1e' }}>
 
-        <div id={QR_DIV_ID} />
+        {/* Scanner div — hidden when not active so html5-qrcode lifecycle stays intact */}
+        <div id={QR_DIV_ID} style={{ display: phase === 'scanning' ? 'block' : 'none' }} />
 
         {phase !== 'scanning' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8"
-            style={{ background: '#020f1e' }}>
+          <div className="flex flex-col items-center justify-center p-8" style={{ minHeight: 300 }}>
 
             {phase === 'idle' && <>
               <span className="material-symbols-outlined mb-4"
@@ -181,7 +181,7 @@ export default function TicketScanner() {
             </>}
 
             {phase === 'success' && (
-              <div className="w-full text-center min-h-105">
+              <div className="w-full text-center">
                 <ResultIcon icon="check_circle" color="#22c55e" bg="rgba(34,197,94,0.12)" />
                 <p style={{ color: '#22c55e', fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{labels.success.title}</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginBottom: 20 }}>{labels.success.sub}</p>
@@ -191,7 +191,7 @@ export default function TicketScanner() {
             )}
 
             {phase === 'already_used' && (
-              <div className="w-full text-center min-h-105">
+              <div className="w-full text-center">
                 <ResultIcon icon="warning" color="#fbbf24" bg="rgba(251,191,36,0.12)" border="#fbbf24" />
                 <p style={{ color: '#fbbf24', fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{labels.already_used.title}</p>
                 {usedAt && (
@@ -207,7 +207,7 @@ export default function TicketScanner() {
             )}
 
             {phase === 'not_found' && (
-              <div className="w-full text-center min-h-105">
+              <div className="w-full text-center">
                 <ResultIcon icon="cancel" color="#ef4444" bg="rgba(239,68,68,0.12)" border="#ef4444" />
                 <p style={{ color: '#ef4444', fontSize: 22, fontWeight: 700, marginBottom: 2 }}>{labels.not_found.title}</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginBottom: info?.raw ? 8 : 20 }}>
@@ -223,7 +223,7 @@ export default function TicketScanner() {
             )}
 
             {phase === 'error' && (
-              <div className="w-full text-center min-h-105">
+              <div className="w-full text-center">
                 <ResultIcon icon="error" color="#ef4444" bg="rgba(239,68,68,0.12)" border="#ef4444" />
                 <p style={{ color: '#ef4444', fontSize: 22, fontWeight: 700, marginBottom: 2 }}>Erreur</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, marginBottom: 20 }}>
