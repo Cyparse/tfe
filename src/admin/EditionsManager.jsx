@@ -323,7 +323,7 @@ export default function EditionsManager() {
               key={ed.id}
               style={{ ...s.card, opacity: ed.active ? 1 : 0.5 }}
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div
                     className="w-3 h-3 rounded-full shrink-0"
@@ -339,7 +339,7 @@ export default function EditionsManager() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex flex-wrap items-center gap-2">
                   <span
                     className="text-xs px-2 py-0.5 rounded-full"
                     style={{
@@ -355,16 +355,19 @@ export default function EditionsManager() {
                     {ed.active ? "Actif" : "Inactif"}
                   </span>
                   <button style={s.btn()} onClick={() => handleToggle(ed)}>
-                    {ed.active ? "Désactiver" : "Activer"}
+                    <span className="hidden sm:inline">{ed.active ? "Désactiver" : "Activer"}</span>
+                    <span className="material-symbols-outlined text-sm sm:hidden">{ed.active ? "toggle_off" : "toggle_on"}</span>
                   </button>
                   <button
                     style={s.btn("var(--color-ice-blue)")}
                     onClick={() => startEdit(ed)}
                   >
-                    Modifier
+                    <span className="hidden sm:inline">Modifier</span>
+                    <span className="material-symbols-outlined text-sm sm:hidden">edit</span>
                   </button>
                   <button style={s.danger} onClick={() => setConfirmDelete(ed)}>
-                    Supprimer
+                    <span className="hidden sm:inline">Supprimer</span>
+                    <span className="material-symbols-outlined text-sm sm:hidden">delete</span>
                   </button>
                 </div>
               </div>

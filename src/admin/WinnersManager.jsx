@@ -202,16 +202,17 @@ export default function WinnersManager() {
                                             onChange={e => updateField(winner.id, 'winner_name', e.target.value)}
                                             onBlur={() => saveName(winner)}
                                             placeholder="À venir…"
-                                            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium outline-none"
+                                            className="flex-1 min-w-0 px-4 py-2.5 rounded-xl text-sm font-medium outline-none"
                                             style={{ background: 'rgba(0,36,66,0.5)', border: `1px solid ${winner.edition_color}44`, color: '#ffffff' }}
                                         />
                                         <button
                                             onClick={() => saveName(winner)}
                                             disabled={saving[winner.id]}
-                                            className="px-4 py-2.5 rounded-xl text-sm font-semibold shrink-0"
+                                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold shrink-0"
                                             style={{ background: winner.edition_color, color: '#002442', opacity: saving[winner.id] ? 0.6 : 1 }}
                                         >
-                                            {saving[winner.id] ? '…' : 'Sauvegarder'}
+                                            <span className="material-symbols-outlined text-sm sm:hidden">save</span>
+                                            <span className="hidden sm:inline">{saving[winner.id] ? '…' : 'Sauvegarder'}</span>
                                         </button>
                                         {(winner.winner_name || winner.photo_url) && (
                                             <button
