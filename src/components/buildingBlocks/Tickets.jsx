@@ -95,16 +95,24 @@ export default function Tickets({ inCircle = false }) {
     setIsSubmitting(true);
 
     try {
-      // Vérifier si cet email a déjà commandé pour cette édition
+      // Vérifier le total de billets déjà commandés pour cet email + édition
       const { data: existing } = await supabase
         .from("ticket_orders")
-        .select("id")
+        .select("ticket_count")
         .ilike("email", formData.email)
-        .eq("festival_edition", formData.edition)
-        .limit(1);
+        .eq("festival_edition", formData.edition);
 
-      if (existing && existing.length > 0) {
-        setErrors({ submit: "Cette adresse e-mail a déjà une réservation pour cette édition. Contactez-nous à info@snow-wonder.be si vous avez besoin de billets supplémentaires." });
+      const alreadyOrdered = (existing ?? []).reduce((sum, o) => sum + (o.ticket_count || 0), 0);
+      const remaining = MAX_TICKETS - alreadyOrdered;
+
+      if (remaining <= 0) {
+        setErrors({ submit: `Vous avez déjà atteint la limite de ${MAX_TICKETS} billets pour cette édition avec cette adresse e-mail.` });
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (formData.ticketCount > remaining) {
+        setErrors({ submit: `Il vous reste ${remaining} billet${remaining > 1 ? 's' : ''} disponible${remaining > 1 ? 's' : ''} pour cette édition (limite de ${MAX_TICKETS} par adresse e-mail).` });
         setIsSubmitting(false);
         return;
       }
