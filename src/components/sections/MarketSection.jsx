@@ -20,7 +20,7 @@ export default function MarketSection() {
       const SausageLocation = [50.602741, 3.388638];
       const WafflesLocation = [50.602676, 3.388451];
       const CandyLocation = [50.602568, 3.38824];
-      const GazeboLocation = [50.602631, 3.387923];
+      const GazeboLocation = [50.602592, 3.387943];
 
       // Create map
       leafletMapRef.current = L.map(mapRef.current, {
