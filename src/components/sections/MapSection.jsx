@@ -105,7 +105,7 @@ export default function MapSection() {
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <span className="material-symbols-outlined text-festival-yellow mt-0.5">directions_walk</span>
-                                        <p className="text-sm">10 minutes à pied depuis la gare principale</p>
+                                        <p className="text-sm">20 minutes à pied depuis la gare de Tournai</p>
                                     </div>
                                     <a
                                         href="https://www.google.com/maps/dir/?api=1&destination=50.602511757616966,3.388043095146282"
