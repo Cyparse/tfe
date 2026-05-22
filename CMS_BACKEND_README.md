@@ -1,341 +1,209 @@
-# CMS-Like Backend Documentation
+# CMS Backend Documentation
 
-A comprehensive CMS backend system integrated with Supabase for managing registrations, ticket reservations, and generic content through a powerful admin panel.
+Admin panel and backend services for the Snow Wonder Festival site, built with React, Vite, Supabase, and Tailwind CSS.
+
+---
 
 ## Features
 
-### 🎯 Core Functionality
-- **Registration Management**: Handle amateur and professional registrations
-- **Ticket/Reservation Management**: Manage ticket orders and reservations
-- **Generic Content Management**: CRUD operations for any Supabase table
-- **Admin Authentication**: Secure admin-only access
-- **Data Export**: CSV export functionality
-- **Search & Filtering**: Advanced filtering and search capabilities
-- **Pagination**: Efficient data loading with pagination
+- **Festival Editions**: Create and manage editions (year, theme, accent colour, events JSON, active flag)
+- **Registration Management**: View, search, filter, and export amateur/pro registrations per edition
+- **Ticket Management**: View, search, and export ticket orders; generate individual tickets
+- **Ticket Scanner**: QR/barcode check-in scanner for entry control (scanner role only)
+- **Carousel Manager**: Upload and reorder images by section (gallery, etc.)
+- **Winners Manager**: Add past edition winners with photos and podium positions
+- **Newsletter Subscribers**: View and manage newsletter opt-ins
+- **Admin Authentication**: Role-based access (`super_admin`, `admin`, `scanner`)
+- **Error Logging**: Automatic error capture via `errorLogger.js` → `error_logs` table
 
-### 📊 Admin Dashboard
-- Real-time statistics and metrics
-- Quick overview of registrations and tickets
-- Visual data presentation
-- Quick action buttons
+---
 
 ## Project Structure
 
 ```
 src/
-├── services/               # Backend service layer
-│   ├── authService.js     # Admin authentication
-│   ├── registrationService.js  # Registration CRUD operations
-│   ├── ticketService.js   # Ticket order CRUD operations
-│   └── contentService.js  # Generic content CRUD operations
+├── admin/
+│   ├── AdminLogin.jsx         # Login + forgot/reset password flow
+│   ├── AdminPanel.jsx         # Tab container; guards by role
+│   ├── Dashboard.jsx          # Stats overview (registrations, tickets, revenue)
+│   ├── RegistrationManager.jsx
+│   ├── TicketManager.jsx
+│   ├── TicketScanner.jsx      # Scanner role: QR check-in UI
+│   ├── EditionsManager.jsx    # CRUD for festival_editions
+│   ├── CarouselManager.jsx    # CRUD for carousel_images
+│   ├── WinnersManager.jsx     # CRUD for winners
+│   ├── ContentManager.jsx     # Generic table browser
+│   ├── ForgotPassword.jsx
+│   └── UpdatePassword.jsx
 │
-├── admin/                 # Admin panel components
-│   ├── AdminLogin.jsx     # Admin login page
-│   ├── AdminPanel.jsx     # Main admin panel container
-│   ├── Dashboard.jsx      # Statistics dashboard
-│   ├── RegistrationManager.jsx  # Manage registrations
-│   ├── TicketManager.jsx  # Manage ticket orders
-│   └── ContentManager.jsx # Generic content manager
+├── services/
+│   ├── authService.js         # Supabase Auth + admin_users role check
+│   ├── registrationService.js # Registrations CRUD + CSV export
+│   ├── ticketService.js       # Ticket orders + individual tickets CRUD
+│   ├── editionsService.js     # Festival editions CRUD
+│   └── contentService.js      # Generic CRUD for any table
 │
-├── components/            # Public-facing components
-│   ├── Registration.jsx   # Public registration form
-│   ├── Tickets.jsx        # Public ticket order form
-│   └── ...
+├── hooks/
+│   └── useEditions.js         # Shared hook: fetch active editions list
 │
-└── App.jsx               # Main app with routing
+├── utils/
+│   └── errorLogger.js         # Writes to error_logs table
+│
+├── components/
+│   ├── buildingBlocks/        # Public-facing UI components
+│   └── sections/              # Page sections (Schedule, Gallery, Winners, etc.)
+│
+└── supabaseClient.js          # Supabase client singleton
 ```
+
+---
 
 ## Getting Started
 
-### 1. Database Setup
+### 1. Database
 
-Follow the instructions in `DATABASE_SETUP.md` to:
-- Create required tables in Supabase
-- Set up Row Level Security policies
-- Create your first admin user
+Run all scripts in [DATABASE_SETUP.md](DATABASE_SETUP.md) in order. `festival_editions` must be seeded before registrations or ticket orders can be submitted.
 
-### 2. Environment Configuration
-
-Create a `.env` file in the project root:
+### 2. Environment
 
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 3. Install Dependencies
+### 3. Install & Run
 
 ```bash
 npm install
-```
-
-### 4. Run Development Server
-
-```bash
 npm run dev
 ```
 
-## Usage
+---
 
-### Accessing the Admin Panel
+## Accessing the Admin Panel
 
-Navigate to `/admin` or add `#admin` to your URL:
-- Example: `http://localhost:5173/admin`
-- Or: `http://localhost:5173/#admin`
+Navigate to `/admin`:
 
-### Admin Login
+```
+http://localhost:5173/admin
+```
 
-Use credentials for a user that exists in both:
-1. Supabase Authentication (Users)
-2. `admin_users` table
+Login with a user that exists in both Supabase Authentication and the `admin_users` table.
 
-### Managing Registrations
+---
 
-1. Go to Admin Panel → Registrations tab
-2. **View**: Click "View" to see full registration details
-3. **Search**: Use the search box to filter by name or email
-4. **Filter**: Filter by registration type (Amateur/Pro)
-5. **Export**: Download all registrations as CSV
-6. **Delete**: Remove unwanted registrations
+## Roles
 
-### Managing Ticket Orders
+| Role | Access |
+|---|---|
+| `super_admin` | Full access to all tabs |
+| `admin` | All tabs except cannot delete other admins |
+| `scanner` | Ticket Scanner tab only |
 
-1. Go to Admin Panel → Tickets tab
-2. **View**: Click "View" to see full order details
-3. **Search**: Search by name or email
-4. **Sort**: Sort by date, name, or ticket count
-5. **Export**: Download all orders as CSV
-6. **Delete**: Remove orders
-
-### Generic Content Management
-
-1. Go to Admin Panel → Content tab
-2. **Select Table**: Choose from dropdown or enter custom table name
-3. **View Data**: See all records in the selected table
-4. **Create**: Add new records with the form
-5. **Edit**: Update existing records
-6. **Delete**: Remove records
+---
 
 ## Service APIs
 
-### Authentication Service
+### authService.js
 
 ```javascript
 import { signInAdmin, signOut, getCurrentUser, isAdmin } from './services/authService';
 
-// Sign in
 await signInAdmin(email, password);
-
-// Sign out
 await signOut();
-
-// Get current user
 const user = await getCurrentUser();
-
-// Check if user is admin
-const adminStatus = await isAdmin();
+const { isAdmin, role } = await isAdmin(); // checks admin_users table
 ```
 
-### Registration Service
+### editionsService.js
 
 ```javascript
-import { 
-    getRegistrations, 
-    getRegistrationById,
-    createRegistration,
-    updateRegistration,
-    deleteRegistration,
-    getRegistrationStats,
-    exportRegistrationsToCSV
-} from './services/registrationService';
+import { getEditions, createEdition, updateEdition, deleteEdition } from './services/editionsService';
 
-// Get paginated registrations
+const editions = await getEditions();          // all, ordered by sort_order
+await createEdition(editionData);
+await updateEdition(id, updates);
+await deleteEdition(id);
+```
+
+### registrationService.js
+
+```javascript
+import { getRegistrations, createRegistration, updateRegistration, deleteRegistration, getRegistrationStats, exportRegistrationsToCSV } from './services/registrationService';
+
 const result = await getRegistrations({
     page: 1,
     pageSize: 20,
-    type: 'amateur', // or 'pro' or null for all
+    festivalEdition: 'edition-2025',
+    type: 'amateur',           // 'amateur' | 'pro' | null
     search: 'john',
     sortBy: 'created_at',
     sortOrder: 'desc'
 });
+// result: { data, count, page, pageSize }
 
-// Get single registration
-const registration = await getRegistrationById(id);
-
-// Create new registration
-const newReg = await createRegistration({
-    type: 'amateur',
-    first_name: 'John',
-    last_name: 'Doe',
-    email: 'john@example.com',
-    phone: '+1234567890',
-    terms_accepted: true
-});
-
-// Update registration
-await updateRegistration(id, { phone: '+0987654321' });
-
-// Delete registration
+await createRegistration({ type, first_name, last_name, email, phone, festival_edition, terms_accepted });
+await updateRegistration(id, { checked_in: true, checked_in_at: new Date() });
 await deleteRegistration(id);
 
-// Get statistics
-const stats = await getRegistrationStats();
-// Returns: { total, amateur, pro, today }
+const stats = await getRegistrationStats(festivalEdition);
+// { total, amateur, pro, checkedIn, today }
 
-// Export to CSV
 const csv = exportRegistrationsToCSV(registrations);
 ```
 
-### Ticket Service
+### ticketService.js
 
 ```javascript
-import { 
-    getTicketOrders,
-    getTicketOrderById,
-    createTicketOrder,
-    updateTicketOrder,
-    deleteTicketOrder,
-    getTicketStats,
-    exportTicketOrdersToCSV
-} from './services/ticketService';
+import { getTicketOrders, createTicketOrder, deleteTicketOrder, getTicketStats, exportTicketOrdersToCSV } from './services/ticketService';
 
-// Similar API to registrationService
-const orders = await getTicketOrders({ page: 1, pageSize: 20 });
-const order = await getTicketOrderById(id);
-await createTicketOrder(orderData);
-await updateTicketOrder(id, updates);
+const result = await getTicketOrders({ page: 1, pageSize: 20, festivalEdition: 'edition-2025' });
+await createTicketOrder(orderData);   // also generates rows in tickets table
 await deleteTicketOrder(id);
-const stats = await getTicketStats();
+
+const stats = await getTicketStats(festivalEdition);
+// { totalOrders, totalTickets, newsletterOptIns }
+
 const csv = exportTicketOrdersToCSV(orders);
 ```
 
-### Content Service (Generic CRUD)
+### contentService.js (generic CRUD)
 
 ```javascript
-import {
-    getItems,
-    getItemById,
-    createItem,
-    updateItem,
-    deleteItem,
-    bulkCreate,
-    bulkUpdate,
-    bulkDelete,
-    searchItems
-} from './services/contentService';
+import { getItems, getItemById, createItem, updateItem, deleteItem } from './services/contentService';
 
-// Get items from any table
-const items = await getItems('custom_table', {
-    page: 1,
-    pageSize: 50,
-    filters: { status: 'active' },
-    sortBy: 'created_at',
-    sortOrder: 'desc'
-});
-
-// CRUD operations
-const item = await getItemById('custom_table', id);
-await createItem('custom_table', itemData);
-await updateItem('custom_table', id, updates);
-await deleteItem('custom_table', id);
-
-// Bulk operations
-await bulkCreate('custom_table', [item1, item2, item3]);
-await bulkDelete('custom_table', [id1, id2, id3]);
-
-// Search
-const results = await searchItems('custom_table', 'search term', ['name', 'description']);
+const items = await getItems('carousel_images', { sortBy: 'position', sortOrder: 'asc' });
+await createItem('winners', { edition_label, winner_name, photo_url, position });
+await updateItem('carousel_images', id, { active: false });
+await deleteItem('winners', id);
 ```
-
-## Adding Custom Tables
-
-To manage custom content:
-
-1. **Create table in Supabase**:
-   ```sql
-   CREATE TABLE custom_content (
-       id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-       title TEXT NOT NULL,
-       content TEXT,
-       status TEXT DEFAULT 'draft',
-       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-   ```
-
-2. **Add RLS policies** (similar to existing tables)
-
-3. **Use Content Manager**: In admin panel, select your new table
-
-4. **Or create dedicated manager**: Create a new component using `contentService.js`
-
-## Security
-
-### Row Level Security (RLS)
-- All tables have RLS enabled
-- Anonymous users can only INSERT (for public forms)
-- Authenticated users have full CRUD access
-- Admin status verified via `admin_users` table
-
-### Authentication Flow
-1. User submits credentials to admin login
-2. `authService` authenticates with Supabase Auth
-3. Checks if user exists in `admin_users` table
-4. Only grants access if both conditions are met
-
-## Customization
-
-### Styling
-- Uses Tailwind CSS
-- Admin panel uses clean white/gray theme
-- Easily customizable via className props
-
-### Adding Features
-- Extend service files for new operations
-- Create new admin components for specific needs
-- Add new tables and manage via ContentManager
-
-### Permissions
-- Extend `admin_users` table with role-based permissions
-- Modify RLS policies for fine-grained control
-- Add middleware checks in services
-
-## Troubleshooting
-
-### Cannot log in to admin
-- Verify user exists in Supabase Authentication
-- Verify user email exists in `admin_users` table
-- Check environment variables are correct
-
-### Tables not showing data
-- Check RLS policies are set up correctly
-- Verify authenticated user has proper permissions
-- Check browser console for errors
-
-### CSV export not working
-- Ensure data is loaded before exporting
-- Check for special characters in data
-
-## Future Enhancements
-
-Potential additions:
-- [ ] Email notifications
-- [ ] Advanced analytics and reporting
-- [ ] Batch operations UI
-- [ ] Media/file upload management
-- [ ] Activity logs and audit trails
-- [ ] Role-based access control (RBAC)
-- [ ] Multi-language support
-- [ ] API rate limiting
-- [ ] Data backup/restore
-
-## Support
-
-For issues or questions:
-1. Check the console for error messages
-2. Verify Supabase connection and credentials
-3. Ensure database tables and policies are set up correctly
-4. Review this documentation
 
 ---
 
-Built with React, Vite, Supabase, and Tailwind CSS
+## Security
+
+- RLS enabled on all user-facing tables
+- Anonymous users can only INSERT (public forms)
+- Authenticated users have full CRUD
+- `scanner` role accounts are restricted to the check-in view by the admin panel
+- Rate limiting tracked in `rate_limits` table
+- Errors logged to `error_logs` via `errorLogger.js`
+
+### Authentication Flow
+
+1. User submits credentials → `authService.signInAdmin`
+2. Supabase Auth validates credentials
+3. Service checks `admin_users` table for matching email and `is_active = true`
+4. Returns role; `AdminPanel` renders tabs based on role
+
+---
+
+## Troubleshooting
+
+| Problem | Check |
+|---|---|
+| Cannot log in | User exists in Supabase Auth AND `admin_users` with `is_active = true` |
+| No editions in dropdowns | Seed at least one row in `festival_editions` |
+| Tables empty after login | RLS policies — verify authenticated role has SELECT |
+| Scanner not checking in | Ticket `used` flag is already `true`, or wrong `edition` |
+| CSV export blank | Load data first; check for empty result set |
