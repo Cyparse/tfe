@@ -251,12 +251,12 @@ const EDITIONS = [
                 </p>
 
                 {submitSuccess ? (
-                    <div className="text-center py-10 px-6 bg-white/5 rounded-2xl border border-festival-yellow/30">
+                    <div className="text-center py-10 px-6 bg-white/5 rounded-2xl border border-festival-yellow/50">
                         <div className="w-12 h-12 rounded-full bg-festival-yellow/15 border border-festival-yellow/40 flex items-center justify-center mx-auto mb-4">
                             <span className="material-symbols-outlined text-festival-yellow" style={{ fontSize: '22px' }}>check</span>
                         </div>
-                        <div className="font-display text-2xl text-festival-yellow mb-2">Inscription réussie</div>
-                        <div className="text-sm text-ice-blue/70">
+                        <div className="font-display text-2xl text-deep-navy mb-2">Inscription réussie</div>
+                        <div className="text-sm text-deep-navy/60">
                             {emailStatus === 'failed' ? "Votre inscription est bien enregistrée." : "E-mail de confirmation envoyé."}
                         </div>
                         {emailStatus === 'failed' && (

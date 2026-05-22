@@ -254,12 +254,12 @@ export default function Tickets({ inCircle = false }) {
                 </p>
 
                 {submitSuccess ? (
-                    <div className="text-center py-10 px-6 bg-white/5 rounded-2xl border border-festival-yellow/30">
+                    <div className="text-center py-10 px-6 bg-white/5 rounded-2xl border border-festival-yellow/50">
                         <div className="w-12 h-12 rounded-full bg-festival-yellow/15 border border-festival-yellow/40 flex items-center justify-center mx-auto mb-4">
                             <span className="material-symbols-outlined text-festival-yellow" style={{ fontSize: '22px' }}>check</span>
                         </div>
-                        <div className="font-display text-2xl text-festival-yellow mb-2">Billets confirmés</div>
-                        <div className="text-sm text-ice-blue/70">
+                        <div className="font-display text-2xl text-deep-navy mb-2">Billets confirmés</div>
+                        <div className="text-sm text-deep-navy/60">
                             {emailStatus === 'failed'
                                 ? `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} réservé${formData.ticketCount > 1 ? "s" : ""}.`
                                 : `${formData.ticketCount} billet${formData.ticketCount > 1 ? "s" : ""} envoyés à ${formData.email}`}
@@ -431,11 +431,11 @@ export default function Tickets({ inCircle = false }) {
 
                 <div className="max-w-md md:max-w-4xl mx-auto">
                     {submitSuccess ? (
-                        <div className="text-center py-16 px-8 bg-white/5 rounded-2xl border border-festival-yellow/30">
+                        <div className="text-center py-16 px-8 bg-white/5 rounded-2xl border border-festival-yellow/50">
                             <div className="w-16 h-16 rounded-full bg-festival-yellow/15 border border-festival-yellow/40 flex items-center justify-center mx-auto mb-6">
                                 <span className="material-symbols-outlined text-festival-yellow" style={{ fontSize: '28px' }}>check</span>
                             </div>
-                            <h3 className="font-display text-3xl text-festival-yellow mb-3">Billets confirmés</h3>
+                            <h3 className="font-display text-3xl text-deep-navy mb-3">Billets confirmés</h3>
                             <p className="text-ice-blue/80 mb-2">Vos {formData.ticketCount} billet{formData.ticketCount > 1 ? 's' : ''} gratuit{formData.ticketCount > 1 ? 's' : ''} ont été réservés.</p>
                             {emailStatus === 'failed' ? (
                                 <p className="text-sm text-amber-400 mt-3">
