@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { snowflake, FooterImage } from "../../assets/images";
 import FAQModal from '../modals/FAQModal';
+import LegalModal from '../modals/LegalModal';
 
 export default function Footer({ onContactOpen }) {
     const [faqOpen, setFaqOpen] = useState(false);
+    const [legalOpen, setLegalOpen] = useState(false);
 
     const handleScroll = (e, href) => {
         e.preventDefault();
@@ -68,6 +70,9 @@ export default function Footer({ onContactOpen }) {
                                 <button onClick={onContactOpen} className="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 text-ice-blue/60 text-sm font-medium">Nous contacter</button>
                             </li>
                             <li>
+                                <button onClick={() => setLegalOpen(true)} className="hover:text-white transition-colors cursor-pointer bg-transparent border-none p-0 text-ice-blue/60 text-sm font-medium">Mentions légales &amp; RGPD</button>
+                            </li>
+                            <li>
                                 <a href="#admin" className="hover:text-white transition-colors">Accès administrateur</a>
                             </li>
                         </ul>
@@ -75,8 +80,15 @@ export default function Footer({ onContactOpen }) {
                 </div>
                 
                 {/* Footer Bottom */}
-                <div className="pt-16 mt-16 border-t border-white/10 text-center text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
-                    © 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.
+                <div className="pt-16 mt-16 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3 text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
+                    <span>© 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.</span>
+                    <span className="hidden sm:inline opacity-40">·</span>
+                    <button
+                        onClick={() => setLegalOpen(true)}
+                        className="hover:text-ice-blue/70 transition-colors bg-transparent border-none p-0 text-ice-blue/40 text-[10px] uppercase tracking-[0.3em] cursor-pointer"
+                    >
+                        Mentions légales &amp; RGPD
+                    </button>
                 </div>
             </div>
             
@@ -84,6 +96,7 @@ export default function Footer({ onContactOpen }) {
             <img src={FooterImage} alt="" className="absolute bottom-0 left-0 w-full pointer-events-none z-0" />
 
             <FAQModal isOpen={faqOpen} onClose={() => setFaqOpen(false)} />
+            <LegalModal isOpen={legalOpen} onClose={() => setLegalOpen(false)} />
         </footer>
     );
 }
