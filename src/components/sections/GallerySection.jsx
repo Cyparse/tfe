@@ -60,7 +60,7 @@ export default function GallerySection() {
                         flex-wrap: wrap;
                         align-content: flex-start;
                         gap: 0.75rem;
-                        height: 800px;
+                        height: 860px;
                         overflow-x: auto;
                         overflow-y: hidden;
                         scrollbar-width: none;
