@@ -24,7 +24,7 @@ export default function Dashboard({ onNavigate }) {
             ...(regs || []).map(r => ({
                 text: `Inscription ${r.type === 'pro' ? 'professionnelle' : 'amateur'} — ${r.first_name} ${r.last_name}`,
                 date: new Date(r.created_at),
-                dot: '#acc9ef',
+                dot: 'var(--color-light-blue)',
             })),
             ...(tickets || []).map(t => ({
                 text: `Commande de ${t.ticket_count} billet${t.ticket_count > 1 ? 's' : ''} — ${t.first_name} ${t.last_name}`,
@@ -152,15 +152,15 @@ export default function Dashboard({ onNavigate }) {
                     <h2 className="text-4xl font-bold mb-1" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.02em' }}>
                         Vue d'ensemble
                     </h2>
-                    <p className="text-base" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                    {/* <p className="text-base" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
                         La logistique du festival se déroule actuellement sans problème.
-                    </p>
+                    </p> */}
                 </div>
                 <div className="flex gap-3">
                     <button
                         onClick={loadAll}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
-                        style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
+                        style={{ background: 'var(--color-navy-dark)', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)' }}
                     >
                         <span className="material-symbols-outlined text-sm">refresh</span>
                         Actualiser
@@ -181,10 +181,10 @@ export default function Dashboard({ onNavigate }) {
                     Inscriptions
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <StatCard title="Total des inscriptions" value={stats.registrations.total} accent="#acc9ef" />
-                    <StatCard title="Participants amateurs" value={stats.registrations.amateur} accent="#acc9ef" />
-                    <StatCard title="Participants professionnels" value={stats.registrations.pro} accent="#acc9ef" />
-                    <StatCard title="Aujourd'hui" value={stats.registrations.today} subtitle="nouvelles inscriptions" accent="#acc9ef" />
+                    <StatCard title="Total des inscriptions" value={stats.registrations.total} accent="var(--color-light-blue)" />
+                    <StatCard title="Participants amateurs" value={stats.registrations.amateur} accent="var(--color-light-blue)" />
+                    <StatCard title="Participants professionnels" value={stats.registrations.pro} accent="var(--color-light-blue)" />
+                    <StatCard title="Aujourd'hui" value={stats.registrations.today} subtitle="nouvelles inscriptions" accent="var(--color-light-blue)" />
                 </div>
             </section>
 
@@ -216,10 +216,10 @@ export default function Dashboard({ onNavigate }) {
                                 disabled={a.loading}
                                 className="rounded-xl p-5 border text-left transition-all"
                                 style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)', opacity: a.loading ? 0.7 : 1 }}
-                                onMouseEnter={e => { if (!a.loading) e.currentTarget.style.background = '#004075'; }}
+                                onMouseEnter={e => { if (!a.loading) e.currentTarget.style.background = 'var(--color-navy-dark)'; }}
                                 onMouseLeave={e => e.currentTarget.style.background = 'var(--color-deep-navy)'}
                             >
-                                <span className={`material-symbols-outlined mb-2 block${a.loading ? ' animate-spin' : ''}`} style={{ color: '#acc9ef' }}>
+                                <span className={`material-symbols-outlined mb-2 block${a.loading ? ' animate-spin' : ''}`} style={{ color: 'var(--color-light-blue)' }}>
                                     {a.loading ? 'progress_activity' : a.icon}
                                 </span>
                                 <h4 className="text-xs font-bold uppercase tracking-wider mb-1"

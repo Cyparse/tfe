@@ -2,7 +2,9 @@
 
 @theme {
   --color-ice-blue: #cae9ff;
+  --color-light-blue: #acc9ef;
   --color-deep-navy: #002442;
+  --color-navy-dark: #004075;
   --color-midblue: #3a7ca5;
   --color-festival-yellow: #e8a94e;
   --color-dark-brown: #3a2416;
@@ -36,7 +38,9 @@
 
 :root {
   --color-ice-blue: #cae9ff;
+  --color-light-blue: #acc9ef;
   --color-deep-navy: #002442;
+  --color-navy-dark: #004075;
   --color-midblue: #3a7ca5;
   --color-festival-yellow: #e8a94e;
   --color-dark-brown: #3a2416;
