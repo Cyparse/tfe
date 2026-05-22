@@ -120,12 +120,15 @@ export default function Tickets({ inCircle = false }) {
       if (error) throw error;
 
       // Send ticket confirmation email and track status
+      const selectedEdition = EDITIONS.find((ed) => ed.value === formData.edition);
       const emailResult = await supabase.functions
         .invoke("send-ticket", {
           body: {
             name: `${formData.firstName} ${formData.lastName}`,
             email: formData.email,
             edition: formData.edition,
+            editionLabel: selectedEdition?.label ?? formData.edition,
+            editionDate: selectedEdition?.date_display ?? "",
             quantity: formData.ticketCount,
             orderId: data[0]?.id ?? "",
           },

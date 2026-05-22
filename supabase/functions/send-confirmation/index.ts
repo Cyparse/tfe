@@ -9,19 +9,15 @@ const SMTP_USER = Deno.env.get('SMTP_USER')!
 const SMTP_PASS = Deno.env.get('SMTP_PASS')!
 const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
-const DATES_EDITIONS: Record<string, string> = {
-  december: '6 décembre 2026',
-  january:  '10 janvier 2027',
-  february: '7 février 2027',
-}
-
-const LIEU = 'Lieu à confirmer — annonce prochainement'
+const LIEU = 'Tournai Parc Georges Brassens'
 
 async function genererCartePDF(
   idInscription: string,
   nomParticipant: string,
   edition: string,
   categorie: string,
+  editionLabel: string,
+  editionDate: string,
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
@@ -57,7 +53,7 @@ async function genererCartePDF(
 
   cx('SNOW WONDER FESTIVAL', gras, 18, height - 52, blanc)
   cx('CONCOURS DE BONHOMME DE NEIGE', regular, 11, height - 76, glace)
-  cx(DATES_EDITIONS[edition] ?? edition, gras, 12, height - 104, blanc)
+  cx(editionDate || editionLabel, gras, 12, height - 104, blanc)
   cx('Inscription confirmée', regular, 10, height - 122, glace)
 
   // Badge catégorie
@@ -103,13 +99,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name: nom, email, edition, category, registrationId: idInscription } = await req.json()
+    const { name: nom, email, edition, editionLabel = edition, editionDate = '', category, registrationId: idInscription } = await req.json()
     const categorie = category === 'pro' ? 'professionnel' : 'amateur'
     console.log(`send-confirmation-concours: ${email} edition=${edition}`)
 
     let piecesJointes: object[] = []
     try {
-      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie)
+      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie, editionLabel, editionDate)
       piecesJointes = [{
         filename: `inscription-${idInscription.slice(0, 8).toUpperCase()}.pdf`,
         content: Buffer.from(pdfBytes),
@@ -120,7 +116,7 @@ Deno.serve(async (req) => {
       console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = emailConfirmationConcours({ nom, email, edition, categorie, idInscription })
+    const html = emailConfirmationConcours({ nom, email, edition, editionLabel, editionDate, categorie, idInscription })
 
     const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,

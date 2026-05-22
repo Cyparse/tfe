@@ -1,25 +1,7 @@
 // Pas de React nécessaire — template literals TypeScript
 // Tous les styles sont inline pour une compatibilité maximale avec les clients email
 
-type Edition =
-  | "decembre"
-  | "janvier"
-  | "fevrier"
-  | "december"
-  | "january"
-  | "february";
 type CategorieParticipant = "amateur" | "professionnel" | "pro";
-
-const datesEditions: Record<Edition, string> = {
-  // Clés françaises
-  decembre: "6 décembre 2026",
-  janvier: "10 janvier 2027",
-  fevrier: "7 février 2027",
-  // Clés anglaises (rétrocompatibilité)
-  december: "6 décembre 2026",
-  january: "10 janvier 2027",
-  february: "7 février 2027",
-};
 
 const ORNEMENT = `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
@@ -34,7 +16,9 @@ const FONTS = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?fa
 export function emailConfirmationConcours(donnees: {
   nom: string;
   email: string;
-  edition: Edition;
+  edition: string;
+  editionLabel?: string;
+  editionDate?: string;
   categorie: CategorieParticipant;
   idInscription: string;
 }) {
@@ -90,7 +74,7 @@ export function emailConfirmationConcours(donnees: {
 
               <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Édition</td>
-                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${datesEditions[donnees.edition]}</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionDate || donnees.editionLabel || donnees.edition}</td>
               </tr>
 
               <tr>
@@ -138,7 +122,9 @@ export function emailConfirmationConcours(donnees: {
 export function emailConfirmationBillets(donnees: {
   nom: string;
   email: string;
-  edition: Edition;
+  edition: string;
+  editionLabel?: string;
+  editionDate?: string;
   quantite: number;
   idCommande: string;
 }) {
@@ -191,7 +177,7 @@ export function emailConfirmationBillets(donnees: {
 
               <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:11px 0;font-size:13px;color:#999999;font-weight:300;">Édition</td>
-                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${datesEditions[donnees.edition]}</td>
+                <td style="padding:11px 0;font-size:13px;text-align:right;font-weight:600;color:#1a1a2e;">${donnees.editionDate || donnees.editionLabel || donnees.edition}</td>
               </tr>
 
               <tr>

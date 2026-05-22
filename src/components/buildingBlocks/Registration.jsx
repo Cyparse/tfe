@@ -133,17 +133,20 @@ export default function Registration({ inCircle = false }) {
 
             // Send confirmation emails and track status
             const emailResults = await Promise.allSettled(
-                data.map((reg) =>
-                    supabase.functions.invoke('send-confirmation', {
+                data.map((reg) => {
+                    const editionObj = EDITIONS.find((e) => e.value === reg.festival_edition);
+                    return supabase.functions.invoke('send-confirmation', {
                         body: {
                             name: `${formData.firstName} ${formData.lastName}`,
                             email: formData.email,
                             edition: reg.festival_edition,
+                            editionLabel: editionObj?.label ?? reg.festival_edition,
+                            editionDate: editionObj?.date_display ?? '',
                             category: formData.type,
                             registrationId: reg.id,
                         },
-                    })
-                )
+                    });
+                })
             );
             const emailFailed = emailResults.some(r => r.status === 'rejected' || r.value?.error);
             if (emailFailed) logError('registration:email', new Error('Email confirmation failed'), { editions: newEditions, email: formData.email });

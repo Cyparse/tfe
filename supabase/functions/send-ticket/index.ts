@@ -11,13 +11,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const FROM = 'Snow Wonder Festival <info@snow-wonder.be>'
 
-const DATES_EDITIONS: Record<string, string> = {
-  december: '6 décembre 2026',
-  january:  '10 janvier 2027',
-  february: '7 février 2027',
-}
-
-const LIEU = 'Lieu à confirmer — annonce prochainement'
+const LIEU = 'Tournai Parc Georges Brassens'
 
 function genererNumeroBillet(edition: string): string {
   const prefixe = edition.slice(0, 3).toUpperCase()
@@ -31,6 +25,8 @@ async function genererBilletPDF(
   nomPorteur: string,
   edition: string,
   idCommande: string,
+  editionLabel: string,
+  editionDate: string,
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb, StandardFonts } = await import('npm:pdf-lib')
 
@@ -64,10 +60,10 @@ async function genererBilletPDF(
   page.drawRectangle({ x: 0, y: height - headerH, width, height: headerH, color: marine })
   page.drawRectangle({ x: 0, y: height - headerH - 2, width, height: 2, color: glace })
 
-  cx('SNOW WONDER FESTIVAL',              gras,    18, height - 50,  blanc)
-  cx("BILLET D'ENTRÉE",                   regular, 11, height - 74,  glace)
-  cx(DATES_EDITIONS[edition] ?? edition,  gras,    12, height - 100, blanc)
-  cx('Concours & Village Gastronomique',  regular, 10, height - 118, glace)
+  cx('SNOW WONDER FESTIVAL',             gras,    18, height - 50,  blanc)
+  cx("BILLET D'ENTRÉE",                  regular, 11, height - 74,  glace)
+  cx(editionDate || editionLabel,        gras,    12, height - 100, blanc)
+  cx('Concours & Village Gastronomique', regular, 10, height - 118, glace)
 
   // ─── QR code  (y: 330–500, centré sous l'en-tête) ───────────────────────
   const tailleQR = 160
@@ -117,7 +113,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name: nom, email, edition, quantity: quantite, orderId: idCommande } = await req.json()
+    const { name: nom, email, edition, editionLabel = edition, editionDate = '', quantity: quantite, orderId: idCommande } = await req.json()
     console.log(`send-confirmation-billets: ${email} edition=${edition} qte=${quantite}`)
 
     const billets = Array.from({ length: quantite }, () => ({
@@ -148,7 +144,7 @@ Deno.serve(async (req) => {
     try {
       piecesJointes = await Promise.all(
         billets.map(async (b) => {
-          const pdfBytes = await genererBilletPDF(b.ticket_number, nom, edition, idCommande)
+          const pdfBytes = await genererBilletPDF(b.ticket_number, nom, edition, idCommande, editionLabel, editionDate)
           return {
             filename: `billet-${b.ticket_number}.pdf`,
             content: Buffer.from(pdfBytes),
@@ -161,7 +157,7 @@ Deno.serve(async (req) => {
       console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = emailConfirmationBillets({ nom, email, edition, quantite, idCommande })
+    const html = emailConfirmationBillets({ nom, email, edition, editionLabel, editionDate, quantite, idCommande })
 
     const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,
