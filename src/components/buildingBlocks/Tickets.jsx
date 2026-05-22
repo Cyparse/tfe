@@ -95,6 +95,20 @@ export default function Tickets({ inCircle = false }) {
     setIsSubmitting(true);
 
     try {
+      // Vérifier si cet email a déjà commandé pour cette édition
+      const { data: existing } = await supabase
+        .from("ticket_orders")
+        .select("id")
+        .ilike("email", formData.email)
+        .eq("festival_edition", formData.edition)
+        .limit(1);
+
+      if (existing && existing.length > 0) {
+        setErrors({ submit: "Cette adresse e-mail a déjà une réservation pour cette édition. Contactez-nous à info@snow-wonder.be si vous avez besoin de billets supplémentaires." });
+        setIsSubmitting(false);
+        return;
+      }
+
       // Insert ticket order into Supabase (tickets are free)
       const { data, error } = await supabase
         .from("ticket_orders")
@@ -1051,6 +1065,7 @@ export default function Tickets({ inCircle = false }) {
                 value={formData.specialRequests}
                 onChange={handleChange}
                 rows="3"
+                maxLength={1000}
                 className="w-full px-4 py-2 bg-white/10 border border-ice-blue/30 text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent"
                 placeholder="Besoins d'accessibilité, groupes, etc."
               />

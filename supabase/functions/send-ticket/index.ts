@@ -2,6 +2,7 @@ import nodemailer from 'npm:nodemailer'
 import { Buffer } from 'node:buffer'
 import { corsHeaders } from '../_shared/cors.ts'
 import { emailConfirmationBillets } from '../_shared/templates.ts'
+import { checkRateLimit } from '../_shared/rateLimit.ts'
 
 const SMTP_HOST = Deno.env.get('SMTP_HOST')!
 const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') ?? '465')
@@ -120,6 +121,15 @@ Deno.serve(async (req) => {
   try {
     const { name: nom, email, edition, editionLabel = edition, editionDate = '', editionTime = '', quantity: quantite, orderId: idCommande } = await req.json()
     console.log(`send-confirmation-billets: ${email} edition=${edition} qte=${quantite}`)
+
+    // 5 envois max par email par heure (protection anti-spam)
+    const allowed = await checkRateLimit(`ticket:${email.toLowerCase()}`, 5, 3600)
+    if (!allowed) {
+      return new Response(JSON.stringify({ error: 'Trop de requêtes.' }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
 
     const billets = Array.from({ length: quantite }, () => ({
       ticket_number: genererNumeroBillet(edition),

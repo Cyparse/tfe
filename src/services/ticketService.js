@@ -162,9 +162,15 @@ export const exportTicketOrdersToCSV = (orders) => {
         new Date(o.created_at).toLocaleString()
     ]);
 
+    const sanitizeCell = (cell) => {
+        const s = String(cell ?? '');
+        const safe = /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
+        return `"${safe.replace(/"/g, '""')}"`;
+    };
+
     const csvContent = [
         headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+        ...rows.map(row => row.map(sanitizeCell).join(','))
     ].join('\n');
 
     return csvContent;

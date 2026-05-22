@@ -2,6 +2,7 @@ import nodemailer from 'npm:nodemailer'
 import { Buffer } from 'node:buffer'
 import { corsHeaders } from '../_shared/cors.ts'
 import { emailConfirmationConcours } from '../_shared/templates.ts'
+import { checkRateLimit } from '../_shared/rateLimit.ts'
 
 const SMTP_HOST = Deno.env.get('SMTP_HOST')!
 const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') ?? '465')
@@ -16,7 +17,7 @@ async function genererCartePDF(
   nomParticipant: string,
   edition: string,
   categorie: string,
-  editionLabel: string,
+  editionLabelResolved: string,
   editionDate: string,
   editionTime: string,
 ): Promise<Uint8Array> {
@@ -54,7 +55,7 @@ async function genererCartePDF(
 
   cx('SNOW WONDER FESTIVAL', gras, 18, height - 52, blanc)
   cx('CONCOURS DE BONHOMME DE NEIGE', regular, 11, height - 76, glace)
-  cx(editionDate || editionLabel, gras, 12, height - 104, blanc)
+  cx(editionDate || editionLabelResolved, gras, 12, height - 104, blanc)
   cx('Inscription confirmée', regular, 10, height - 122, glace)
 
   // Badge catégorie
@@ -104,13 +105,23 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { name: nom, email, edition, editionLabel = edition, editionDate = '', editionTime = '', category, registrationId: idInscription } = await req.json()
+    const { name: nom, email, edition, editionLabel, editionDate = '', editionTime = '', category, registrationId: idInscription } = await req.json()
+    const editionLabelResolved: string = editionLabel ?? edition
     const categorie = category === 'pro' ? 'professionnel' : 'amateur'
     console.log(`send-confirmation-concours: ${email} edition=${edition}`)
 
+    // 5 e-mails de confirmation max par email par heure (protection anti-spam)
+    const allowed = await checkRateLimit(`confirmation:${email.toLowerCase()}`, 5, 3600)
+    if (!allowed) {
+      return new Response(JSON.stringify({ error: 'Trop de requêtes.' }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
     let piecesJointes: object[] = []
     try {
-      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie, editionLabel, editionDate, editionTime)
+      const pdfBytes = await genererCartePDF(idInscription, nom, edition, categorie, editionLabelResolved, editionDate, editionTime)
       piecesJointes = [{
         filename: `inscription-${idInscription.slice(0, 8).toUpperCase()}.pdf`,
         content: Buffer.from(pdfBytes),
@@ -121,7 +132,7 @@ Deno.serve(async (req) => {
       console.error('Échec PDF :', erreurPdf)
     }
 
-    const html = emailConfirmationConcours({ nom, email, edition, editionLabel, editionDate, editionTime, categorie, idInscription })
+    const html = emailConfirmationConcours({ nom, email, edition, editionLabel: editionLabelResolved, editionDate, editionTime, categorie, idInscription })
 
     const transporteur = nodemailer.createTransport({
       host: SMTP_HOST,

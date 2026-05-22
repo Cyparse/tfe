@@ -361,7 +361,7 @@ export default function Registration({ inCircle = false }) {
                                 </div>
                                 <div style={cField}>
                                     <label style={cLabel}>Expérience *</label>
-                                    <textarea name="experience" value={formData.experience} onChange={handleChange} rows={3} placeholder="Décrivez votre expérience..." style={{ ...ci(errors.experience), resize: "vertical" }} />
+                                    <textarea name="experience" value={formData.experience} onChange={handleChange} rows={3} maxLength={2000} placeholder="Décrivez votre expérience..." style={{ ...ci(errors.experience), resize: "vertical" }} />
                                     {errors.experience && <p style={cErr}>{errors.experience}</p>}
                                 </div>
                             </>
@@ -600,6 +600,7 @@ export default function Registration({ inCircle = false }) {
                                             value={formData.experience}
                                             onChange={handleChange}
                                             rows="4"
+                                            maxLength={2000}
                                             className={`w-full px-4 py-2 bg-white/10 border text-white placeholder-white/50 rounded-lg focus:ring-2 focus:ring-festival-yellow focus:border-transparent ${
                                                 errors.experience ? 'border-red-500' : 'border-ice-blue/30'
                                             }`}
