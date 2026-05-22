@@ -56,7 +56,7 @@ function Countdown() {
 
   return (
     <div className="mb-8">
-      <p className="text-xs uppercase tracking-[0.3em] text-ice-blue/60 mb-3">
+      <p className="text-xs uppercase tracking-[0.3em] text-midblue/60 mb-3">
         {next.label} commence dans
       </p>
       <div className="inline-flex items-center gap-3 bg-deep-navy/50 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-4 shadow-xl">
