@@ -39,9 +39,9 @@ export default function MarketSection() {
         },
       ).addTo(leafletMapRef.current);
 
-      const makeIcon = (iconName, size = 44) =>
+      const makeIcon = (iconName, size = 44, bg = 'var(--color-festival-yellow)', color = 'var(--color-deep-navy)') =>
         L.divIcon({
-          html: `<div style="background-color:var(--color-festival-yellow);width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.3);"><span class="material-symbols-outlined" style="color:var(--color-deep-navy);font-size:${Math.round(size * 0.5)}px;user-select:none;">${iconName}</span></div>`,
+          html: `<div style="background-color:${bg};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.3);"><span class="material-symbols-outlined" style="color:${color};font-size:${Math.round(size * 0.5)}px;user-select:none;">${iconName}</span></div>`,
           className: 'custom-marker',
           iconSize: [size, size],
           iconAnchor: [size / 2, size],
@@ -62,11 +62,11 @@ export default function MarketSection() {
         { latlng: SausageLocation,   icon: 'kebab_dining',  name: 'Paradis de la saucisse', desc: 'Bratwurst, Currywurst & spécialités' },
         { latlng: WafflesLocation,   icon: 'brunch_dining', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
         { latlng: CandyLocation,     icon: 'cake',          name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
-        { latlng: GazeboLocation,    icon: 'celebration',   name: 'Espace Gazebo',          desc: 'Pavillon & animations' },
+        { latlng: GazeboLocation,    icon: 'festival',      name: 'Espace Gazebo',          desc: 'Pavillon & animations', size: 58, bg: 'var(--color-deep-navy)', color: 'var(--color-festival-yellow)' },
       ];
 
-      vendors.forEach(({ latlng, icon, name, desc }) => {
-        L.marker(latlng, { icon: makeIcon(icon) })
+      vendors.forEach(({ latlng, icon, name, desc, size, bg, color }) => {
+        L.marker(latlng, { icon: makeIcon(icon, size, bg, color) })
           .addTo(leafletMapRef.current)
           .bindPopup(popup(name, desc));
       });
@@ -111,7 +111,7 @@ export default function MarketSection() {
             </h2>
             <p className="text-xl text-ice-blue font-medium">
               Réchauffez-vous avec un chocolat chaud artisanal et découvrez
-              des trésors uniques. Notre marché réunit plus de 50 exposants
+              des trésors uniques. Notre marché réunit une douzaine d'exposants
               locaux, des lampions lumineux et de la musique live.
             </p>
             <ul className="flex flex-col gap-5 text-white/90">
