@@ -42,10 +42,10 @@ export default function WinnersSection() {
                     </h2>
                 </div>
 
-                <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="flex flex-col wide:grid wide:grid-cols-2 gap-8 wide:gap-12 items-center">
 
                     {/* Winner cards — first on mobile */}
-                    <div className="flex flex-col gap-3 sm:gap-5 w-full md:order-2">
+                    <div className="flex flex-col gap-3 sm:gap-5 w-full wide:order-2">
                         {loading ? (
                             <div className="text-ice-blue/40 py-10 text-center">Chargement…</div>
                         ) : winners.map((winner) => (
@@ -99,7 +99,7 @@ export default function WinnersSection() {
                     </div>
 
                     {/* Carousel — second on mobile */}
-                    <div className="flex flex-col items-center w-full md:order-1">
+                    <div className="flex flex-col items-center w-full wide:order-1">
                         {loading ? (
                             <div className="text-ice-blue/40 py-20">Chargement…</div>
                         ) : images.length === 0 ? (
