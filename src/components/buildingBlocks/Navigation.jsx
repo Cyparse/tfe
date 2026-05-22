@@ -41,13 +41,13 @@ export default function Navigation({ onMenuClick }) {
             id: Date.now() + i,
             x: 5 + Math.random() * 90,
             size: 5 + Math.random() * 9,
-            duration: 2.4 + Math.random() * 1.6,
+            duration: 4 + Math.random() * 2,
             delay: Math.random() * 1.2,
         }));
         setFlakes(f => [...f, ...newFlakes]);
         setTimeout(() => {
             setFlakes(f => f.filter(fl => !newFlakes.some(n => n.id === fl.id)));
-        }, 4500);
+        }, 7500);
     }, []);
 
     return (
