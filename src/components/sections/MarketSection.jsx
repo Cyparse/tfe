@@ -39,9 +39,9 @@ export default function MarketSection() {
         },
       ).addTo(leafletMapRef.current);
 
-      const makeIcon = (src, border = '#7b563b', bg = '#ffffff', size = 50) =>
+      const makeIcon = (iconName, size = 44) =>
         L.divIcon({
-          html: `<div style="background-color:${bg};width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid ${border};box-shadow:0 3px 10px rgba(0,0,0,0.3);overflow:hidden;"><img src="${src}" style="width:${size * 0.84}px;height:${size * 0.84}px;object-fit:contain;" /></div>`,
+          html: `<div style="background-color:var(--color-festival-yellow);width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.3);"><span class="material-symbols-outlined" style="color:var(--color-deep-navy);font-size:${Math.round(size * 0.5)}px;user-select:none;">${iconName}</span></div>`,
           className: 'custom-marker',
           iconSize: [size, size],
           iconAnchor: [size / 2, size],
@@ -54,23 +54,19 @@ export default function MarketSection() {
         </div>`;
 
       const vendors = [
-        { latlng: FriesLocation,    src: '/fries.png',   border: '#7b563b', name: 'Baraque Friture',        desc: 'Frites & Accompagnements' },
-        { latlng: PretzelLocation,  src: '/pretzel.png', border: '#7b563b', name: 'Doughy Delights',        desc: 'Pretzels, Bretzels & Snacks' },
-        { latlng: RacletteLocation, src: '/cheese.png',  border: '#7b563b', name: 'Raclette',               desc: 'Raclette & Fromages' },
-        { latlng: ClothesLocation,  src: '/gloves.png',  border: 'var(--color-midblue)', name: 'Pas froid aux yeux',     desc: 'Gants, Bonnets & Écharpes' },
-        { latlng: HotDrinksLocation,src: '/coffee.png',  border: 'var(--color-festival-yellow)', name: 'Chaud Cacao',            desc: 'Vin chaud & Boissons chaudes' },
-        { latlng: SausageLocation,  src: '/sausage.png', border: '#7b563b', name: 'Paradis de la saucisse', desc: 'Bratwurst, Currywurst & spécialités' },
-        { latlng: WafflesLocation,  src: '/waffle.png',  border: 'var(--color-festival-yellow)', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
-        { latlng: CandyLocation,    src: '/candy.png',   border: 'var(--color-festival-yellow)', name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
-        { latlng: GazeboLocation,   src: '/gazebo.png',  border: '#ffffff', bg: 'var(--color-midblue)', size: 60, anchor: 'center', name: 'Espace Gazebo', desc: 'Pavillon & animations' },
+        { latlng: FriesLocation,     icon: 'lunch_dining',  name: 'Baraque Friture',        desc: 'Frites & Accompagnements' },
+        { latlng: PretzelLocation,   icon: 'bakery_dining', name: 'Doughy Delights',        desc: 'Pretzels, Bretzels & Snacks' },
+        { latlng: RacletteLocation,  icon: 'restaurant',    name: 'Raclette',               desc: 'Raclette & Fromages' },
+        { latlng: ClothesLocation,   icon: 'checkroom',     name: 'Pas froid aux yeux',     desc: 'Gants, Bonnets & Écharpes' },
+        { latlng: HotDrinksLocation, icon: 'local_cafe',    name: 'Chaud Cacao',            desc: 'Vin chaud & Boissons chaudes' },
+        { latlng: SausageLocation,   icon: 'kebab_dining',  name: 'Paradis de la saucisse', desc: 'Bratwurst, Currywurst & spécialités' },
+        { latlng: WafflesLocation,   icon: 'brunch_dining', name: 'Waffling About',         desc: 'Gaufres & Crêpes' },
+        { latlng: CandyLocation,     icon: 'cake',          name: 'Chalet Sucré',           desc: 'Bonbons, chouchous et chocolats' },
+        { latlng: GazeboLocation,    icon: 'celebration',   name: 'Espace Gazebo',          desc: 'Pavillon & animations' },
       ];
 
-      vendors.forEach(({ latlng, src, border, bg, size, anchor, name, desc }) => {
-        const icon = makeIcon(src, border, bg, size);
-        if (anchor === 'center') {
-          icon.options.iconAnchor = [size / 2, size / 2];
-        }
-        L.marker(latlng, { icon })
+      vendors.forEach(({ latlng, icon, name, desc }) => {
+        L.marker(latlng, { icon: makeIcon(icon) })
           .addTo(leafletMapRef.current)
           .bindPopup(popup(name, desc));
       });
