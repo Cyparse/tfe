@@ -39,6 +39,10 @@ export default function TicketManager() {
     };
 
     const ViewModal = ({ order, onClose }) => {
+        useEffect(() => {
+            document.body.style.overflow = 'hidden';
+            return () => { document.body.style.overflow = ''; };
+        }, []);
         if (!order) return null;
         const Field = ({ label, value }) => (
             <div>
@@ -94,22 +98,22 @@ export default function TicketManager() {
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap justify-between items-center gap-3">
                 <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
                     Billetterie
                 </h2>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                     <button onClick={handleExport}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">download</span>
-                        Exporter CSV
+                        <span className="hidden sm:inline">Exporter CSV</span>
                     </button>
                     <button onClick={loadOrders}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">refresh</span>
-                        Actualiser
+                        <span className="hidden sm:inline">Actualiser</span>
                     </button>
                 </div>
             </div>

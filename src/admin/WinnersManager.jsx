@@ -234,7 +234,7 @@ export default function WinnersManager() {
 
             {/* ── Carousel images ── */}
             <div>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                     <div>
                         <h3 className="text-xl font-bold" style={{ color: 'var(--color-festival-yellow)' }}>Photos du carousel</h3>
                         <p className="text-sm mt-1" style={{ color: 'rgba(202,233,255,0.6)' }}>
@@ -246,7 +246,7 @@ export default function WinnersManager() {
                         style={{ background: 'var(--color-festival-yellow)', color: 'var(--color-dark-brown)' }}
                     >
                         <span className="material-symbols-outlined text-base">upload</span>
-                        {carUploading ? 'Envoi…' : 'Ajouter des photos'}
+                        <span className="hidden sm:inline">{carUploading ? 'Envoi…' : 'Ajouter des photos'}</span>
                         <input ref={carFileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleCarouselUpload} disabled={carUploading} />
                     </label>
                 </div>

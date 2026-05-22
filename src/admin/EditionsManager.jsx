@@ -261,7 +261,7 @@ export default function EditionsManager() {
 
   return (
     <div style={{ color: "#ffffff", fontFamily: "var(--font-family-body)" }}>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2
             className="text-2xl font-bold"
@@ -283,7 +283,7 @@ export default function EditionsManager() {
           >
             add
           </span>
-          Nouvelle édition
+          <span className="hidden sm:inline">Nouvelle édition</span>
         </button>
       </div>
 

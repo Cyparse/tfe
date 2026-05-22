@@ -91,22 +91,22 @@ export default function RegistrationManager() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex justify-between items-center">
+            <div className="flex flex-wrap justify-between items-center gap-3">
                 <h2 className="text-3xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)', letterSpacing: '-0.01em' }}>
                     Inscriptions
                 </h2>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                     <button onClick={handleExport}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">download</span>
-                        Exporter CSV
+                        <span className="hidden sm:inline">Exporter CSV</span>
                     </button>
                     <button onClick={loadRegistrations}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
                         style={{ background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', letterSpacing: '0.05em' }}>
                         <span className="material-symbols-outlined text-sm">refresh</span>
-                        Actualiser
+                        <span className="hidden sm:inline">Actualiser</span>
                     </button>
                 </div>
             </div>
