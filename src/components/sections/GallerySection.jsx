@@ -68,7 +68,8 @@ export default function GallerySection() {
                     }
                     .gallery-track .gallery-item {
                         width: 260px;
-                        height: 255px;
+                        height: auto;
+                        max-height: 420px;
                         flex-shrink: 0;
                     }
                     .gallery-scroll-btn { display: flex; }
