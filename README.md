@@ -2,6 +2,19 @@
 
 A modern, responsive website for the Snow Wonder Festival — built with React, Vite, Tailwind CSS, Leaflet maps, and Supabase.
 
+## Analyse
+
+Figma:
+https://www.figma.com/design/Zrhk1xDGntJeXSuFMcobGW/Snow-Wonder?node-id=0-1&t=AZ86V5Fq2l2A9jQR-1 
+
+Impact Mapping
+https://docs.google.com/document/d/18TUijJmgLuDZTtCEuzbB3RCfaMJxzaDHLiwmL7JWnF0/edit?usp=sharing
+
+User Stories
+https://docs.google.com/document/d/11IUJmYKbRK9aRPFRxdyY05nIMR4HWzLNnldi3RoCs84/edit?usp=sharing
+
+
+
 ## Tech Stack
 
 - **React 19** — UI library
