@@ -4,6 +4,26 @@ import { useEditions } from '../../hooks/useEditions';
 
 export default function ScheduleSection() {
     const { editions, loading } = useEditions();
+    const gridRef = React.useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+    const [canScrollRight, setCanScrollRight] = React.useState(false);
+
+    React.useEffect(() => {
+        const el = gridRef.current;
+        if (!el) return;
+        setCanScrollRight(el.scrollWidth > el.clientWidth);
+    }, [editions]);
+
+    const handleScroll = () => {
+        const el = gridRef.current;
+        if (!el) return;
+        setCanScrollLeft(el.scrollLeft > 4);
+        setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+    };
+
+    const scroll = (dir) => {
+        gridRef.current?.scrollBy({ left: dir * 324, behavior: 'smooth' });
+    };
 
     return (
         <section id="schedule" className="schedule-section">
@@ -27,10 +47,19 @@ export default function ScheduleSection() {
                         <span className="schedule-eyebrow-line"></span>
                     </div>
                     <h2 className="schedule-title">Programme du Festival</h2>
-                    
+
                 </div>
 
-                <div className="schedule-grid">
+                <div className="schedule-grid-wrapper">
+                    <button
+                        className={`schedule-scroll-btn schedule-scroll-btn--left${canScrollLeft ? ' visible' : ''}`}
+                        onClick={() => scroll(-1)}
+                        aria-label="Défiler vers la gauche"
+                    >
+                        <span className="material-symbols-outlined">chevron_left</span>
+                    </button>
+
+                    <div className="schedule-grid" ref={gridRef} onScroll={handleScroll}>
                     {loading ? (
                         <p className="schedule-date" style={{ opacity: 0.5 }}>Chargement…</p>
                     ) : editions.map((ed) => (
@@ -83,6 +112,15 @@ export default function ScheduleSection() {
                             </div>
                         </article>
                     ))}
+                    </div>
+
+                    <button
+                        className={`schedule-scroll-btn schedule-scroll-btn--right${canScrollRight ? ' visible' : ''}`}
+                        onClick={() => scroll(1)}
+                        aria-label="Défiler vers la droite"
+                    >
+                        <span className="material-symbols-outlined">chevron_right</span>
+                    </button>
                 </div>
             </div>
         </section>

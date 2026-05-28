@@ -82,13 +82,6 @@ export default function Footer({ onContactOpen }) {
                 {/* Footer Bottom */}
                 <div className="pt-16 mt-16 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3 text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
                     <span>© 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.</span>
-                    <span className="hidden sm:inline opacity-40">·</span>
-                    <button
-                        onClick={() => setLegalOpen(true)}
-                        className="hover:text-ice-blue/70 transition-colors bg-transparent border-none p-0 text-ice-blue/40 text-[10px] uppercase tracking-[0.3em] cursor-pointer"
-                    >
-                        Mentions légales &amp; RGPD
-                    </button>
                 </div>
             </div>
             

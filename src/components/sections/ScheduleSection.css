@@ -260,3 +260,48 @@
 .schedule-btn:hover {
   letter-spacing: 0.2em;
 }
+
+/* Mobile scroll arrows */
+.schedule-grid-wrapper {
+  position: relative;
+}
+
+.schedule-scroll-btn {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  color: white;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.schedule-scroll-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.schedule-scroll-btn--left {
+  left: 2px;
+}
+
+.schedule-scroll-btn--right {
+  right: 2px;
+}
+
+@media (max-width: 1279px) {
+  .schedule-scroll-btn {
+    display: flex;
+  }
+}
