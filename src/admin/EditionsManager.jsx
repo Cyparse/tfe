@@ -245,10 +245,11 @@ export default function EditionsManager() {
   };
 
   const handleToggle = async (ed) => {
+    setEditions(prev => prev.map(e => e.id === ed.id ? { ...e, active: !e.active } : e));
     try {
       await toggleEditionActive(ed.id, !ed.active);
-      load();
     } catch (e) {
+      setEditions(prev => prev.map(e => e.id === ed.id ? { ...e, active: ed.active } : e));
       setError(e.message);
     }
   };
@@ -325,10 +326,10 @@ export default function EditionsManager() {
           {editions.map((ed) => (
             <div
               key={ed.id}
-              style={{ ...s.card, opacity: ed.active ? 1 : 0.5 }}
+              style={s.card}
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3" style={{ opacity: ed.active ? 1 : 0.5 }}>
                   <div
                     className="w-3 h-3 rounded-full shrink-0"
                     style={{ background: ed.accent }}
@@ -347,6 +348,7 @@ export default function EditionsManager() {
                   <span
                     className="text-xs px-2 py-0.5 rounded-full"
                     style={{
+                      opacity: ed.active ? 1 : 0.5,
                       background: ed.active
                         ? "rgba(232,169,78,0.15)"
                         : "rgba(255,255,255,0.05)",
@@ -363,13 +365,13 @@ export default function EditionsManager() {
                     <span className="material-symbols-outlined text-sm sm:hidden">{ed.active ? "toggle_off" : "toggle_on"}</span>
                   </button>
                   <button
-                    style={s.btn("var(--color-ice-blue)")}
+                    style={{ ...s.btn("var(--color-ice-blue)"), opacity: ed.active ? 1 : 0.5 }}
                     onClick={() => startEdit(ed)}
-                  className="flex items-center gap-1">
+                    className="flex items-center gap-1">
                     <span className="hidden sm:inline">Modifier</span>
                     <span className="material-symbols-outlined text-sm sm:hidden">edit</span>
                   </button>
-                  <button style={s.danger} onClick={() => setConfirmDelete(ed)} className="flex items-center gap-1">
+                  <button style={{ ...s.danger, opacity: ed.active ? 1 : 0.5 }} onClick={() => setConfirmDelete(ed)} className="flex items-center gap-1">
                     <span className="hidden sm:inline">Supprimer</span>
                     <span className="material-symbols-outlined text-sm sm:hidden">delete</span>
                   </button>
