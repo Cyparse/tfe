@@ -7,19 +7,14 @@ const scrollTo = (id) => {
 };
 
 function useCountdown(targetDate) {
-  const [timeLeft, setTimeLeft] = useState(() => {
-    const diff = targetDate - new Date();
-    return diff > 0 ? diff : 0;
-  });
+  const [, tick] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const diff = targetDate - new Date();
-      setTimeLeft(diff > 0 ? diff : 0);
-    }, 1000);
+    const id = setInterval(() => tick(t => t + 1), 1000);
     return () => clearInterval(id);
-  }, [targetDate]);
+  }, []);
 
+  const timeLeft = Math.max(0, targetDate - new Date());
   const days    = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
   const hours   = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
@@ -45,7 +40,24 @@ function Countdown() {
 
   const { days, hours, minutes, seconds, over } = useCountdown(next ? new Date(next.date_iso) : now);
 
-  if (loading || !next || over) return null;
+  if (!loading && (!next || over)) return null;
+
+  if (loading) return (
+    <div className="mb-8">
+      <div className="h-3 w-36 rounded-full bg-white/10 mb-3 animate-pulse" />
+      <div className="inline-flex items-center gap-3 bg-deep-navy/50 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-4 shadow-xl">
+        {[0, 1, 2, 3].map((i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <span className="text-2xl font-black text-white/10 mb-3">:</span>}
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-14 h-9 rounded-lg bg-white/10 animate-pulse" />
+              <div className="w-8 h-2 rounded-full bg-white/10 animate-pulse" />
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="mb-8">
@@ -110,7 +122,7 @@ export default function Hero() {
         style={{ animationDuration: '3.2s', animationDelay: '0.7s' }}
       />
       
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-center px-4 max-w-4xl mx-auto">
           <div className="inline-block mb-6 mt-6">
             <div className="w-full">
@@ -118,7 +130,9 @@ export default function Hero() {
             </div>
           </div>
 
-          <Countdown />
+          <div className="min-h-35 flex flex-col items-center justify-center">
+            <Countdown />
+          </div>
 
           <div className="flex flex-col md:flex-row justify-center gap-6">
             <button onClick={() => scrollTo('gallery')} className="bg-deep-navy text-white py-4 px-10 rounded-full font-bold shadow-xl hover:bg-deep-navy/90 transition-all uppercase tracking-[0.2em] text-xs">
