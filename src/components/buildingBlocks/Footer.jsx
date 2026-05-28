@@ -20,8 +20,8 @@ export default function Footer({ onContactOpen }) {
     ];
 
     return (
-        <footer id="contact" className="relative text-white py-32 z-20">
-            <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <footer id="contact" className="relative text-white py-24 z-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 pb-40">
                 <div className="grid md:grid-cols-4 gap-16">
                     {/* Brand Section */}
                     <div className="md:col-span-2">
@@ -33,7 +33,7 @@ export default function Footer({ onContactOpen }) {
                             Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1996.
                         </p>
                         <p className="text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
-                            © 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.
+                            © 2026 Snow Wonder Festival. Tous droits réservés. <br /> Fait pour la saison froide. — Réalisé par Claire Siboni
                         </p>
                     </div>
                     
