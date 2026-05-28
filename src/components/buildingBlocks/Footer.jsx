@@ -20,8 +20,8 @@ export default function Footer({ onContactOpen }) {
     ];
 
     return (
-        <footer id="contact" className="relative text-white py-24 z-20 ">
-            <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <footer id="contact" className="relative text-white py-24 z-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 lg:pb-20">
                 <div className="grid md:grid-cols-4 gap-16">
                     {/* Brand Section */}
                     <div className="md:col-span-2">
@@ -29,10 +29,12 @@ export default function Footer({ onContactOpen }) {
                             <span className="w-12 h-12 rounded-full flex items-center justify-center"><img src={snowflake} alt="Snowflake Logo" className="w-12 h-12" /></span>
                             <span className="font-lavish text-4xl">Snow Wonder</span>
                         </div>
-                        <p className="text-ice-blue/60 max-w-sm mb-8 leading-relaxed">
+                        <p className="text-ice-blue/60 max-w-sm mb-4 leading-relaxed">
                             Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1996.
                         </p>
-                        
+                        <p className="text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
+                            © 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.
+                        </p>
                     </div>
                     
                     {/* Quick Links */}
@@ -79,10 +81,6 @@ export default function Footer({ onContactOpen }) {
                     </div>
                 </div>
                 
-                {/* Footer Bottom */}
-                <div className="pt-16 mt-16 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3 text-ice-blue/40 text-[10px] uppercase tracking-[0.3em]">
-                    <span>© 2026 Snow Wonder Festival. Tous droits réservés. Fait pour la saison froide.</span>
-                </div>
             </div>
             
             {/* Footer Trees Background */}
