@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 import { snowflake } from '../../assets/images';
 import Carousel from '../buildingBlocks/Carousel';
+import Lightbox from '../buildingBlocks/Lightbox';
 
 export default function WinnersSection() {
     const [images, setImages] = useState([]);
     const [winners, setWinners] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [lightbox, setLightbox] = useState(null);
 
     useEffect(() => {
         Promise.all([
@@ -28,6 +30,8 @@ export default function WinnersSection() {
     }, []);
 
     return (
+        <>
+        {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
         <section id="winners" className="max-w-7xl mx-auto px-4 sm:px-6 relative z-20 pb-20">
             <div className="bg-deep-navy/40 p-6 sm:p-10 md:p-16 text-white rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10">
 
@@ -81,7 +85,8 @@ export default function WinnersSection() {
                                 {/* Winner avatar */}
                                 <div
                                     className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center overflow-hidden"
-                                    style={{ border: `2px solid ${winner.edition_color}66`, background: `${winner.edition_color}15` }}
+                                    style={{ border: `2px solid ${winner.edition_color}66`, background: `${winner.edition_color}15`, cursor: winner.photo_url ? 'zoom-in' : 'default' }}
+                                    onClick={winner.photo_url ? () => setLightbox({ src: winner.photo_url, alt: winner.winner_name || '' }) : undefined}
                                 >
                                     {winner.photo_url ? (
                                         <img src={winner.photo_url} alt={winner.winner_name || ''} loading="lazy" decoding="async" className="w-full h-full object-cover" />
@@ -107,12 +112,13 @@ export default function WinnersSection() {
                                 <p className="text-ice-blue/40">Photos à venir.</p>
                             </div>
                         ) : (
-                            <Carousel cards={images} />
+                            <Carousel cards={images} onImageClick={(src, alt) => setLightbox({ src, alt })} />
                         )}
                     </div>
 
                 </div>
             </div>
         </section>
+        </>
     );
 }

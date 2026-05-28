@@ -16,7 +16,7 @@ function lerpColor(hexA, hexB, t) {
   return `#${((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1)}`;
 }
 
-function Carousel({ cards = [] }) {
+function Carousel({ cards = [], onImageClick }) {
   const [active, setActive] = useState(Math.floor(cards.length / 2));
 
   useEffect(() => {
@@ -78,10 +78,14 @@ function Carousel({ cards = [] }) {
                     alt={card.alt || ''}
                     loading="lazy"
                     decoding="async"
-                    style={isActiveImg
-                      ? { maxHeight: '22rem', width: 'auto', height: 'auto', maxWidth: '100%', display: 'block' }
-                      : { width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
-                    }
+                    onClick={isActive && onImageClick ? () => onImageClick(card.url, card.alt) : undefined}
+                    style={{
+                      ...(isActiveImg
+                        ? { maxHeight: '22rem', width: 'auto', height: 'auto', maxWidth: '100%', display: 'block' }
+                        : { width: '100%', height: '100%', objectFit: 'cover', display: 'block' }
+                      ),
+                      ...(isActive && onImageClick ? { cursor: 'zoom-in' } : {}),
+                    }}
                   />
                 ) : (
                   <>
