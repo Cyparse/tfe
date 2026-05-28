@@ -328,17 +328,52 @@ export default function TicketManager() {
                 </div>
             </div>
 
-            {/* Table */}
-            <div className="rounded-xl border overflow-hidden" style={card}>
-                {isLoading ? (
-                    <div className="p-12 text-center flex items-center justify-center gap-2"
-                        style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Chargement…
+            {/* Mobile cards / Desktop table */}
+            {isLoading ? (
+                <div className="p-12 text-center flex items-center justify-center gap-2 rounded-xl border"
+                    style={{ ...card, color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                    <span className="material-symbols-outlined animate-spin">progress_activity</span> Chargement…
+                </div>
+            ) : orders.length === 0 ? (
+                <div className="p-12 text-center rounded-xl border" style={{ ...card, color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                    Aucune commande trouvée
+                </div>
+            ) : (
+                <>
+                    {/* Mobile cards */}
+                    <div className="flex flex-col gap-3 md:hidden">
+                        {orders.map(order => (
+                            <div key={order.id} className="rounded-xl border p-4 space-y-3" style={card}>
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-sm font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
+                                        {order.first_name} {order.last_name}
+                                    </span>
+                                    <span className="px-2.5 py-1 text-xs font-bold rounded-full shrink-0"
+                                        style={{ background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>
+                                        {order.ticket_count} billet{order.ticket_count > 1 ? 's' : ''}
+                                    </span>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{order.email}</p>
+                                    <p className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{order.city}, {order.country}</p>
+                                    <p className="text-xs" style={{ color: 'rgba(172,201,239,0.5)', fontFamily: 'var(--font-family-body)' }}>
+                                        {new Date(order.created_at).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="flex gap-3 pt-1 border-t" style={{ borderColor: 'var(--color-midblue)' }}>
+                                    <button onClick={() => setSelectedOrder(order)} className="text-xs font-bold"
+                                        style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Voir</button>
+                                    <button onClick={() => setEditingOrder(order)} className="text-xs font-bold"
+                                        style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Modifier</button>
+                                    <button onClick={() => handleDelete(order.id)} className="text-xs font-bold"
+                                        style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ) : orders.length === 0 ? (
-                    <div className="p-12 text-center" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Aucune commande trouvée</div>
-                ) : (
-                    <>
+
+                    {/* Desktop table */}
+                    <div className="hidden md:block rounded-xl border overflow-hidden" style={card}>
                         <div className="overflow-x-auto">
                             <table className="min-w-full">
                                 <thead>
@@ -386,33 +421,34 @@ export default function TicketManager() {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
 
-                        <div className="px-6 py-4 flex items-center justify-between border-t"
-                            style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
-                            <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                                {orders.length} sur {pagination.count} commandes
+                    {/* Pagination */}
+                    <div className="px-4 py-4 flex items-center justify-between rounded-xl border"
+                        style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
+                        <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                            {orders.length} sur {pagination.count} commandes
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                                disabled={filters.page === 1}
+                                className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
+                                Précédent
+                            </button>
+                            <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                                {filters.page} / {pagination.totalPages}
                             </span>
-                            <div className="flex items-center gap-2">
-                                <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
-                                    disabled={filters.page === 1}
-                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Précédent
-                                </button>
-                                <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                                    {filters.page} / {pagination.totalPages}
-                                </span>
-                                <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
-                                    disabled={filters.page >= pagination.totalPages}
-                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
-                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Suivant
-                                </button>
-                            </div>
+                            <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                                disabled={filters.page >= pagination.totalPages}
+                                className="px-3 py-1.5 rounded-lg text-xs font-bold border disabled:opacity-30"
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
+                                Suivant
+                            </button>
                         </div>
-                    </>
-                )}
-            </div>
+                    </div>
+                </>
+            )}
 
             {selectedOrder && <ViewModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
             {editingOrder && (

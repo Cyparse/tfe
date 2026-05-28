@@ -312,19 +312,54 @@ export default function RegistrationManager() {
                 </div>
             </div>
 
-            {/* Table */}
-            <div className="rounded-xl border overflow-hidden" style={card}>
-                {isLoading ? (
-                    <div className="p-12 text-center flex items-center justify-center gap-2"
-                        style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        <span className="material-symbols-outlined animate-spin">progress_activity</span> Chargement…
+            {/* Mobile cards / Desktop table */}
+            {isLoading ? (
+                <div className="p-12 text-center flex items-center justify-center gap-2 rounded-xl border"
+                    style={{ ...card, color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                    <span className="material-symbols-outlined animate-spin">progress_activity</span> Chargement…
+                </div>
+            ) : registrations.length === 0 ? (
+                <div className="p-12 text-center rounded-xl border" style={{ ...card, color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                    Aucune inscription trouvée
+                </div>
+            ) : (
+                <>
+                    {/* Mobile cards */}
+                    <div className="flex flex-col gap-3 md:hidden">
+                        {registrations.map(reg => (
+                            <div key={reg.id} className="rounded-xl border p-4 space-y-3" style={card}>
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-sm font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-body)' }}>
+                                        {reg.first_name} {reg.last_name}
+                                    </span>
+                                    <span className="px-2.5 py-1 text-xs font-bold rounded-full shrink-0"
+                                        style={reg.type === 'pro'
+                                            ? { background: 'rgba(172,201,239,0.15)', color: '#acc9ef', fontFamily: 'var(--font-family-body)' }
+                                            : { background: 'rgba(252,186,93,0.15)', color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                                        {reg.type}
+                                    </span>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{reg.email}</p>
+                                    <p className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>{reg.phone}</p>
+                                    <p className="text-xs" style={{ color: 'rgba(172,201,239,0.5)', fontFamily: 'var(--font-family-body)' }}>
+                                        {new Date(reg.created_at).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="flex gap-3 pt-1 border-t" style={{ borderColor: 'var(--color-midblue)' }}>
+                                    <button onClick={() => setSelectedReg(reg)} className="text-xs font-bold"
+                                        style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Voir</button>
+                                    <button onClick={() => setEditingReg(reg)} className="text-xs font-bold"
+                                        style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Modifier</button>
+                                    <button onClick={() => handleDelete(reg.id)} className="text-xs font-bold"
+                                        style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ) : registrations.length === 0 ? (
-                    <div className="p-12 text-center" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                        Aucune inscription trouvée
-                    </div>
-                ) : (
-                    <>
+
+                    {/* Desktop table */}
+                    <div className="hidden md:block rounded-xl border overflow-hidden" style={card}>
                         <div className="overflow-x-auto">
                             <table className="min-w-full">
                                 <thead>
@@ -360,14 +395,11 @@ export default function RegistrationManager() {
                                                 {new Date(reg.created_at).toLocaleDateString()}
                                             </td>
                                             <td className="px-6 py-4 text-right space-x-3">
-                                                <button onClick={() => setSelectedReg(reg)}
-                                                    className="text-xs font-bold transition-colors"
+                                                <button onClick={() => setSelectedReg(reg)} className="text-xs font-bold transition-colors"
                                                     style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Voir</button>
-                                                <button onClick={() => setEditingReg(reg)}
-                                                    className="text-xs font-bold transition-colors"
+                                                <button onClick={() => setEditingReg(reg)} className="text-xs font-bold transition-colors"
                                                     style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Modifier</button>
-                                                <button onClick={() => handleDelete(reg.id)}
-                                                    className="text-xs font-bold transition-colors"
+                                                <button onClick={() => handleDelete(reg.id)} className="text-xs font-bold transition-colors"
                                                     style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
                                             </td>
                                         </tr>
@@ -375,34 +407,34 @@ export default function RegistrationManager() {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
 
-                        {/* Pagination */}
-                        <div className="px-6 py-4 flex items-center justify-between border-t"
-                            style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
-                            <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                                {registrations.length} sur {pagination.count} inscriptions
+                    {/* Pagination */}
+                    <div className="px-4 py-4 flex items-center justify-between rounded-xl border"
+                        style={{ borderColor: 'var(--color-midblue)', background: '#004075' }}>
+                        <span className="text-xs" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                            {registrations.length} sur {pagination.count} inscriptions
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
+                                disabled={filters.page === 1}
+                                className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
+                                Précédent
+                            </button>
+                            <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
+                                {filters.page} / {pagination.totalPages}
                             </span>
-                            <div className="flex items-center gap-2">
-                                <button onClick={() => setFilters({ ...filters, page: filters.page - 1 })}
-                                    disabled={filters.page === 1}
-                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
-                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Précédent
-                                </button>
-                                <span className="text-xs px-2" style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>
-                                    {filters.page} / {pagination.totalPages}
-                                </span>
-                                <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
-                                    disabled={filters.page >= pagination.totalPages}
-                                    className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
-                                    style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
-                                    Suivant
-                                </button>
-                            </div>
+                            <button onClick={() => setFilters({ ...filters, page: filters.page + 1 })}
+                                disabled={filters.page >= pagination.totalPages}
+                                className="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all disabled:opacity-30"
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
+                                Suivant
+                            </button>
                         </div>
-                    </>
-                )}
-            </div>
+                    </div>
+                </>
+            )}
 
             {selectedReg && <ViewModal registration={selectedReg} onClose={() => setSelectedReg(null)} />}
             {editingReg && (
