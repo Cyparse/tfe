@@ -56,6 +56,14 @@ export default function AdminPanel({ user, onLogout }) {
                 Snow Wonder
               </span>
             </div>
+            <a
+              href="/"
+              className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider transition-colors hover:opacity-80"
+              style={{ color: "var(--color-festival-yellow)", fontFamily: "var(--font-family-body)" }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>arrow_back</span>
+              <span className="hidden sm:inline">Retour au site</span>
+            </a>
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex flex-col items-end">
                 <span
@@ -138,6 +146,14 @@ export default function AdminPanel({ user, onLogout }) {
                 Snow Wonder
               </span>
             </div>
+            <a
+              href="/"
+              className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider transition-colors hover:opacity-80"
+              style={{ color: "var(--color-festival-yellow)", fontFamily: "var(--font-family-body)" }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>arrow_back</span>
+              <span className="hidden sm:inline">Retour au site</span>
+            </a>
             {/* Search */}
             {/* <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-1.5 border"
                             style={{ background: '#004075', borderColor: 'var(--color-midblue)', minWidth: '220px' }}>
