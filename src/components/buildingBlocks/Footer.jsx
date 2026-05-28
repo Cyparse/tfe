@@ -20,8 +20,8 @@ export default function Footer({ onContactOpen }) {
     ];
 
     return (
-        <footer id="contact" className="relative text-white py-24 z-20">
-            <div className="relative z-10 max-w-7xl mx-auto px-6 lg:pb-20">
+        <footer id="contact" className="relative text-white py-32 z-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-6">
                 <div className="grid md:grid-cols-4 gap-16">
                     {/* Brand Section */}
                     <div className="md:col-span-2">
