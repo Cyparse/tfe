@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ForgotPassword from './ForgotPassword';
 import { signInAdmin } from '../services/authService';
+import { snowflakeBlue } from '../assets/images';
 
 export default function AdminLogin({ onLoginSuccess }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -37,12 +38,9 @@ export default function AdminLogin({ onLoginSuccess }) {
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="flex items-center justify-center gap-3 mb-8">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center"
                         style={{ background: 'var(--color-festival-yellow)' }}>
-                        <span className="material-symbols-outlined text-xl"
-                            style={{ fontVariationSettings: "'FILL' 1", color: 'var(--color-dark-brown)' }}>
-                            ac_unit
-                        </span>
+                        <img src={snowflakeBlue} alt="Snow Wonder" className="w-6 h-6" />
                     </div>
                     <span className="text-2xl font-semibold tracking-tight" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
                         Snow Wonder

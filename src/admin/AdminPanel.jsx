@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from "react";
 import { signOut } from "../services/authService";
-import { snowflake } from "../assets/images";
+import { snowflakeBlue } from "../assets/images";
 
 const Dashboard           = lazy(() => import("./Dashboard"));
 const RegistrationManager = lazy(() => import("./RegistrationManager"));
@@ -44,10 +44,10 @@ export default function AdminPanel({ user, onLogout }) {
           <div className="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-full flex items-center justify-center"
                 style={{ background: "var(--color-festival-yellow)" }}
               >
-                <img src={snowflake} alt="Snow Wonder" className="w-6 h-6" />
+                <img src={snowflakeBlue} alt="Snow Wonder" className="w-6 h-6" />
               </div>
               <span
                 className="font-semibold tracking-tight hidden sm:block"
@@ -130,10 +130,10 @@ export default function AdminPanel({ user, onLogout }) {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-full flex items-center justify-center"
                 style={{ background: "var(--color-festival-yellow)" }}
               >
-                <img src={snowflake} alt="Snow Wonder" className="w-6 h-6" />
+                <img src={snowflakeBlue} alt="Snow Wonder" className="w-6 h-6" />
               </div>
               <span
                 className="font-semibold tracking-tight hidden sm:block"

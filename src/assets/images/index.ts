@@ -1,4 +1,5 @@
 export { default as snowflake } from "./snowflake.png";
+export { default as snowflakeBlue } from "./snowflake-blue.png";
 export { default as Logo } from "./snow_wonder_logo2.png";
 export { default as HeroImage } from "./hero-image.webp";
 export { default as FooterImage } from "./footer-bg.webp";
