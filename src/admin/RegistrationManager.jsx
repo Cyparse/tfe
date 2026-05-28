@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getRegistrations, deleteRegistration, exportRegistrationsToCSV } from '../services/registrationService';
+import { getRegistrations, deleteRegistration, updateRegistration, exportRegistrationsToCSV } from '../services/registrationService';
+import { fetchEditions } from '../services/editionsService';
+import { supabase } from '../supabaseClient';
 
-// Shared dark-theme primitives
 const card = { background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' };
 const input = { background: '#004075', border: '1px solid var(--color-midblue)', color: '#ffffff', fontFamily: 'var(--font-family-body)', outline: 'none' };
 const labelStyle = { color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' };
@@ -10,6 +11,7 @@ export default function RegistrationManager() {
     const [registrations, setRegistrations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedReg, setSelectedReg] = useState(null);
+    const [editingReg, setEditingReg] = useState(null);
     const [filters, setFilters] = useState({ type: '', search: '', page: 1, pageSize: 20, sortBy: 'created_at', sortOrder: 'desc' });
     const [pagination, setPagination] = useState({ count: 0, totalPages: 0 });
 
@@ -80,6 +82,163 @@ export default function RegistrationManager() {
                                 className="px-4 py-2 rounded-lg text-sm font-bold border transition-all"
                                 style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
                                 Fermer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const EditModal = ({ registration, onClose, onSaved }) => {
+        const [form, setForm] = useState({
+            type: registration.type || 'amateur',
+            first_name: registration.first_name || '',
+            last_name: registration.last_name || '',
+            email: registration.email || '',
+            phone: registration.phone || '',
+            organization: registration.organization || '',
+            experience: registration.experience || '',
+        });
+        const [saving, setSaving] = useState(false);
+        const [emailStatus, setEmailStatus] = useState(null); // null | 'sent' | 'failed' | 'skipped'
+
+        useEffect(() => {
+            document.body.style.overflow = 'hidden';
+            return () => { document.body.style.overflow = ''; };
+        }, []);
+
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setForm(prev => ({ ...prev, [name]: value }));
+        };
+
+        const handleSave = async () => {
+            setSaving(true);
+            setEmailStatus(null);
+            try {
+                await updateRegistration(registration.id, form);
+
+                const emailChanged = form.email.trim().toLowerCase() !== registration.email.trim().toLowerCase();
+                if (emailChanged) {
+                    try {
+                        const editions = await fetchEditions(true);
+                        const editionObj = editions.find(e => e.value === registration.festival_edition);
+                        const editionTime = editionObj?.date_iso?.match(/T(\d{2}:\d{2})/)?.[1]?.replace(':', 'h') ?? '';
+                        const result = await supabase.functions.invoke('send-confirmation', {
+                            body: {
+                                name: `${form.first_name} ${form.last_name}`,
+                                email: form.email,
+                                edition: registration.festival_edition,
+                                editionLabel: editionObj?.label ?? registration.festival_edition,
+                                editionDate: editionObj?.date_display ?? '',
+                                editionTime,
+                                category: form.type,
+                                registrationId: registration.id,
+                            }
+                        });
+                        setEmailStatus(result?.error ? 'failed' : 'sent');
+                    } catch {
+                        setEmailStatus('failed');
+                    }
+                } else {
+                    setEmailStatus('skipped');
+                }
+
+                onSaved();
+                if (emailChanged) {
+                    // stay open briefly to show email status
+                    setTimeout(onClose, 2000);
+                } else {
+                    onClose();
+                }
+            } catch (e) {
+                alert('Erreur lors de la sauvegarde : ' + e.message);
+            } finally {
+                setSaving(false);
+            }
+        };
+
+        const fieldInput = (label, name, type = 'text') => (
+            <div>
+                <label className="block mb-1.5" style={labelStyle}>{label}</label>
+                <input
+                    type={type}
+                    name={name}
+                    value={form[name]}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 rounded-lg text-sm"
+                    style={input}
+                    onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                    onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
+                />
+            </div>
+        );
+
+        return (
+            <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
+                <div className="rounded-2xl border w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                    style={{ background: 'var(--color-deep-navy)', borderColor: 'var(--color-midblue)' }}>
+                    <div className="p-6">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-semibold" style={{ color: '#ffffff', fontFamily: 'var(--font-family-rubik)' }}>
+                                Modifier l'inscription
+                            </h3>
+                            <button onClick={onClose} className="material-symbols-outlined"
+                                style={{ color: 'var(--color-festival-yellow)', fontSize: '1.25rem' }}>close</button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block mb-1.5" style={labelStyle}>Type</label>
+                                <select name="type" value={form.type} onChange={handleChange}
+                                    className="w-full px-3 py-2 rounded-lg text-sm" style={input}>
+                                    <option value="amateur">Amateur</option>
+                                    <option value="pro">Professionnel</option>
+                                </select>
+                            </div>
+                            {fieldInput('Prénom', 'first_name')}
+                            {fieldInput('Nom', 'last_name')}
+                            {fieldInput('E-mail', 'email', 'email')}
+                            {fieldInput('Téléphone', 'phone')}
+                            {fieldInput('Organisation', 'organization')}
+                            <div className="col-span-2">
+                                <label className="block mb-1.5" style={labelStyle}>Expérience</label>
+                                <textarea
+                                    name="experience"
+                                    value={form.experience}
+                                    onChange={handleChange}
+                                    rows={3}
+                                    className="w-full px-3 py-2 rounded-lg text-sm resize-none"
+                                    style={input}
+                                    onFocus={e => e.target.style.borderColor = '#acc9ef'}
+                                    onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
+                                />
+                            </div>
+                        </div>
+
+                        {emailStatus === 'sent' && (
+                            <p className="mt-4 text-xs" style={{ color: '#86efac', fontFamily: 'var(--font-family-body)' }}>
+                                E-mail de confirmation renvoyé à {form.email}.
+                            </p>
+                        )}
+                        {emailStatus === 'failed' && (
+                            <p className="mt-4 text-xs" style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>
+                                Sauvegardé, mais l'envoi de l'e-mail a échoué.
+                            </p>
+                        )}
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button onClick={onClose}
+                                className="px-4 py-2 rounded-lg text-sm font-bold border"
+                                style={{ border: '1px solid var(--color-midblue)', color: 'var(--color-ice-blue)', fontFamily: 'var(--font-family-body)' }}>
+                                Annuler
+                            </button>
+                            <button onClick={handleSave} disabled={saving}
+                                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all disabled:opacity-50"
+                                style={{ background: 'var(--color-festival-yellow)', color: '#1a1a1a', fontFamily: 'var(--font-family-body)' }}>
+                                {saving && <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>}
+                                Enregistrer
                             </button>
                         </div>
                     </div>
@@ -204,6 +363,9 @@ export default function RegistrationManager() {
                                                 <button onClick={() => setSelectedReg(reg)}
                                                     className="text-xs font-bold transition-colors"
                                                     style={{ color: '#acc9ef', fontFamily: 'var(--font-family-body)' }}>Voir</button>
+                                                <button onClick={() => setEditingReg(reg)}
+                                                    className="text-xs font-bold transition-colors"
+                                                    style={{ color: 'var(--color-festival-yellow)', fontFamily: 'var(--font-family-body)' }}>Modifier</button>
                                                 <button onClick={() => handleDelete(reg.id)}
                                                     className="text-xs font-bold transition-colors"
                                                     style={{ color: '#ffb4ab', fontFamily: 'var(--font-family-body)' }}>Supprimer</button>
@@ -243,6 +405,13 @@ export default function RegistrationManager() {
             </div>
 
             {selectedReg && <ViewModal registration={selectedReg} onClose={() => setSelectedReg(null)} />}
+            {editingReg && (
+                <EditModal
+                    registration={editingReg}
+                    onClose={() => setEditingReg(null)}
+                    onSaved={() => { loadRegistrations(); }}
+                />
+            )}
         </div>
     );
 }
