@@ -32,7 +32,7 @@ export default function Footer({ onContactOpen }) {
                         <p className="text-ice-blue/60 max-w-sm mb-4 leading-relaxed">
                             Rejoignez-nous pour célébrer la beauté et la créativité de l'hiver. Une tradition qui illumine les nuits les plus froides depuis 1996.
                         </p>
-                        <p className="text-ice-blue/40 text-[10px] uppercase tracking-[0.3em] sm:text-center">
+                        <p className="text-ice-blue/40 text-[10px] uppercase tracking-[0.3em] text-center md:text-left">
                             © 2026 Snow Wonder Festival. Fait pour la saison froide.  <br /> Claire Siboni - Tous droits réservés.
                         </p>
                     </div>
