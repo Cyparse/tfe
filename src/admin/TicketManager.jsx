@@ -130,7 +130,8 @@ export default function TicketManager() {
             setSaving(true);
             setEmailStatus(null);
             try {
-                await updateTicketOrder(order.id, { ...form, ticket_count: Number(form.ticket_count) });
+                const { ticket_count, ...updatableFields } = form;
+                await updateTicketOrder(order.id, updatableFields);
 
                 const emailChanged = form.email.trim().toLowerCase() !== order.email.trim().toLowerCase();
                 if (emailChanged) {
@@ -209,17 +210,9 @@ export default function TicketManager() {
                             {fieldInput('Pays', 'country')}
                             <div>
                                 <label className="block mb-1.5" style={labelStyle}>Nombre de billets</label>
-                                <input
-                                    type="number"
-                                    name="ticket_count"
-                                    min="1"
-                                    value={form.ticket_count}
-                                    onChange={handleChange}
-                                    className="w-full px-3 py-2 rounded-lg text-sm"
-                                    style={input}
-                                    onFocus={e => e.target.style.borderColor = '#acc9ef'}
-                                    onBlur={e => e.target.style.borderColor = 'var(--color-midblue)'}
-                                />
+                                <p className="w-full px-3 py-2 rounded-lg text-sm" style={{ ...input, border: '1px solid rgba(58,124,165,0.3)', opacity: 0.6, cursor: 'not-allowed' }}>
+                                    {form.ticket_count}
+                                </p>
                             </div>
                             <div className="flex items-center gap-3 pt-5">
                                 <input

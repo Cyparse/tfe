@@ -68,7 +68,7 @@ function PolitiqueRGPD() {
                 <p>
                     <strong className="text-white">Snow Wonder Festival ASBL</strong><br />
                     Grand-Place 1, 7500 Tournai — Belgique<br />
-                    Contact : <a href="mailto:privacy@snow-wonder.be" className="text-festival-yellow hover:underline">privacy@snow-wonder.be</a>
+                    Contact : <a href="mailto:info@snow-wonder.be" className="text-festival-yellow hover:underline">info@snow-wonder.be</a>
                 </p>
             </Section>
 
@@ -120,7 +120,7 @@ function PolitiqueRGPD() {
                 </ul>
                 <p className="mt-2">
                     Pour exercer ces droits, contactez-nous à{' '}
-                    <a href="mailto:privacy@snow-wonder.be" className="text-festival-yellow hover:underline">privacy@snow-wonder.be</a>.
+                    <a href="mailto:info@snow-wonder.be" className="text-festival-yellow hover:underline">info@snow-wonder.be</a>.
                     Vous disposez également du droit d'introduire une réclamation auprès de l'{' '}
                     <a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener noreferrer" className="text-festival-yellow hover:underline">Autorité de Protection des Données (APD)</a>.
                 </p>
