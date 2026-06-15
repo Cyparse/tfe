@@ -143,6 +143,7 @@ export default function EditionsManager() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [deleteError, setDeleteError] = useState("");
 
   const load = useCallback(() => {
     setLoading(true);
@@ -255,12 +256,18 @@ export default function EditionsManager() {
   };
 
   const handleDelete = async (id) => {
+    setDeleteError("");
     try {
       await deleteEdition(id);
       setConfirmDelete(null);
       load();
     } catch (e) {
-      setError(e.message);
+      const isFk = e.code === '23503' || e.message?.includes('foreign key');
+      setDeleteError(
+        isFk
+          ? "Impossible de supprimer : des inscriptions ou billets sont liés à cette édition. Désactivez-la plutôt."
+          : (e.message || "Erreur lors de la suppression.")
+      );
     }
   };
 
@@ -400,8 +407,11 @@ export default function EditionsManager() {
               cette édition, mais elle ne sera plus proposée dans les
               formulaires.
             </p>
+            {deleteError && (
+              <p className="text-xs mb-3 mt-1" style={{ color: "#ffdad6" }}>{deleteError}</p>
+            )}
             <div className="flex gap-2 justify-end">
-              <button style={s.btn()} onClick={() => setConfirmDelete(null)}>
+              <button style={s.btn()} onClick={() => { setConfirmDelete(null); setDeleteError(""); }}>
                 Annuler
               </button>
               <button
