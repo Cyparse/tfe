@@ -112,7 +112,7 @@ export default function CarouselManager() {
                             style={{ borderColor: img.active ? 'rgba(232,169,78,0.5)' : 'rgba(255,255,255,0.1)', background: 'rgba(0,36,66,0.5)', opacity: img.active ? 1 : 0.5 }}>
                             <div className="relative" style={{ aspectRatio: '1' }}>
                                 <img src={img.url} alt={img.alt} className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 flex items-center justify-center gap-1 opacity-0 hover:opacity-100 transition-opacity"
+                                <div className="absolute inset-0 flex items-center justify-center gap-1 opacity-100 md:opacity-0 md:hover:opacity-100 transition-opacity"
                                     style={{ background: 'rgba(0,0,0,0.5)' }}>
                                     <button onClick={() => move(index, -1)} disabled={index === 0}
                                         className="p-1.5 rounded-lg disabled:opacity-30"
