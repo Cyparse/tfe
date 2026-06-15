@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getRegistrations, deleteRegistration, updateRegistration, exportRegistrationsToCSV } from '../services/registrationService';
+import { getRegistrations, getAllRegistrations, deleteRegistration, updateRegistration, exportRegistrationsToCSV } from '../services/registrationService';
 import { fetchEditions } from '../services/editionsService';
 import { supabase } from '../supabaseClient';
 
@@ -33,12 +33,15 @@ export default function RegistrationManager() {
         catch (e) { alert(e.message); }
     };
 
-    const handleExport = () => {
-        const csv = exportRegistrationsToCSV(registrations);
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+    const handleExport = async () => {
+        try {
+            const all = await getAllRegistrations();
+            const csv = exportRegistrationsToCSV(all);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+        } catch (e) { alert('Erreur export : ' + e.message); }
     };
 
     const ViewModal = ({ registration, onClose }) => {

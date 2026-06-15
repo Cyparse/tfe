@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTicketOrders, deleteTicketOrder, updateTicketOrder, exportTicketOrdersToCSV } from '../services/ticketService';
+import { getTicketOrders, getAllTicketOrders, deleteTicketOrder, updateTicketOrder, exportTicketOrdersToCSV } from '../services/ticketService';
 import { fetchEditions } from '../services/editionsService';
 import { supabase } from '../supabaseClient';
 
@@ -33,12 +33,15 @@ export default function TicketManager() {
         catch (e) { alert(e.message); }
     };
 
-    const handleExport = () => {
-        const csv = exportTicketOrdersToCSV(orders);
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = `ticket_orders_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+    const handleExport = async () => {
+        try {
+            const all = await getAllTicketOrders();
+            const csv = exportTicketOrdersToCSV(all);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `ticket_orders_${new Date().toISOString().split('T')[0]}.csv`; a.click();
+        } catch (e) { alert('Erreur export : ' + e.message); }
     };
 
     const ViewModal = ({ order, onClose }) => {

@@ -143,6 +143,15 @@ export const getTicketStats = async () => {
     }
 };
 
+export const getAllTicketOrders = async () => {
+    const { data, error } = await supabase
+        .from('ticket_orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data ?? [];
+};
+
 // Export ticket orders to CSV
 export const exportTicketOrdersToCSV = (orders) => {
     const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Address', 'City', 'Postal Code', 'Country', 'Ticket Count', 'Special Requests', 'Newsletter', 'Created At'];

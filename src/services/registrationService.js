@@ -158,6 +158,15 @@ export const getRegistrationStats = async () => {
     }
 };
 
+export const getAllRegistrations = async () => {
+    const { data, error } = await supabase
+        .from('registrations')
+        .select('*')
+        .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data ?? [];
+};
+
 // Export registrations to CSV
 export const exportRegistrationsToCSV = (registrations) => {
     const headers = ['ID', 'Type', 'First Name', 'Last Name', 'Email', 'Phone', 'Organization', 'Experience', 'Created At'];
