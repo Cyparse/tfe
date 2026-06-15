@@ -82,7 +82,7 @@ export default function Navigation({ onMenuClick }) {
             <div className="max-w-7xl mx-auto w-full">
                 
                 {/* Desktop Navigation */}
-                <ul className="hidden md:flex items-center gap-8 justify-evenly w-full mx-auto">
+                <ul className="hidden md:flex items-center gap-8 justify-evenly max-w-200 w-full mx-auto">
                     {menuItems.map((item) => (
                         <li key={item.label}>
                             <a 
