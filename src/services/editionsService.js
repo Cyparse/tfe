@@ -79,6 +79,14 @@ export async function deleteEdition(id) {
     invalidateEditionsCache();
 }
 
+export async function forceDeleteEdition(id, value) {
+    await supabase.from('registrations').update({ festival_edition: null }).eq('festival_edition', value);
+    await supabase.from('tickets').update({ festival_edition: null }).eq('festival_edition', value);
+    const { error } = await supabase.from('festival_editions').delete().eq('id', id);
+    if (error) throw error;
+    invalidateEditionsCache();
+}
+
 export async function toggleEditionActive(id, active) {
     const { error } = await supabase
         .from('festival_editions')

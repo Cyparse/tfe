@@ -3,6 +3,7 @@ import {
   fetchEditions,
   saveEdition,
   deleteEdition,
+  forceDeleteEdition,
   toggleEditionActive,
 } from "../services/editionsService";
 
@@ -144,6 +145,7 @@ export default function EditionsManager() {
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [deleteError, setDeleteError] = useState("");
+  const [isFkError, setIsFkError] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -257,17 +259,31 @@ export default function EditionsManager() {
 
   const handleDelete = async (id) => {
     setDeleteError("");
+    setIsFkError(false);
     try {
       await deleteEdition(id);
       setConfirmDelete(null);
       load();
     } catch (e) {
-      const isFk = e.code === '23503' || e.message?.includes('foreign key');
+      const fk = e.code === '23503' || e.message?.includes('foreign key');
+      setIsFkError(fk);
       setDeleteError(
-        isFk
-          ? "Impossible de supprimer : des inscriptions ou billets sont liés à cette édition. Désactivez-la plutôt."
+        fk
+          ? "Des inscriptions ou billets sont liés à cette édition."
           : (e.message || "Erreur lors de la suppression.")
       );
+    }
+  };
+
+  const handleForceDelete = async () => {
+    setDeleteError("");
+    setIsFkError(false);
+    try {
+      await forceDeleteEdition(confirmDelete.id, confirmDelete.value);
+      setConfirmDelete(null);
+      load();
+    } catch (e) {
+      setDeleteError(e.message || "Erreur lors de la suppression forcée.");
     }
   };
 
@@ -408,10 +424,21 @@ export default function EditionsManager() {
               formulaires.
             </p>
             {deleteError && (
-              <p className="text-xs mb-3 mt-1" style={{ color: "#ffdad6" }}>{deleteError}</p>
+              <div className="mt-2 mb-3 px-3 py-2 rounded-lg" style={{ background: "rgba(147,0,10,0.2)", border: "1px solid rgba(147,0,10,0.4)" }}>
+                <p className="text-xs" style={{ color: "#ffdad6" }}>{deleteError}</p>
+                {isFkError && (
+                  <button
+                    className="mt-2 text-xs font-bold underline"
+                    style={{ color: "#ffb4ab", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                    onClick={handleForceDelete}
+                  >
+                    Supprimer quand même (déliera les inscriptions et billets)
+                  </button>
+                )}
+              </div>
             )}
             <div className="flex gap-2 justify-end">
-              <button style={s.btn()} onClick={() => { setConfirmDelete(null); setDeleteError(""); }}>
+              <button style={s.btn()} onClick={() => { setConfirmDelete(null); setDeleteError(""); setIsFkError(false); }}>
                 Annuler
               </button>
               <button
