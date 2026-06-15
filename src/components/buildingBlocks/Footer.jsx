@@ -86,7 +86,7 @@ export default function Footer({ onContactOpen }) {
             {/* Footer Trees Background */}
             <img src={FooterImage} alt="" loading="lazy" decoding="async" className="absolute bottom-0 left-0 w-full pointer-events-none z-0" />
 
-            <FAQModal isOpen={faqOpen} onClose={() => setFaqOpen(false)} />
+            <FAQModal isOpen={faqOpen} onClose={() => setFaqOpen(false)} onContactOpen={onContactOpen} />
             <LegalModal isOpen={legalOpen} onClose={() => setLegalOpen(false)} />
         </footer>
     );

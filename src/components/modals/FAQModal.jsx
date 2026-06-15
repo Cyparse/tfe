@@ -35,7 +35,7 @@ const FAQS = [
     },
 ];
 
-export default function FAQModal({ isOpen, onClose }) {
+export default function FAQModal({ isOpen, onClose, onContactOpen }) {
     const [openIndex, setOpenIndex] = useState(null);
 
     useEffect(() => {
@@ -143,7 +143,7 @@ export default function FAQModal({ isOpen, onClose }) {
                     <p className="text-xs" style={{ color: 'rgba(202,233,255,0.4)' }}>
                         Vous ne trouvez pas votre réponse ?{' '}
                         <button
-                            onClick={onClose}
+                            onClick={() => { onClose(); onContactOpen?.(); }}
                             className="underline transition-colors hover:text-white"
                             style={{ color: 'rgba(202,233,255,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                         >
