@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
+import { fetchEditions } from '../services/editionsService';
 
 const WINNER_BUCKET   = 'winners';
 const CAROUSEL_BUCKET = 'carousel-images';
@@ -7,6 +8,7 @@ const CAROUSEL_BUCKET = 'carousel-images';
 export default function WinnersManager() {
     const [winners,       setWinners]       = useState([]);
     const [carouselImgs,  setCarouselImgs]  = useState([]);
+    const [allEditions,   setAllEditions]   = useState([]);
     const [loading,       setLoading]       = useState(true);
     const [saving,        setSaving]        = useState({});
     const [uploading,     setUploading]     = useState({});
@@ -26,6 +28,10 @@ export default function WinnersManager() {
         if (!wRes.error) setWinners(wRes.data || []);
         if (!cRes.error) setCarouselImgs(cRes.data || []);
         if (wRes.error) setError(wRes.error.message);
+        try {
+            const eds = await fetchEditions(true);
+            setAllEditions(eds);
+        } catch (_) {}
         setLoading(false);
     };
 
@@ -42,6 +48,23 @@ export default function WinnersManager() {
             .eq('id', winner.id);
         if (error) setError(error.message);
         setSaving(s => ({ ...s, [winner.id]: false }));
+    };
+
+    const saveEditionLabel = async (winner, editionValue) => {
+        const ed = allEditions.find(e => e.value === editionValue);
+        if (!ed) return;
+        const newColor = ed.accent;
+        const newBg    = ed.accent + '1a';
+        setSaving(s => ({ ...s, [`ed_${winner.id}`]: true }));
+        const { error } = await supabase
+            .from('winners')
+            .update({ edition_label: ed.label, edition_color: newColor, edition_bg: newBg })
+            .eq('id', winner.id);
+        if (error) setError(error.message);
+        else setWinners(prev => prev.map(w =>
+            w.id === winner.id ? { ...w, edition_label: ed.label, edition_color: newColor, edition_bg: newBg } : w
+        ));
+        setSaving(s => ({ ...s, [`ed_${winner.id}`]: false }));
     };
 
     const handlePhotoUpload = async (winner, e) => {
@@ -152,7 +175,20 @@ export default function WinnersManager() {
                                     {/* Edition badge */}
                                     <div className="flex items-center gap-3 md:w-56 shrink-0">
                                         <div className="w-3 h-3 rounded-full shrink-0" style={{ background: winner.edition_color }} />
-                                        <span className="font-semibold text-white text-base">{winner.edition_label}</span>
+                                        <select
+                                            value={allEditions.find(e => e.label === winner.edition_label)?.value || ''}
+                                            onChange={e => saveEditionLabel(winner, e.target.value)}
+                                            disabled={saving[`ed_${winner.id}`]}
+                                            className="font-semibold text-white text-sm rounded-lg px-2 py-1 outline-none cursor-pointer"
+                                            style={{ background: 'rgba(0,36,66,0.6)', border: `1px solid ${winner.edition_color}55`, color: '#ffffff', maxWidth: '11rem' }}
+                                        >
+                                            {allEditions.length === 0 && (
+                                                <option value="" style={{ background: '#002442' }}>{winner.edition_label}</option>
+                                            )}
+                                            {allEditions.map(ed => (
+                                                <option key={ed.value} value={ed.value} style={{ background: '#002442' }}>{ed.label}</option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     {/* Photo */}
