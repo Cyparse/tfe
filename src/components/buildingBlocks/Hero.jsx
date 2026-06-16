@@ -88,13 +88,13 @@ export default function Hero() {
       <img 
         src={Twinkle} 
         alt="" 
-        className="absolute top-20 left-10 w-8 h-8 animate-ping opacity-60 pointer-events-none"
+        className="absolute top-2 md:top-20 left-10 md:left-20 w-8 h-8 animate-ping opacity-60 pointer-events-none"
         style={{ animationDuration: '2s' }}
       />
       <img 
         src={Twinkle} 
         alt="" 
-        className="absolute top-32 right-20 w-6 h-6 animate-ping opacity-70 pointer-events-none"
+        className="absolute top-12 md:top-32 right-20 w-6 h-6 animate-ping opacity-70 pointer-events-none"
         style={{ animationDuration: '3s', animationDelay: '0.5s' }}
       />
       <img 
@@ -106,19 +106,19 @@ export default function Hero() {
       <img 
         src={Twinkle} 
         alt="" 
-        className="absolute top-1/3 right-1/3 w-7 h-7 animate-ping opacity-65 pointer-events-none"
+        className="absolute top-1/3 md:top-1/2 right-1/3 w-7 h-7 animate-ping opacity-65 pointer-events-none"
         style={{ animationDuration: '3.5s', animationDelay: '0.3s' }}
       />
       <img 
         src={Twinkle} 
         alt="" 
-        className="absolute bottom-1/4 left-1/3 w-9 h-9 animate-ping opacity-55 pointer-events-none"
+        className="absolute top-10 md:bottom-1/4 left-1/3 w-9 h-9 animate-ping opacity-55 pointer-events-none"
         style={{ animationDuration: '2.8s', animationDelay: '1.2s' }}
       />
       <img 
         src={Twinkle} 
         alt="" 
-        className="absolute bottom-32 right-16 w-8 h-8 animate-ping opacity-60 pointer-events-none"
+        className="absolute top-4 md:bottom-32 right-16 w-8 h-8 animate-ping opacity-60 pointer-events-none"
         style={{ animationDuration: '3.2s', animationDelay: '0.7s' }}
       />
       
@@ -138,7 +138,7 @@ export default function Hero() {
             <button onClick={() => scrollTo('gallery')} className="bg-deep-navy text-white py-4 px-10 rounded-full font-bold shadow-xl hover:bg-deep-navy/90 transition-all uppercase tracking-[0.2em] text-xs">
               Découvrir les Œuvres
             </button>
-            <button onClick={() => scrollTo('forms')} className="bg-white/80 backdrop-blur-xl text-deep-navy py-4 px-10 rounded-full font-bold border border-deep-navy/10 shadow-xl hover:bg-white transition-all uppercase tracking-[0.2em] text-xs">
+            <button onClick={() => scrollTo('forms')} className="bg-white/80 backdrop-blur-xl text-deep-navy py-4 px-10 rounded-full font-bold border border-deep-navy/10 shadow-xl hover:bg-white transition-all uppercase tracking-[0.2em] text-xs mb-20 md:mb-0">
               Obtenir des Billets
             </button>
           </div>
